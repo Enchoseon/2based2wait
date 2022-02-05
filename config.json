@@ -1,0 +1,32 @@
+{
+	"account": {
+		"username": "YOUR USERNAME",
+		"password": "YOUR PASSWORD",
+		"auth": "YOUR ACCOUNT TYPE"
+	},
+	
+	"discord": {
+		"webhookURL": "YOUR DISCORD WEBHOOK",
+		"id": "YOUR DISCORD ID"
+	},
+	
+	"queueThreshold": 69,
+	
+	"reconnectInterval": 25,
+	
+	"log": {
+		"active": true,
+		"cutoff": 690420,
+		"filter": ["playerlist_header", "chat", "map", "map_chunk", "player_info", "entity_metadata", "entity_velocity", "entity_move_look", "entity_look", "update_time", "world_particles", "unload_chunk", "teams", "rel_entity_move"]
+	},
+	
+	"server": {
+		"host": "connect.2b2t.org",
+		"version": "1.12.2"
+	},
+	
+	"proxy": {
+		"whitelist": true,
+		"port": 25565
+	}
+}
