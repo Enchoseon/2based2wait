@@ -1,5 +1,4 @@
 "use strict";
-
 // =======
 // Imports
 // =======
@@ -12,6 +11,7 @@ const mc = require("minecraft-protocol");
 const logger = require("./util/logger.js");
 const notifier = require("./util/notifier.js");
 const gui = require("./util/gui.js");
+const chatty = require("./util/chatty.js");
 
 const config = JSON.parse(fs.readFileSync("config.json"));
 
@@ -29,11 +29,35 @@ var server;
 
 start();
 
+// =================
+// Packet Handler(s)
+// =================
+
+/**
+ * Handle incoming packets
+ * @param {object} packetData
+ * @param {object} packetMeta
+ */
+function packetHandler(packetData, packetMeta) {
+	logger.packetHandler(packetData, packetMeta); // Log packets
+	gui.packetHandler(packetData, packetMeta); // Process into CLI GUI and notifications
+	chatty.packetHandler(packetData, packetMeta);
+
+	switch (packetMeta.name) {
+		case "kick_disconnect": // Handle kick/disconnect packets
+			logger.log("kick/disconnect", packetData);
+			reconnect();
+			break;
+		default:
+			break;
+	}
+}
+
 // ======
 // Client
 // ======
 
-// Start proxy stack
+/** Start proxy stack */
 function start() {
 	logger.log("proxy", "Starting proxy stack.");
 	conn = new mcproxy.Conn({
@@ -53,9 +77,9 @@ function start() {
 		"max-players": 1
 	});
 
-	// Send message once connected to 2B2T
+	// Send message once connected
 	client.on("connect", function () {
-		logger.log("connected", "Client connected to 2B2T");
+		logger.log("connected", "Client connected");
 		startMineflayer();
 	});
 
@@ -65,66 +89,19 @@ function start() {
 		reconnect();
 	});
 
-	// Listen to packets for ETA, position, joining, & restart info
-	client.on("packet", (data, meta) => {
-		// Log packets
-		logger.packetHandler(meta, data);
-		
+	// Asoorted packet handlers
+	client.on("packet", (packetData, packetMeta) => {
 		// Check if in queue
-		var inQueue = conn.bot.game.serverBrand === "Waterfall <- 2b2t-lobby";
+		const inQueue = (conn.bot.game.serverBrand === "Waterfall <- 2b2t-lobby");
 		if (inQueue !== gui.data.inQueue) {
 			gui.display("inQueue", inQueue);
 		}
-		
-		switch(meta.name) {
-			case "playerlist_header": // Handle playerlist packets
-				if (inQueue) { // Check if in server
-					var header = JSON.parse(data.header);
-					var position = header.text.split("\n")[5].split("§l")[1];
-					var eta = header.text.split("\n")[6].split("§l")[1];
-					if (position !== gui.data.position) { // Position
-						gui.display("position", position);
-						if (gui.data.position <= config.queueThreshold) { // Notifications
-							notifier.sendToast("2B2T Queue Position: " + gui.data.position);
-							notifier.sendWebhook({ping: true});
-						} else {
-							notifier.sendWebhook({ping: false});
-						}
-					}
-					if (eta !== gui.data.eta) { // ETA
-						gui.display("eta", eta);
-					}
-				} else {
-					var position = "In Server!";
-					var eta = "Now!";
-					if (gui.data.position !== position) {
-						gui.display("position", "In Server!");
-					}
-					if (gui.data.eta !== eta) {
-						gui.display("eta", "Now!");
-					}
-				}
-				server.motd = "Position: " + gui.data.position + " - ETA: " + gui.data.eta; // Update local server motd
-				break;
-			case "chat": // Handle chat packets
-				var msg = JSON.parse(data.message);
-				logger.log("chat", msg);
-				if (msg.extra !== undefined && msg.extra[0].text.startsWith("[SERVER] Server restarting in ")) {
-					var restart = msg.extra[0].text.replace("[SERVER] Server restarting in ", "").replace(" ...", "");
-					if (restart !== gui.data.restart) {
-						gui.display("restart", restart);
-						notifier.sendToast("Server Restart In: " + gui.data.restart);
-						notifier.sendWebhook({ping: true, titleOverride: "Server Restart In: " + gui.data.restart});
-					}
-				}
-				break;
-			case "kick_disconnect": // Handle kick/disconnect packets
-				logger.log("kick/disconnect", data);
-				reconnect();
-				break;
-			default:
-				break;
-		}
+
+		// Packet handler(s)
+		packetHandler(packetData, packetMeta);
+
+		// Update local server motd
+		server.motd = "Position: " + gui.data.position + " - ETA: " + gui.data.eta;
 	})
 	
 	// Mineflayer stuff
@@ -133,38 +110,6 @@ function start() {
 			// Mineflayer stuff
 		}
 	})
-}
-
-// Reconnect
-function reconnect() {
-	logger.log("proxy", "Reconnecting.");
-	gui.display("restart", "Reconnecting in " + config.reconnectInterval + " seconds...");
-	setTimeout(
-		function(){
-			server.close();
-			client.end();
-			conn.disconnect();
-			gui.display("restart", "Reconnecting now!");
-			notifier.sendToast("Reconnecting now!");
-			notifier.sendWebhook({ping: true, titleOverride: "Reconnecting now!"});
-			gui.reset();
-			start();
-		}, config.reconnectInterval * 1000
-	);
-}
-
-// Start Mineflayer modules
-function startMineflayer() {
-	logger.log("mineflayer", "Starting Mineflayer.");
-	// meow
-	gui.display("mineflayer", true);
-}
-
-// Stop all Mineflayer modules
-function stopMineflayer() {
-	logger.log("mineflayer", "Stopping Mineflayer.");
-	// woof
-	gui.display("mineflayer", false);
 }
 
 // ============
@@ -192,7 +137,46 @@ server.on("login", (bridgeClient) => {
 	conn.link(bridgeClient);
 });
 
-// Send packets from Point A to Point B
+// =========
+// Functions
+// =========
+
+/** Reconnect */
+function reconnect() {
+	logger.log("proxy", "Reconnecting.");
+	gui.display("restart", "Reconnecting in " + config.reconnectInterval + " seconds...");
+	setTimeout(
+		function() {
+			server.close();
+			client.end();
+			conn.disconnect();
+			gui.display("restart", "Reconnecting now!");
+			notifier.sendToast("Reconnecting now!");
+			notifier.sendWebhook({
+				title: "Reconnecting now!",
+				ping: true
+			});
+			gui.reset();
+			start();
+		}, config.reconnectInterval * 1000
+	);
+}
+
+/** Start Mineflayer modules */
+function startMineflayer() {
+	logger.log("mineflayer", "Starting Mineflayer.");
+	// meow
+	gui.display("mineflayer", true);
+}
+
+/** Stop all Mineflayer modules */
+function stopMineflayer() {
+	logger.log("mineflayer", "Stopping Mineflayer.");
+	// woof
+	gui.display("mineflayer", false);
+}
+
+/** Send packets from Point A to Point B */
 function bridge(data, meta, dest) {
 	if (meta.name !== "keep_alive" && meta.name !== "update_time") { // Keep-alive packets are filtered bc the client already handles them. Sending double would kick us.
 		dest.writeRaw(data);
