@@ -4,11 +4,12 @@ Lightweight & (theoretically) extensible 2b2t proxy.
 
 # Quick Start
 
-Go to config.json and configure the following values:
+Go to config.json and configure the following values (see [the wiki](https://github.com/Enchoseon/2based2wait/wiki/Configuration-Guide) for a more thorough explanation):
 - `account.username`: Your Minecraft username
 - `account.password`: Your Minecraft password (Not needed if you're using a Microsoft account. Log-in instructions will appear in the console.)
 - `account.auth`: Your Minecraft account type ("mojang"/"microsoft")
-- `discord.webhookURL`: The URL of the Discord webhook to send update messages to.
+- `discord.webhook.position`: The URL of the Discord webhook to send updates on your position in queue.
+- `discord.webhook.livechat`: The URL of the Discord webhook to relay livechat.
 - `discord.id`: The ID of the Discord user to ping for important stuff.
 
 Then run `npm start` & connect to `localhost:25565` in Minecraft.
@@ -18,6 +19,14 @@ Then run `npm start` & connect to `localhost:25565` in Minecraft.
 This proxy is just *barely* stable enough for actual use. There is also no auto-reconnect anymore because it's annoying, doesn't work, and would be better handled on your end with a robust keep-alive library like [Forever](https://github.com/foreversd/forever) or [Nodemon](https://github.com/remy/nodemon).
 
 This also hasn't been tested on a VPS yet. It also probably won't work due to the notifier library and the fact that pertinent info like the Microsoft verification code is only briefly visible in the console, which is annoying.
+
+# Features
+
+- Proxy
+- Livechat relay
+- Queue position relay
+- Toast notifications on restarts/position
+- Extensive logging
 
 # How it Works
 
@@ -47,5 +56,9 @@ Normally: `You` <=> `2B2T`
 # Planned Features
 
 - Better storage of logs.
+  - Human-readable chat logs.
+  - Chat coordinate logs.
 - Queue time estimator.
 - Automatic screenshotter.
+- Mineflayer bot (probably just kill aura and auto-eat)
+- Auto `/queue main`
