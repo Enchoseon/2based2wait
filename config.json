@@ -6,8 +6,11 @@
 	},
 	
 	"discord": {
-		"webhookURL": "YOUR DISCORD WEBHOOK",
-		"id": "YOUR DISCORD ID"
+		"webhook": {
+			"position": "YOUR DISCORD WEBHOOK",
+			"livechat": "YOUR DISCORD WEBHOOK"
+		},
+		"id": "424701879151230977"
 	},
 	
 	"queueThreshold": 69,
