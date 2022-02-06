@@ -3,6 +3,7 @@
 // =======
 
 const fs = require("fs");
+
 const config = JSON.parse(fs.readFileSync("config.json"));
 
 // ===========
@@ -16,29 +17,38 @@ var logHashCode = String(Math.random()).replace(".", "");
 // Functions
 // =========
 
-// Filter & log packets
-function packetHandler(meta, data) {
+/**
+ * Filter & log incoming packets
+ * @param {object} packetData
+ * @param {object} packetMeta
+ */
+function packetHandler(packetData, packetMeta) {
 	if (config.log.active) {
 		const filter = config.log.filter;
 		for (var i = 0; i < filter.length; i++) {
-			if (meta.name === filter[i]) {
+			if (packetMeta.name === filter[i]) {
 				return;
 			}
 		}
-		log("packet" + meta.name + "meta", meta);
-		log("packet" + meta.name + "data", data);
+		log("packet" + packetMeta.name + "meta", packetMeta);
+		log("packet" + packetMeta.name + "data", packetData);
 	}
 }
 
-// Write to a log file
-function log(prefix, msg) {
+/**
+ * Write to a log file
+ * @param {string} category
+ * @param {object} data
+ */
+function log(category, data) {
 	if (config.log.active) {
 		// Create file name
-		var date = new Date();
-		var logFile = "log/2based2wait_" + date.getYear() + "-" + date.getMonth() + "-" + date.getDay() + "_" + logHashCode + "_" + logIndex + ".log";
+		var logFile = "log/2based2wait_" + getTimestamp(true) + "_" + logHashCode + "_" + logIndex + ".log";
 		// Write to log
-		var stream = fs.createWriteStream(logFile, { flags: "a" });
-		stream.write("[" + getTimestamp("-") + "] [" + prefix.toUpperCase() + "] " + JSON.stringify(msg) + "\n");
+		var stream = fs.createWriteStream(logFile, {
+			flags: "a"
+		});
+		stream.write("[" + getTimestamp() + "] [" + category.toUpperCase() + "] " + JSON.stringify(data) + "\n");
 		stream.end();
 		// Increment filename if size is too big		
 		fs.stat(logFile, (err, stats) => {
@@ -51,10 +61,19 @@ function log(prefix, msg) {
 	}
 }
 
-// Get current timestamp
-function getTimestamp(separator) {
-	var date = new Date();
-	return date.getHours() + separator + date.getMinutes() + separator + date.getSeconds();
+/**
+ * Get current timestamp
+ * @param {boolean} includeTime
+ */
+function getTimestamp(includeTime) {
+	var timestamp = new Date();
+	if (includeTime) {
+		timestamp = timestamp.toLocaleDateString();
+	} else {
+		timestamp = timestamp.toLocaleString();
+	}
+	return timestamp.replace(/\//g, "-") // Replace forward-slash with hyphen
+					.replace(",", ""); // Remove comma
 }
 
 // =======
