@@ -4,10 +4,8 @@
 
 const fs = require("fs");
 
-const notifier = require("node-notifier");
+const toast = require("node-notifier");
 const fetch = require("node-fetch");
-
-const gui = require("./gui.js");
 
 const config = JSON.parse(fs.readFileSync("config.json"));
 
@@ -15,9 +13,12 @@ const config = JSON.parse(fs.readFileSync("config.json"));
 // Functions
 // =========
 
-// Send a toast
+/**
+ * Send a toast
+ * @param {string} titleText
+ */
 function sendToast(titleText) {
-	notifier.notify({
+	toast.notify({
 		"title": titleText,
 		"message": " ",
 		"subtitle": "2B Queue Tool",
@@ -28,16 +29,24 @@ function sendToast(titleText) {
 	});
 }
 
-// Send message to a Discord webhook
+/**
+ * Send Discord webhook
+ * @param {object} options
+ * @param {string} options.title
+ * @param {string} options.description
+ * @param {string} options.footer
+ * @param {boolean} options.ping
+ */
 function sendWebhook(options) {
-	var params = { // Create the base embed
+	var params = { // Create embed
 		embeds: [
 			{
 				color: 0xcc0000,
-				title: "2B2T Queue Position: " + gui.data.position,
+				title: options.title,
+				description: options.description,
 				timestamp: new Date(),
 				footer: {
-					text: "ETA: " + gui.data.eta,
+					text: options.footer,
 				},
 				image: {
 					url: null
@@ -45,16 +54,12 @@ function sendWebhook(options) {
 			}
 		]
 	}
-	if (options.ping) { // ping on Discord
-		params.embeds[0].description = "<@" + config.discord.id + ">";
-	} else {
-		params.embeds[0].description = " ";
+	// Add Discord ping to description
+	if (options.ping) {
+		params.embeds[0].description += "<@" + config.discord.id + ">";
 	}
-	if (options.titleOverride !== undefined) { // override title
-		params.embeds[0].title = options.titleOverride;
-	}
-	// Send the final embed to the webhook
-	fetch(config.discord.webhookURL, {
+	// Send embed
+	fetch(options.url, {
 		method: "POST",
 		headers: {
 			"Content-type": "application/json"
@@ -65,11 +70,25 @@ function sendWebhook(options) {
 	})
 }
 
+/**
+ * Update livechat webhook
+ * @param {string} msg
+ */
+function updateLivechat(msg) {
+	if (msg.length > 0) {
+		sendWebhook({
+			description: msg,
+			url: config.discord.webhook.livechat
+		});
+	}
+}
+
 // =======
 // Exports
 // =======
 
 module.exports = {
 	sendToast,
-	sendWebhook
+	sendWebhook,
+	updateLivechat
 };
