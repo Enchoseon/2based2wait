@@ -8,7 +8,7 @@
     "start": "node proxy.js"
   },
   "author": "Enchoseon",
-  "license": "ISC",
+  "license": "GPL-2.0",
   "dependencies": {
     "@rob9315/mcproxy": "^0.2.3",
     "form-data": "^4.0.0",
