@@ -18,12 +18,9 @@ function packetHandler(packetData, packetMeta) {
 	if (packetMeta.name === "chat") {
 		// Parse chat messages
 		var msgObj = JSON.parse(packetData.message);
-		var msgUsername = "";
+		var msgUsername = msgObj.text || "";
 		var msgText = "";
-		if (msgObj.text) {
-			msgUsername += msgObj.text;
-		}
-		if (msgObj.extra) {
+		if (msgObj.extra) { // Being incredibly careful and meandering about how I do this because I didn't read the protocol documentation 
 			msgObj.extra.forEach((extraObj) => {
 				if (extraObj.text) {
 					msgText += extraObj.text;
@@ -31,7 +28,7 @@ function packetHandler(packetData, packetMeta) {
 			});
 		}
 
-		// Notify about server restarts
+		// Notify about server restarts (haven't been tested in a long time due to restarts being less common)
 		if (msgText && msgText.startsWith("[SERVER] Server restarting in ")) {
 			var restart = msgText.replace("[SERVER] Server restarting in ", "").replace(" ...", "");
 			if (restart !== gui.data.restart) {
@@ -45,7 +42,7 @@ function packetHandler(packetData, packetMeta) {
 		}
 
 		// Livechat webhook relay, if not in queue
-		if (!gui.data.inQueue) {
+		if (gui.data.inQueue !== "true") {
 			notifier.updateLivechat(msgUsername + " " + msgText);
 		}
 	}
