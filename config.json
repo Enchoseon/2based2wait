@@ -20,7 +20,7 @@
 	"log": {
 		"active": true,
 		"cutoff": 690420,
-		"filter": ["playerlist_header", "chat", "map", "map_chunk", "player_info", "entity_metadata", "entity_velocity", "entity_move_look", "entity_look", "update_time", "world_particles", "unload_chunk", "teams", "rel_entity_move"]
+		"filter": ["map", "map_chunk", "player_info", "entity_metadata", "entity_velocity", "entity_move_look", "entity_look", "update_time", "world_particles", "unload_chunk", "teams", "rel_entity_move"]
 	},
 	
 	"server": {
