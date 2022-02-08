@@ -41,16 +41,7 @@ start();
 function packetHandler(packetData, packetMeta) {
 	logger.packetHandler(packetData, packetMeta); // Log packets
 	gui.packetHandler(packetData, packetMeta); // Process into CLI GUI and notifications
-	chatty.packetHandler(packetData, packetMeta);
-
-	switch (packetMeta.name) {
-		case "kick_disconnect": // Handle kick/disconnect packets
-			logger.log("kick/disconnect", packetData);
-			reconnect();
-			break;
-		default:
-			break;
-	}
+	chatty.packetHandler(packetData, packetMeta); // Parse chat messages
 }
 
 // ======
@@ -77,15 +68,21 @@ function start() {
 		"max-players": 1
 	});
 
-	// Send message once connected
-	client.on("connect", function () {
+	// Log connect and start Mineflayer
+	client.on("connect", function() {
 		logger.log("connected", "Client connected");
 		startMineflayer();
 	});
 
-	// Send message once disconnected from 2B2T
-	client.on("disconnect", function (packet) {
+	// Log disconnect
+	client.on("disconnect", function(packet) {
 		logger.log("disconnected", packet.reason);
+		reconnect();
+	});
+
+	// Log kick
+	client.on("kick_disconnect", function(packet) {
+		logger.log("kick/disconnect", packet.reason);
 		reconnect();
 	});
 
@@ -93,9 +90,7 @@ function start() {
 	client.on("packet", (packetData, packetMeta) => {
 		// Check if in queue
 		const inQueue = (conn.bot.game.serverBrand === "Waterfall <- 2b2t-lobby");
-		if (inQueue !== gui.data.inQueue) {
-			gui.display("inQueue", inQueue);
-		}
+		gui.display("inQueue", inQueue);
 
 		// Packet handler(s)
 		packetHandler(packetData, packetMeta);
@@ -118,16 +113,20 @@ function start() {
 
 // Bridge packets between you & the already logged-in client
 server.on("login", (bridgeClient) => {
+	// Check whitelist and log connection attempts
 	if (config.proxy.whitelist && (client.uuid !== bridgeClient.uuid)) {
 		bridgeClient.end("You must either use the same account specified in config.json or disable whitelisting.\n\nIf you're getting this error in error, you may have to grant the script permission to use your Microsoft account (if you're using a Microsoft account).");
+		logger.log("bridgeclient", bridgeClient.uuid + " was denied connection to the local server.");
 		return;
+	} else {
+		logger.log("bridgeclient", bridgeClient.uuid + " has connected to the local server.");
 	}
-	logger.log("bridgeclient", bridgeClient.uuid + " has connected to the local server.");
 	
 	bridgeClient.on("packet", (data, meta, rawData) => {
 		bridge(rawData, meta, client);
 	});
-	bridgeClient.on("end", ()=>{
+
+	bridgeClient.on("end", () => {
 		logger.log("bridgeClient", bridgeClient.uuid + " has disconnected from the local server.");
 		startMineflayer();
 	});
@@ -141,7 +140,7 @@ server.on("login", (bridgeClient) => {
 // Functions
 // =========
 
-/** Reconnect */
+/** Reconnect (Remember to set up Nodemon or Forever or this will just cause the script to shut down!) */
 function reconnect() {
 	logger.log("proxy", "Reconnecting.");
 	gui.display("restart", "Reconnecting in " + config.reconnectInterval + " seconds...");
@@ -157,7 +156,8 @@ function reconnect() {
 				ping: true
 			});
 			gui.reset();
-			start();
+			process.exit(0); // Nodemon or Forever or whatever should handle the restart
+			// start();
 		}, config.reconnectInterval * 1000
 	);
 }
@@ -178,7 +178,7 @@ function stopMineflayer() {
 
 /** Send packets from Point A to Point B */
 function bridge(data, meta, dest) {
-	if (meta.name !== "keep_alive" && meta.name !== "update_time") { // Keep-alive packets are filtered bc the client already handles them. Sending double would kick us.
+	if (meta.name !== "keep_alive" || meta.name !== "update_time") { // Keep-alive packets are filtered bc the client already handles them. Sending double would kick us.
 		dest.writeRaw(data);
 	}
 }
