@@ -19,7 +19,7 @@ var data = {
 	"eta": "CHECKING...",
 	"restart": "None",
 	"mineflayer": "CHECKING...",
-	"inQueue": false
+	"inQueue": "false"
 };
 var dataDefault = data;
 
@@ -33,8 +33,8 @@ var dataDefault = data;
  * @param {string} input
  */
 function display(type, input) {
-	if (eval("data." + type + " !== `" + input + "`")) { // Jankus maximus
-		eval("data." + type + " = `" + input + "`");
+	if (data[type] !== input.toString()) { // Only continue if input being received is different from what's already stored in "data".
+		data[type] = input.toString(); // Store input in "data"
 		console.clear();
 		console.log("\x1b[36m", `
 88888                               88888                        
@@ -69,31 +69,25 @@ function reset() {
 function packetHandler(packetData, packetMeta) {
 	switch (packetMeta.name) {
 		case "playerlist_header": // Handle playerlist packets
-			if (data.inQueue) { // Check if in server
+			if (data.inQueue === "true") { // Check if in server
 				const header = JSON.parse(packetData.header).text.split("\n");
 				const position = header[5].split("l")[1];
 				const eta = header[6].split("l")[1];
-				if (position !== data.position) { // Position
+
+				if (position !== data.position) { // Update position
 					display("position", position);
-					if (data.position <= config.queueThreshold) { // Notifications
+					if (data.position <= config.queueThreshold) { // Position notifications on Discord
 						notifier.sendToast("2B2T Queue Position: " + data.position);
 						updatePosition(true);
 					} else {
 						updatePosition(false);
 					}
 				}
-				if (eta !== data.eta) { // ETA
-					display("eta", eta);
-				}
+				// Update ETA
+				display("eta", eta);
 			} else {
-				var position = "In Server!";
-				var eta = "Now!";
-				if (data.position !== position) {
-					display("position", "In Server!");
-				}
-				if (data.eta !== eta) {
-					display("eta", "Now!");
-				}
+				display("position", "In Server!");
+				display("eta", "Now!");
 			}
 			break;
 		default:
