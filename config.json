@@ -8,7 +8,8 @@
 	"discord": {
 		"webhook": {
 			"position": "YOUR DISCORD WEBHOOK",
-			"livechat": "YOUR DISCORD WEBHOOK"
+			"livechat": "YOUR DISCORD WEBHOOK",
+			"sensitive": "YOUR DISCORD WEBHOOK"
 		},
 		"id": "424701879151230977"
 	},
@@ -29,7 +30,8 @@
 	},
 	
 	"proxy": {
-		"whitelist": true,
+		"whitelist": [ "YOUR WHITELISTED PLAYERNAMES" ],
+		"onlineMode": true,
 		"port": 25565
 	}
 }
