@@ -37,12 +37,12 @@ function display(type, input) {
 		data[type] = input.toString(); // Store input in "data"
 		console.clear();
 		console.log("\x1b[36m", `
-88888                               88888                        
-    8 88888  88888 88888 8888 88888     8 e  e  e 88888 8 88888 
-    8 8   8  8   8 8     8    88  8     8 8  8  8 8   8 8   8   
-88888 888888 88888 88888 8888 8   8 88888 8  8  8 88888 8   8   
-8     8    8 8   8     8 8    88  8 8     8  8  8 8   8 8   8   
-88888 888888 8   8 88888 8888 88888 88888 8888888 8   8 8   8 
+88888                               88888
+    8 88888  88888 88888 8888 88888     8 e  e  e 88888 8 88888
+    8 8   8  8   8 8     8    88  8     8 8  8  8 8   8 8   8
+88888 888888 88888 88888 8888 8   8 88888 8  8  8 88888 8   8
+8     8    8 8   8     8 8    88  8 8     8  8  8 8   8 8   8
+88888 888888 8   8 88888 8888 88888 88888 8888888 8   8 8   8
 		`);
 		console.log("\x1b[30m", "Enchoseon#1821 was here!");
 		console.log("\x1b[33m", "Last Update: [" + logger.getTimestamp() + "]");
@@ -78,9 +78,9 @@ function packetHandler(packetData, packetMeta) {
 					display("position", position);
 					if (data.position <= config.queueThreshold) { // Position notifications on Discord
 						notifier.sendToast("2B2T Queue Position: " + data.position);
-						updatePosition(true);
+						updatePositionWebhook(true);
 					} else {
-						updatePosition(false);
+						updatePositionWebhook(false);
 					}
 				}
 				// Update ETA
@@ -99,7 +99,7 @@ function packetHandler(packetData, packetMeta) {
  * Update position in CLI GUI & webhook
  * @param {boolean} ping
  */
-function updatePosition(ping) {
+function updatePositionWebhook(ping) {
 	notifier.sendWebhook({
 		title: "2B2T Queue Position: " + data.position,
 		ping: ping,
