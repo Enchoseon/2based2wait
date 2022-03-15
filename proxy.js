@@ -60,7 +60,7 @@ function start() {
 	});
 	client = conn.bot._client;
 	server = mc.createServer({
-		"online-mode": config.proxy.whitelist,
+		"online-mode": config.proxy.onlineMode,
 		encryption: true,
 		host: "localhost",
 		port: config.proxy.port,
@@ -98,10 +98,10 @@ function start() {
 		// Update local server motd
 		server.motd = "Position: " + gui.data.position + " - ETA: " + gui.data.eta;
 	})
-	
+
 	// Mineflayer stuff
 	client.on("physicTick", function() {
-		if (gui.data.mineflayer && !gui.data.inQueue) {			
+		if (gui.data.mineflayer && !gui.data.inQueue) {
 			// Mineflayer stuff
 		}
 	})
@@ -111,23 +111,30 @@ function start() {
 // Local Server
 // ============
 
-// Bridge packets between you & the already logged-in client
+// Handle logins
 server.on("login", (bridgeClient) => {
-	// Check whitelist and log connection attempts
-	if (config.proxy.whitelist && (client.uuid !== bridgeClient.uuid)) {
-		bridgeClient.end("You must either use the same account specified in config.json or disable whitelisting.\n\nIf you're getting this error in error, you may have to grant the script permission to use your Microsoft account (if you're using a Microsoft account).");
+	// Don't proceed if connecting player isn't in whitelist
+	if (config.proxy.whitelist.indexOf(bridgeClient.uuid) > -1) {
+		bridgeClient.end("Your account is not whitelisted.\n\nIf you're getting this error in error the Microsoft account token may have expired.\n\nThe whitelist may also be set up incorrectly.");
+		// Log unsuccessful connection attempt
 		logger.log("bridgeclient", bridgeClient.uuid + " was denied connection to the local server.");
+		notifier.updateSensitive("[" + bridgeClient.uuid + "](https://api.ashcon.app/mojang/v2/user/) was denied connection to the local server.");
 		return;
-	} else {
-		logger.log("bridgeclient", bridgeClient.uuid + " has connected to the local server.");
 	}
-	
+
+	// Log successful connection attempt
+	logger.log("bridgeclient", bridgeClient.uuid + " has connected to the local server.");
+	notifier.updateSensitive("[" + bridgeClient.uuid + "](https://api.ashcon.app/mojang/v2/user/) has connected to the local server.");
+
+	// Bridge packets between you & the already logged-in client
 	bridgeClient.on("packet", (data, meta, rawData) => {
 		bridge(rawData, meta, client);
 	});
-
+	// Start Mineflayer when disconnected
 	bridgeClient.on("end", () => {
 		logger.log("bridgeClient", bridgeClient.uuid + " has disconnected from the local server.");
+		notifier.updateSensitive(bridgeClient.uuid + " has disconnected from the local server.");
+		notifier.updateSensitive("[" + bridgeClient.uuid + "](https://api.ashcon.app/mojang/v2/user/) has disconnected from the local server.");
 		startMineflayer();
 	});
 
@@ -136,13 +143,21 @@ server.on("login", (bridgeClient) => {
 	conn.link(bridgeClient);
 });
 
+// ===========================
+// Unclean Disconnect Detector
+// ===========================
+
+// If no packets are sent for 5 minutes, assume we were disconnected uncleanly.
+
+
 // =========
 // Functions
 // =========
 
 /** Reconnect (Remember to set up Nodemon or Forever or this will just cause the script to shut down!) */
 function reconnect() {
-	logger.log("proxy", "Reconnecting.");
+	logger.log("proxy", "Reconnecting...");
+	notifier.updateSensitive("Reconnecting...");
 	gui.display("restart", "Reconnecting in " + config.reconnectInterval + " seconds...");
 	setTimeout(
 		function() {
