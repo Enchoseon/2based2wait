@@ -118,13 +118,13 @@ server.on("login", (bridgeClient) => {
 		bridgeClient.end("Your account is not whitelisted.\n\nIf you're getting this error in error the Microsoft account token may have expired.\n\nThe whitelist may also be set up incorrectly.");
 		// Log unsuccessful connection attempt
 		logger.log("bridgeclient", bridgeClient.uuid + " was denied connection to the local server.");
-		notifier.updateSensitive("[" + bridgeClient.uuid + "](https://api.ashcon.app/mojang/v2/user/) was denied connection to the local server.");
+		notifier.updateSensitive("[" + bridgeClient.uuid + "](https://api.mojang.com/user/profiles/" + bridgeClient.uuid + "/names) was denied connection to the local server.");
 		return;
 	}
 
 	// Log successful connection attempt
 	logger.log("bridgeclient", bridgeClient.uuid + " has connected to the local server.");
-	notifier.updateSensitive("[" + bridgeClient.uuid + "](https://api.ashcon.app/mojang/v2/user/) has connected to the local server.");
+	notifier.updateSensitive("[" + bridgeClient.uuid + "](https://api.mojang.com/user/profiles/" + bridgeClient.uuid + "/names) has connected to the local server.");
 
 	// Bridge packets between you & the already logged-in client
 	bridgeClient.on("packet", (data, meta, rawData) => {
@@ -133,8 +133,7 @@ server.on("login", (bridgeClient) => {
 	// Start Mineflayer when disconnected
 	bridgeClient.on("end", () => {
 		logger.log("bridgeClient", bridgeClient.uuid + " has disconnected from the local server.");
-		notifier.updateSensitive(bridgeClient.uuid + " has disconnected from the local server.");
-		notifier.updateSensitive("[" + bridgeClient.uuid + "](https://api.ashcon.app/mojang/v2/user/) has disconnected from the local server.");
+		notifier.updateSensitive("[" + bridgeClient.uuid + "](https://api.mojang.com/user/profiles/" + bridgeClient.uuid + "/names) has disconnected from the local server.");
 		startMineflayer();
 	});
 
@@ -172,7 +171,6 @@ function reconnect() {
 			});
 			gui.reset();
 			process.exit(0); // Nodemon or Forever or whatever should handle the restart
-			// start();
 		}, config.reconnectInterval * 1000
 	);
 }
