@@ -6,11 +6,13 @@ Lightweight & (theoretically) extensible 2b2t proxy.
 
 Go to config.json and configure the following values (see [the wiki](https://github.com/Enchoseon/2based2wait/wiki/Configuration-Guide) for a more thorough explanation):
 - `account.username`: Your Minecraft username
-- `account.password`: Your Minecraft password (Not needed if you're using a Microsoft account. Log-in instructions will appear in the console.)
+- `account.password`: Your Minecraft password (Not needed if you're using a Microsoft account, just leave it blank and log-in instructions will appear in the console.)
 - `account.auth`: Your Minecraft account type ("mojang"/"microsoft")
 - `discord.webhook.position`: The URL of the Discord webhook to send updates on your position in queue.
 - `discord.webhook.livechat`: The URL of the Discord webhook to relay livechat.
-- `discord.id`: The ID of the Discord user to ping for important stuff.
+- `discord.webhook.sensitive`: The URL of the Discord webhook to relay sensitive information.
+- `discord.id`: The ID of the Discord user to ping for important stuff. (This can also be a role!)
+- `proxy.whitelist`: Playernames of accounts that are allowed to connect to the proxy.
 
 Then run `npm start` & connect to `localhost:25565` in Minecraft.
 
@@ -62,3 +64,4 @@ Normally: `You` <=> `2B2T`
 - Automatic screenshotter.
 - Mineflayer bot (probably just kill aura and auto-eat)
 - Auto `/queue main`
+- Make Microsoft auth less painful.
