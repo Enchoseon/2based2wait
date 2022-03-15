@@ -43,7 +43,7 @@ function sendWebhook(options) {
 			{
 				color: 0xcc0000,
 				title: options.title,
-				description: options.description,
+				description: options.description || "",
 				timestamp: new Date(),
 				footer: {
 					text: options.footer,
@@ -71,16 +71,14 @@ function sendWebhook(options) {
 }
 
 /**
- * Update livechat webhook
+ * Update sensitive webhook
  * @param {string} msg
  */
-function updateLivechat(msg) {
-	if (msg.length > 0) {
-		sendWebhook({
-			description: msg,
-			url: config.discord.webhook.livechat
-		});
-	}
+function updateSensitive(msg) {
+	sendWebhook({
+		description: msg,
+		url: config.discord.webhook.sensitive
+	});
 }
 
 // =======
@@ -90,5 +88,5 @@ function updateLivechat(msg) {
 module.exports = {
 	sendToast,
 	sendWebhook,
-	updateLivechat
+	updateSensitive
 };
