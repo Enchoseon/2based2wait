@@ -2,8 +2,12 @@
 // Imports
 // =======
 
+const fs = require("fs");
+
 const notifier = require("./notifier.js");
 const gui = require("./gui.js");
+
+const config = JSON.parse(fs.readFileSync("config.json"));
 
 // =========
 // Functions
