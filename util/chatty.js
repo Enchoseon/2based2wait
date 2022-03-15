@@ -20,7 +20,7 @@ function packetHandler(packetData, packetMeta) {
 		var msgObj = JSON.parse(packetData.message);
 		var msgUsername = msgObj.text || "";
 		var msgText = "";
-		if (msgObj.extra) { // Being incredibly careful and meandering about how I do this because I didn't read the protocol documentation 
+		if (msgObj.extra) { // Being incredibly careful and meandering about how I do this because I didn't read the protocol documentation
 			msgObj.extra.forEach((extraObj) => {
 				if (extraObj.text) {
 					msgText += extraObj.text;
@@ -41,10 +41,23 @@ function packetHandler(packetData, packetMeta) {
 			}
 		}
 
-		// Livechat webhook relay, if not in queue
 		if (gui.data.inQueue !== "true") {
-			notifier.updateLivechat(msgUsername + " " + msgText);
+			// Livechat webhook relay, if not in queue
+			updateLivechatWebhook(msgUsername + " " + msgText);
 		}
+	}
+}
+
+/**
+ * Update livechat webhook
+ * @param {string} msg
+ */
+function updateLivechatWebhook(msg) {
+	if (msg.length > 0) {
+		notifier.sendWebhook({
+			description: msg,
+			url: config.discord.webhook.livechat
+		});
 	}
 }
 
