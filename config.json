@@ -1,8 +1,8 @@
 {
 	"account": {
 		"username": "YOUR USERNAME",
-		"password": "YOUR PASSWORD",
-		"auth": "YOUR ACCOUNT TYPE"
+		"password": "",
+		"auth": "microsoft"
 	},
 	
 	"discord": {
