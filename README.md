@@ -14,13 +14,13 @@ Go to config.json and configure the following values (see [the wiki](https://git
 - `discord.id`: The ID of the Discord user to ping for important stuff. (This can also be a role!)
 - `proxy.whitelist`: Playernames of accounts that are allowed to connect to the proxy.
 
-Then run `npm start` & connect to `localhost:25565` in Minecraft.
+Then run `npm install`, `npm start`, & connect to `localhost:25565` in Minecraft.
 
 # Important Notes
 
 This proxy is just *barely* stable enough for actual use. There is also no auto-reconnect anymore because it's annoying, doesn't work, and would be better handled on your end with a robust keep-alive library like [Forever](https://github.com/foreversd/forever) or [Nodemon](https://github.com/remy/nodemon).
 
-This also hasn't been tested on a VPS yet. It also probably won't work due to the notifier library and the fact that pertinent info like the Microsoft verification code is only briefly visible in the console, which is annoying.
+This does probably doesn't work on a VPS due to the notifier library and the fact that pertinent info like the Microsoft code being only briefly visible in the console. For most use cases involving sharing accounts, TCP forwarders like [Ngrok](https://ngrok.com/) or [Sish](https://github.com/antoniomika/sish) will be enough.
 
 # Features
 
@@ -65,3 +65,4 @@ Normally: `You` <=> `2B2T`
 - Mineflayer bot (probably just kill aura and auto-eat)
 - Auto `/queue main`
 - Make Microsoft auth less painful.
+- Scalability with multiple accounts.
