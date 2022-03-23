@@ -46,6 +46,7 @@ function display(type, input) {
 		`);
 		console.log("\x1b[30m", "Enchoseon#1821 was here!");
 		console.log("\x1b[33m", "Last Update: [" + logger.getTimestamp() + "]");
+		console.log("\x1b[33m", "Account: " + config.account.username);
 		console.log("\x1b[33m", "Current Queue Position: " + data.position);
 		console.log("\x1b[33m", "ETA: " + data.eta);
 		console.log("\x1b[33m", "Restart: " + data.restart);
