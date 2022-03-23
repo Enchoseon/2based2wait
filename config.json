@@ -11,6 +11,7 @@
 			"livechat": "YOUR DISCORD WEBHOOK",
 			"sensitive": "YOUR DISCORD WEBHOOK"
 		},
+		"color": "0xcc0000",
 		"id": "424701879151230977"
 	},
 	
