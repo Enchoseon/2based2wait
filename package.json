@@ -11,9 +11,9 @@
   "license": "GPL-2.0",
   "dependencies": {
     "@rob9315/mcproxy": "^0.3.0",
-    "form-data": "^4.0.0",
     "minecraft-protocol": "^1.26.5",
-    "node-fetch": "^2.6.2",
+    "ngrok": "^4.3.1",
+    "node-fetch": "^2.6.7",
     "node-notifier": "^10.0.0"
   }
 }
