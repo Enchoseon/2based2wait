@@ -12,6 +12,7 @@ const logger = require("./util/logger.js");
 const notifier = require("./util/notifier.js");
 const gui = require("./util/gui.js");
 const chatty = require("./util/chatty.js");
+const ngrok = require("./util/ngrok.js");
 
 const config = JSON.parse(fs.readFileSync("config.json"));
 
@@ -52,19 +53,19 @@ function packetHandler(packetData, packetMeta) {
 function start() {
 	logger.log("proxy", "Starting proxy stack.");
 	conn = new mcproxy.Conn({
-		host: config.server.host,
-		version: config.server.version,
-		username: config.account.username,
-		password: config.account.password,
-		auth: config.account.auth
+		"host": config.server.host,
+		"version": config.server.version,
+		"username": config.account.username,
+		"password": config.account.password,
+		"auth": config.account.auth
 	});
 	client = conn.bot._client;
 	server = mc.createServer({
 		"online-mode": config.proxy.onlineMode,
-		encryption: true,
-		host: "localhost",
-		port: config.proxy.port,
-		version: config.server.version,
+		"encryption": true,
+		"host": "localhost",
+		"port": config.proxy.port,
+		"version": config.server.version,
 		"max-players": 1
 	});
 
@@ -130,6 +131,7 @@ server.on("login", (bridgeClient) => {
 	bridgeClient.on("packet", (data, meta, rawData) => {
 		bridge(rawData, meta, client);
 	});
+
 	// Start Mineflayer when disconnected
 	bridgeClient.on("end", () => {
 		logger.log("bridgeClient", bridgeClient.uuid + " has disconnected from the local server.");
@@ -141,6 +143,14 @@ server.on("login", (bridgeClient) => {
 	conn.sendPackets(bridgeClient);
 	conn.link(bridgeClient);
 });
+
+// ===================
+// Create Ngrok Tunnel
+// ===================
+
+if (config.ngrok.active) {
+	ngrok.createTunnel();
+}
 
 // ===========================
 // Unclean Disconnect Detector
