@@ -19,7 +19,8 @@ var data = {
 	"eta": "CHECKING...",
 	"restart": "None",
 	"mineflayer": "CHECKING...",
-	"inQueue": "false"
+	"inQueue": "false",
+	"ngrokUrl": "None",
 };
 var dataDefault = data;
 
@@ -51,7 +52,10 @@ function display(type, input) {
 		console.log("\x1b[33m", "ETA: " + data.eta);
 		console.log("\x1b[33m", "Restart: " + data.restart);
 		console.log("\x1b[35m", "Mineflayer Running: " + data.mineflayer.toUpperCase());
-		console.log("\x1b[35m", "In Queue Server: " + data.inQueue.toString().toUpperCase());
+		console.log("\x1b[35m", "In Queue Server: " + data.inQueue.toUpperCase());
+		if (config.ngrok.active) {
+			console.log("\x1b[35m", "Ngrok URL: " + data.ngrokUrl);
+		}
 
 		logger.log("gui", data);
 	}
