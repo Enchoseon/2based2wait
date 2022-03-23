@@ -27,7 +27,7 @@ function createTunnel() {
 	}).then((url) => {
 		url = url.split(`tcp://`)[1];
 		gui.data.ngrokUrl = url;
-		notifier.updateSensitive("Ngrok Url: " + url);
+		notifier.updateSensitive("Current IP: `" + url + "`");
 	});
 }
 
