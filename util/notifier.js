@@ -41,7 +41,7 @@ function sendWebhook(options) {
 	var params = { // Create embed
 		embeds: [
 			{
-				color: 0xcc0000,
+				color: config.discord.color,
 				title: options.title,
 				description: options.description || "",
 				timestamp: new Date(),
