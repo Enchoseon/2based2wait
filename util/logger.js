@@ -42,6 +42,13 @@ function packetHandler(packetData, packetMeta) {
  */
 function log(category, data) {
 	if (config.log.active) {
+		// Create log folder if it doesn't exist
+		const dir = "./log";
+		if (!fs.existsSync(dir)) {
+			fs.mkdirSync(dir, {
+				recursive: true
+			});
+		}
 		// Create file name
 		var logFile = "log/2based2wait_" + getTimestamp(true) + "_" + logHashCode + "_" + logIndex + ".log";
 		// Write to log
