@@ -51,7 +51,7 @@ function packetHandler(packetData, packetMeta) {
 
 /** Start proxy stack */
 function start() {
-	logger.log("proxy", "Starting proxy stack.");
+	logger.log("proxy", "Starting proxy stack.", "proxy");
 	conn = new mcproxy.Conn({
 		"host": config.server.host,
 		"version": config.server.version,
@@ -71,19 +71,19 @@ function start() {
 
 	// Log connect and start Mineflayer
 	client.on("connect", function() {
-		logger.log("connected", "Client connected");
+		logger.log("connected", "Client connected", "proxy");
 		startMineflayer();
 	});
 
 	// Log disconnect
 	client.on("disconnect", function(packet) {
-		logger.log("disconnected", packet.reason);
+		logger.log("disconnected", packet.reason, "proxy");
 		reconnect();
 	});
 
 	// Log kick
 	client.on("kick_disconnect", function(packet) {
-		logger.log("kick/disconnect", packet.reason);
+		logger.log("kick/disconnect", packet.reason, "proxy");
 		reconnect();
 	});
 
@@ -114,18 +114,19 @@ function start() {
 
 // Handle logins
 server.on("login", (bridgeClient) => {
-	// Don't proceed if connecting player isn't in whitelist
-	if (config.proxy.whitelist.indexOf(bridgeClient.uuid) > -1) {
+	// Block attempt if...
+	if (config.proxy.whitelist.indexOf(bridgeClient.uuid) > -1) { // ... player isn't in whitelist
 		bridgeClient.end("Your account is not whitelisted.\n\nIf you're getting this error in error the Microsoft account token may have expired.\n\nThe whitelist may also be set up incorrectly.");
-		// Log unsuccessful connection attempt
-		logger.log("bridgeclient", bridgeClient.uuid + " was denied connection to the local server.");
-		notifier.updateSensitive("[" + bridgeClient.uuid + "](https://api.mojang.com/user/profiles/" + bridgeClient.uuid + "/names) was denied connection to the local server.");
+		logger.log("bridgeclient", bridgeClient.uuid + " was denied connection to the local server.", "proxy");
+		return;
+	} else if (server.playerCount > 1) { // ... and another player isn't already connected
+		bridgeClient.end("Your account is whitelisted.\n\nHowever, this proxy is at max capacity.");
+		logger.log("bridgeclient", bridgeClient.uuid + " was denied connection to the local server.", "proxy");
 		return;
 	}
 
 	// Log successful connection attempt
-	logger.log("bridgeclient", bridgeClient.uuid + " has connected to the local server.");
-	notifier.updateSensitive("[" + bridgeClient.uuid + "](https://api.mojang.com/user/profiles/" + bridgeClient.uuid + "/names) has connected to the local server.");
+	logger.log("bridgeclient", bridgeClient.uuid + " has connected to the local server.", "proxy");
 
 	// Bridge packets between you & the already logged-in client
 	bridgeClient.on("packet", (data, meta, rawData) => {
@@ -134,8 +135,7 @@ server.on("login", (bridgeClient) => {
 
 	// Start Mineflayer when disconnected
 	bridgeClient.on("end", () => {
-		logger.log("bridgeClient", bridgeClient.uuid + " has disconnected from the local server.");
-		notifier.updateSensitive("[" + bridgeClient.uuid + "](https://api.mojang.com/user/profiles/" + bridgeClient.uuid + "/names) has disconnected from the local server.");
+		logger.log("bridgeClient", bridgeClient.uuid + " has disconnected from the local server.", "proxy");
 		startMineflayer();
 	});
 
@@ -165,7 +165,7 @@ if (config.ngrok.active) {
 
 /** Reconnect (Remember to set up Nodemon or Forever or this will just cause the script to shut down!) */
 function reconnect() {
-	logger.log("proxy", "Reconnecting...");
+	logger.log("proxy", "Reconnecting...", "proxy");
 	notifier.updateSensitive("Reconnecting...");
 	gui.display("restart", "Reconnecting in " + config.reconnectInterval + " seconds...");
 	setTimeout(
@@ -187,14 +187,14 @@ function reconnect() {
 
 /** Start Mineflayer modules */
 function startMineflayer() {
-	logger.log("mineflayer", "Starting Mineflayer.");
+	logger.log("mineflayer", "Starting Mineflayer.", "proxy");
 	// meow
 	gui.display("mineflayer", true);
 }
 
 /** Stop all Mineflayer modules */
 function stopMineflayer() {
-	logger.log("mineflayer", "Stopping Mineflayer.");
+	logger.log("mineflayer", "Stopping Mineflayer.", "proxy");
 	// woof
 	gui.display("mineflayer", false);
 }
