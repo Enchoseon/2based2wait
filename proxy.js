@@ -3,18 +3,15 @@
 // Imports
 // =======
 
-const fs = require("fs");
-
 const mcproxy = require("@rob9315/mcproxy");
 const mc = require("minecraft-protocol");
 
+const { config } = require("./util/config.js");
 const logger = require("./util/logger.js");
 const notifier = require("./util/notifier.js");
 const gui = require("./util/gui.js");
 const chatty = require("./util/chatty.js");
 const ngrok = require("./util/ngrok.js");
-
-const config = JSON.parse(fs.readFileSync("config.json"));
 
 // ===========
 // Global Vars
@@ -43,6 +40,10 @@ function packetHandler(packetData, packetMeta) {
 	logger.packetHandler(packetData, packetMeta); // Log packets
 	gui.packetHandler(packetData, packetMeta); // Process into CLI GUI and notifications
 	chatty.packetHandler(packetData, packetMeta); // Parse chat messages
+
+	// Reset uncleanDisconnectMonitor timer
+	clearTimeout(uncleanDisconnectMonitor)
+	startUncleanDisconnectMonitor();
 }
 
 // ======
@@ -152,12 +153,18 @@ if (config.ngrok.active) {
 	ngrok.createTunnel();
 }
 
-// ===========================
-// Unclean Disconnect Detector
-// ===========================
+// ==========================
+// Unclean Disconnect Monitor
+// ==========================
 
-// If no packets are sent for 5 minutes, assume we were disconnected uncleanly.
-
+// If no packets are received for config.uncleanDisconnectInterval seconds, assume we were disconnected uncleanly.
+var uncleanDisconnectMonitor;
+function startUncleanDisconnectMonitor() {
+	uncleanDisconnectMonitor = setTimeout(function () {
+		logger.log("proxy", "No packets were received for " + config.uncleanDisconnectInterval + " seconds. Assuming unclean disconnect.", "proxy");
+		reconnect();
+	}, config.uncleanDisconnectInterval * 1000);
+}
 
 // =========
 // Functions
@@ -201,7 +208,7 @@ function stopMineflayer() {
 
 /** Send packets from Point A to Point B */
 function bridge(data, meta, dest) {
-	if (meta.name !== "keep_alive" || meta.name !== "update_time") { // Keep-alive packets are filtered bc the client already handles them. Sending double would kick us.
+	if (meta.name !== "keep_alive" && meta.name !== "update_time") { // Keep-alive packets are filtered bc the client already handles them. Sending double would kick us.
 		dest.writeRaw(data);
 	}
 }
