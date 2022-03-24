@@ -2,12 +2,9 @@
 // Imports
 // =======
 
-const fs = require("fs");
-
+const { config } = require("./config.js");
 const logger = require("./logger.js");
 const notifier = require("./notifier.js");
-
-const config = JSON.parse(fs.readFileSync("config.json"));
 
 // ===========
 // Global Vars
