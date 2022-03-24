@@ -57,7 +57,7 @@ function display(type, input) {
 			console.log("\x1b[35m", "Ngrok URL: " + data.ngrokUrl);
 		}
 
-		logger.log("gui", data);
+		logger.log("gui", data, "gui");
 	}
 }
 
