@@ -4,6 +4,7 @@
 
 const fs = require("fs");
 
+const logger = require("./logger.js");
 const notifier = require("./notifier.js");
 const gui = require("./gui.js");
 
@@ -48,6 +49,7 @@ function packetHandler(packetData, packetMeta) {
 		if (gui.data.inQueue !== "true") {
 			// Livechat webhook relay, if not in queue
 			updateLivechatWebhook(msgUsername + " " + msgText);
+			logger.log(msgUsername, msgText, "chat");
 		}
 	}
 }
