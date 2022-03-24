@@ -2,12 +2,10 @@
 // Imports
 // =======
 
-const fs = require("fs");
-
 const toast = require("node-notifier");
 const fetch = require("node-fetch");
 
-const config = JSON.parse(fs.readFileSync("config.json"));
+const { config } = require("./config.js");
 
 // =========
 // Functions
@@ -41,15 +39,19 @@ function sendWebhook(options) {
 	var params = { // Create embed
 		embeds: [
 			{
-				color: config.discord.color,
-				title: options.title,
-				description: options.description || "",
-				timestamp: new Date(),
-				footer: {
-					text: options.footer,
+				"color": config.discord.color,
+				"title": options.title,
+				"description": options.description || "",
+				"timestamp": new Date(),
+				"footer": {
+					"text": options.footer
 				},
-				image: {
-					url: null
+				"image": {
+					"url": null
+				},
+				"author": {
+					"name": "Account: " + config.account.username,
+					"icon_url": "https://minotar.net/helm/" + config.account.username + "/100.png"
 				}
 			}
 		]
@@ -58,6 +60,7 @@ function sendWebhook(options) {
 	if (options.ping) {
 		params.embeds[0].description += "<@" + config.discord.id + ">";
 	}
+
 	// Send embed
 	fetch(options.url, {
 		method: "POST",
@@ -67,7 +70,7 @@ function sendWebhook(options) {
 		body: JSON.stringify(params)
 	}).then(res => {
 		// meow
-	})
+	});
 }
 
 /**
