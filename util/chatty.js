@@ -2,13 +2,10 @@
 // Imports
 // =======
 
-const fs = require("fs");
-
+const { config } = require("./config.js");
 const logger = require("./logger.js");
 const notifier = require("./notifier.js");
 const gui = require("./gui.js");
-
-const config = JSON.parse(fs.readFileSync("config.json"));
 
 // =========
 // Functions
@@ -46,11 +43,19 @@ function packetHandler(packetData, packetMeta) {
 			}
 		}
 
+		// Livechat webhook relay, if not in queue
 		if (gui.data.inQueue !== "true") {
-			// Livechat webhook relay, if not in queue
+			// If coordination is active, check the coordination file to see if this chat message has already been relayed by another proxy
+			if (config.coordination.active) {
+				// Not implemented yet
+			}
+
+			// Send message to webhook
 			updateLivechatWebhook(msgUsername + " " + msgText);
-			logger.log(msgUsername, msgText, "chat");
 		}
+
+		// Log message
+		logger.log(msgUsername, msgText, "chat");
 	}
 }
 
