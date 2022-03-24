@@ -4,6 +4,8 @@
 
 const fs = require("fs");
 
+const merge = require("deepmerge");
+
 // ===========
 // Global Vars
 // ===========
@@ -16,9 +18,10 @@ var config = {};
 
 config = JSON.parse(fs.readFileSync("config.json"));
 
+// Apply overrides
 if (config.coordination.active) {
 	const masterConfig = JSON.parse(fs.readFileSync(config.coordination.masterConfigPath));
-	Object.assign(config, masterConfig);
+	config = merge(config, masterConfig);
 }
 
 // =======
