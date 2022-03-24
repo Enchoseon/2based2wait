@@ -2,14 +2,11 @@
 // Imports
 // =======
 
-const fs = require("fs");
-
 const ngrokWrapper = require("ngrok");
 
+const { config } = require("./config.js");
 const gui = require("./gui.js");
 const notifier = require("./notifier.js");
-
-const config = JSON.parse(fs.readFileSync("config.json"));
 
 // =========
 // Functions
@@ -19,7 +16,7 @@ const config = JSON.parse(fs.readFileSync("config.json"));
  * Create ngrok tunnel
  */
 function createTunnel() {
-	ngrokWrapper.connect({ // Get the URL
+	ngrokWrapper.connect({
 		proto: "tcp",
 		addr: config.proxy.port,
 		authtoken: config.ngrok.authtoken,
