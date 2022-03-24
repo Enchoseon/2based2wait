@@ -19,6 +19,8 @@
 	
 	"reconnectInterval": 25,
 	
+	"uncleanDisconnectInterval": 420,
+	
 	"log": {
 		"active": true,
 		"cutoff": 690420,
