@@ -40,5 +40,11 @@
 		"active": false,
 		"authtoken": "YOUR AUTHTOKEN HERE",
 		"region": "us"
+	},
+
+	"coordination": {
+		"active": false,
+		"masterConfigPath": "./../master-config.json",
+		"coordinatorPath": "./../coordinator.txt"
 	}
 }
