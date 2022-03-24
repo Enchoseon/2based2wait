@@ -30,32 +30,33 @@ function packetHandler(packetData, packetMeta) {
 				return;
 			}
 		}
-		log("packet" + packetMeta.name + "meta", packetMeta);
-		log("packet" + packetMeta.name + "data", packetData);
+		log(packetMeta.name + "meta", packetMeta, "packets");
+		log(packetMeta.name + "data", packetData, "packets");
 	}
 }
 
 /**
- * Write to a log file
- * @param {string} category
+ * Write to a log file.
+ * @param {string} name
  * @param {object} data
+ * @param {object} category
  */
-function log(category, data) {
+function log(name, data, category) {
 	if (config.log.active) {
 		// Create log folder if it doesn't exist
-		const dir = "./log";
+		const dir = "./log/" + category + "/";
 		if (!fs.existsSync(dir)) {
 			fs.mkdirSync(dir, {
 				recursive: true
 			});
 		}
 		// Create file name
-		var logFile = "log/2based2wait_" + getTimestamp(true) + "_" + logHashCode + "_" + logIndex + ".log";
+		var logFile = dir + category + "_" + getTimestamp(true) + "_" + logHashCode + "_" + logIndex + ".log";
 		// Write to log
 		var stream = fs.createWriteStream(logFile, {
 			flags: "a"
 		});
-		stream.write("[" + getTimestamp() + "] [" + category.toUpperCase() + "] " + JSON.stringify(data) + "\n");
+		stream.write("[" + getTimestamp() + "] [" + name.toUpperCase() + "] " + JSON.stringify(data) + "\n");
 		stream.end();
 		// Increment filename if size is too big		
 		fs.stat(logFile, (err, stats) => {
