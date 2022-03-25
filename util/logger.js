@@ -84,30 +84,6 @@ function getTimestamp(includeTime) {
 					.replace(",", ""); // Remove comma
 }
 
-/**
- * Merge GUI object into coordinator JSON
- * @param {object} data
- */
-function coordinator(data) {
-	if (config.coordination.active) {
-		fs.readFile(config.coordination.coordinatorPath, (error, coordinatorData) => {
-			if (error && error.code == "ENOENT") { // If coordinator json doesn't exist, default to empty object
-				coordinatorData = {};
-			} else { // Otherwise, read the coordinator JSON
-				coordinatorData = JSON.parse(coordinatorData);
-			}
-			// Merge GUI data object with coordinatorData
-			coordinatorData[config.account.username] = data;
-			// Write to coordinator JSON
-			fs.writeFile(config.coordination.coordinatorPath, JSON.stringify(coordinatorData), (error) => {
-				if (error) {
-					log("coordinator", error, "error");
-				}
-			});
-		});
-	}
-}
-
 // =======
 // Exports
 // =======
@@ -115,6 +91,5 @@ function coordinator(data) {
 module.exports = {
 	packetHandler,
 	log,
-	getTimestamp,
-	coordinator
+	getTimestamp
 };
