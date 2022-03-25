@@ -11,7 +11,7 @@ const { config } = require("./config.js");
 // ===========
 
 var logIndex = 1;
-var logHashCode = String(Math.random()).replace(".", "");
+const logRandomEnumerator = String(Math.random()).replace(".", "");
 
 // =========
 // Functions
@@ -51,7 +51,7 @@ function log(name, data, category) {
 			});
 		}
 		// Create file name
-		var logFile = dir + category + "_" + getTimestamp(true) + "_" + logHashCode + "_" + logIndex + ".log";
+		var logFile = dir + category + "_" + getTimestamp(true) + "_" + logRandomEnumerator + "_" + logIndex + ".log";
 		// Write to log
 		var stream = fs.createWriteStream(logFile, {
 			flags: "a"
@@ -84,6 +84,30 @@ function getTimestamp(includeTime) {
 					.replace(",", ""); // Remove comma
 }
 
+/**
+ * Merge GUI object into coordinator JSON
+ * @param {object} data
+ */
+function coordinator(data) {
+	if (config.coordination.active) {
+		fs.readFile(config.coordination.coordinatorPath, (error, coordinatorData) => {
+			if (error && error.code == "ENOENT") { // If coordinator json doesn't exist, default to empty object
+				coordinatorData = {};
+			} else { // Otherwise, read the coordinator JSON
+				coordinatorData = JSON.parse(coordinatorData);
+			}
+			// Merge GUI data object with coordinatorData
+			coordinatorData[config.account.username] = data;
+			// Write to coordinator JSON
+			fs.writeFile(config.coordination.coordinatorPath, JSON.stringify(coordinatorData), (error) => {
+				if (error) {
+					log("coordinator", error, "error");
+				}
+			});
+		});
+	}
+}
+
 // =======
 // Exports
 // =======
@@ -91,5 +115,6 @@ function getTimestamp(includeTime) {
 module.exports = {
 	packetHandler,
 	log,
-	getTimestamp
+	getTimestamp,
+	coordinator
 };
