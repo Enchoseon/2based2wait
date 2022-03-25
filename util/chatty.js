@@ -45,12 +45,10 @@ function packetHandler(packetData, packetMeta) {
 
 		// Livechat webhook relay, if not in queue
 		if (gui.data.inQueue !== "true") {
-			// If coordination is active, check the coordination file to see if this chat message has already been relayed by another proxy
+			// If coordination is active, see if another proxy is already relaying livechat
 			if (config.coordination.active) {
-				// Not implemented yet
+				// NOT IMPLEMENTED YET
 			}
-
-			// Send message to webhook
 			updateLivechatWebhook(msgUsername + " " + msgText);
 		}
 
