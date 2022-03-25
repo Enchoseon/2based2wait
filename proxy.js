@@ -176,6 +176,7 @@ function reconnect() {
 	logger.log("proxy", "Reconnecting...", "proxy");
 	notifier.updateSensitive("Reconnecting...");
 	gui.display("restart", "Reconnecting in " + config.reconnectInterval + " seconds...");
+	gui.display("livechatRelay", "false");
 	setTimeout(
 		function() {
 			server.close();
