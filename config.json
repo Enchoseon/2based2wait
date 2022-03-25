@@ -47,6 +47,6 @@
 	"coordination": {
 		"active": false,
 		"masterConfigPath": "./../master-config.json",
-		"coordinatorPath": "./../coordinator.txt"
+		"coordinatorPath": "./../coordinator.json"
 	}
 }
