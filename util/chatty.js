@@ -38,13 +38,14 @@ function packetHandler(packetData, packetMeta) {
 				notifier.sendToast("Server Restart In: " + status.restart);
 				notifier.sendWebhook({
 					title: "Server Restart In: " + status.restart,
-					ping: true
+					ping: true,
+					url: config.discord.webhook.position
 				});
 			}
 		}
 
 		// Livechat webhook relay, if not in queue
-		if (status.inQueue !== "true") {
+		if (status.inQueue === "false") {
 			// If coordination is active...
 			if (config.coordination.active) {
 				// If no proxy in the pool is the designated livechat relayer, make this one the one
