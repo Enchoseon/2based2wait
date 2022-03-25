@@ -2,7 +2,7 @@
 // Imports
 // =======
 
-const { config } = require("./config.js");
+const { config, status, coordinatorStatus } = require("./config.js");
 const logger = require("./logger.js");
 const notifier = require("./notifier.js");
 const gui = require("./gui.js");
@@ -33,23 +33,31 @@ function packetHandler(packetData, packetMeta) {
 		// Notify about server restarts (haven't been tested in a long time due to restarts being less common)
 		if (msgText && msgText.startsWith("[SERVER] Server restarting in ")) {
 			var restart = msgText.replace("[SERVER] Server restarting in ", "").replace(" ...", "");
-			if (restart !== gui.data.restart) {
+			if (restart !== status.restart) {
 				gui.display("restart", restart);
-				notifier.sendToast("Server Restart In: " + gui.data.restart);
+				notifier.sendToast("Server Restart In: " + status.restart);
 				notifier.sendWebhook({
-					title: "Server Restart In: " + gui.data.restart,
+					title: "Server Restart In: " + status.restart,
 					ping: true
 				});
 			}
 		}
 
 		// Livechat webhook relay, if not in queue
-		if (gui.data.inQueue !== "true") {
-			// If coordination is active, see if another proxy is already relaying livechat
+		if (status.inQueue !== "true") {
+			// If coordination is active...
 			if (config.coordination.active) {
-				// NOT IMPLEMENTED YET
+				// If no proxy in the pool is the designated livechat relayer, make this one the one
+				if (status.livechatRelay === "false" && JSON.stringify(coordinatorStatus).indexOf(`"livechatRelay":"true"`) === -1) {
+					gui.display("livechatRelay", "true");
+				}
+				// Relay livechat if this proxy is the designated livechat relayer
+				if (status.livechatRelay === "true") {
+					updateLivechatWebhook(msgUsername + " " + msgText);
+				}
+			} else {
+				updateLivechatWebhook(msgUsername + " " + msgText);
 			}
-			updateLivechatWebhook(msgUsername + " " + msgText);
 		}
 
 		// Log message
