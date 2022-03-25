@@ -4,8 +4,7 @@
 
 const ngrokWrapper = require("ngrok");
 
-const { config } = require("./config.js");
-const gui = require("./gui.js");
+const { config, status } = require("./config.js");
 const notifier = require("./notifier.js");
 
 // =========
@@ -23,7 +22,7 @@ function createTunnel() {
 		region: config.ngrok.region,
 	}).then((url) => {
 		url = url.split(`tcp://`)[1];
-		gui.data.ngrokUrl = url;
+		status.ngrokUrl = url;
 		notifier.updateSensitive("Current IP: `" + url + "`");
 	});
 }
