@@ -6,7 +6,7 @@
 const mcproxy = require("@rob9315/mcproxy");
 const mc = require("minecraft-protocol");
 
-const { config } = require("./util/config.js");
+const { config, status } = require("./util/config.js");
 const logger = require("./util/logger.js");
 const notifier = require("./util/notifier.js");
 const gui = require("./util/gui.js");
@@ -98,15 +98,16 @@ function start() {
 		packetHandler(packetData, packetMeta);
 
 		// Update local server motd
-		server.motd = "Position: " + gui.data.position + " - ETA: " + gui.data.eta;
+		server.motd = "Position: " + status.position + " - ETA: " + status.eta;
 	})
 
 	// Mineflayer stuff
+	/*
 	client.on("physicTick", function() {
-		if (gui.data.mineflayer && !gui.data.inQueue) {
-			// Mineflayer stuff
+		if (status.mineflayer === "true" && !status.inQueue) {
 		}
 	})
+	*/
 }
 
 // ============
@@ -186,7 +187,6 @@ function reconnect() {
 				title: "Reconnecting now!",
 				ping: true
 			});
-			gui.reset();
 			process.exit(0); // Nodemon or Forever or whatever should handle the restart
 		}, config.reconnectInterval * 1000
 	);
