@@ -51,7 +51,7 @@ function sendWebhook(options) {
 				},
 				"author": {
 					"name": "Account: " + config.account.username,
-					"icon_url": "https://minotar.net/helm/" + config.account.username + "/100.png"
+					"icon_url": "https://minotar.net/helm/" + config.account.username + "/69.png"
 				}
 			}
 		]
@@ -61,8 +61,8 @@ function sendWebhook(options) {
 		params.embeds[0].description += "<@" + config.discord.id + ">";
 	}
 
-	// Send embed
-	fetch(options.url, {
+	// Send embed (if no destination is provided, defaults to config.discord.webhook.position)
+	fetch(options.url || config.discord.webhook.position, {
 		method: "POST",
 		headers: {
 			"Content-type": "application/json"
