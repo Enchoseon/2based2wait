@@ -2,24 +2,9 @@
 // Imports
 // =======
 
-const { config } = require("./config.js");
+const { config, status, updateStatus, updateCoordinatorStatus } = require("./config.js");
 const logger = require("./logger.js");
 const notifier = require("./notifier.js");
-
-// ===========
-// Global Vars
-// ===========
-
-// GUI
-var data = {
-	"position": "CHECKING...",
-	"eta": "CHECKING...",
-	"restart": "None",
-	"mineflayer": "CHECKING...",
-	"inQueue": "false",
-	"ngrokUrl": "None",
-};
-var dataDefault = data;
 
 // =========
 // Functions
@@ -31,8 +16,8 @@ var dataDefault = data;
  * @param {string} input
  */
 function display(type, input) {
-	if (data[type] !== input.toString()) { // Only continue if input being received is different from what's already stored in "data".
-		data[type] = input.toString(); // Store input in "data"
+	// Update status object and only continue if input being received is different from what's already stored in "status".
+	if (updateStatus(type, input)) {
 		console.clear();
 		console.log("\x1b[36m", `
 88888                               88888
@@ -43,24 +28,26 @@ function display(type, input) {
 88888 888888 8   8 88888 8888 88888 88888 8888888 8   8 8   8
 		`);
 		console.log("\x1b[30m", "Enchoseon#1821 was here!");
-		console.log("\x1b[33m", "Last Update: [" + logger.getTimestamp() + "]");
-		console.log("\x1b[33m", "Account: " + config.account.username);
-		console.log("\x1b[33m", "Current Queue Position: " + data.position);
-		console.log("\x1b[33m", "ETA: " + data.eta);
-		console.log("\x1b[33m", "Restart: " + data.restart);
-		console.log("\x1b[35m", "Mineflayer Running: " + data.mineflayer.toUpperCase());
-		console.log("\x1b[35m", "In Queue Server: " + data.inQueue.toUpperCase());
+		console.log("\x1b[37m", "Last Update: [" + logger.getTimestamp() + "]");
+		console.log("\x1b[37m", "Account: " + config.account.username);
+		console.log("\x1b[33m", "Current Queue Position: " + status.position);
+		console.log("\x1b[33m", "ETA: " + status.eta);
+		console.log("\x1b[33m", "Restart: " + status.restart);
+		console.log("\x1b[35m", "Mineflayer Running: " + status.mineflayer.toUpperCase());
+		console.log("\x1b[35m", "In Queue Server: " + status.inQueue.toUpperCase());
 		if (config.ngrok.active) {
-			console.log("\x1b[35m", "Ngrok URL: " + data.ngrokUrl);
+			console.log("\x1b[32m", "Ngrok URL: " + status.ngrokUrl);
+		}
+		if (config.coordination.active) {
+			console.log("\x1b[32m", "Livechat Relay: " + status.livechatRelay.toUpperCase());
 		}
 
-		logger.log("gui", data, "gui");
+		// Log gui object
+		logger.log("gui", status, "gui");
+		updateCoordinatorStatus(status);
+	} else {
+		logger.log("gui", "updateStatus() failed for: " + type + ", " + input, "error");
 	}
-}
-
-/** Reset CLI GUI */
-function reset() {
-	data = dataDefault;
 }
 
 /**
@@ -71,15 +58,15 @@ function reset() {
 function packetHandler(packetData, packetMeta) {
 	switch (packetMeta.name) {
 		case "playerlist_header": // Handle playerlist packets
-			if (data.inQueue === "true") { // Check if in server
+			if (status.inQueue === "true") { // Check if in server
 				const header = JSON.parse(packetData.header).text.split("\n");
 				const position = header[5].split("l")[1];
 				const eta = header[6].split("l")[1];
 
-				if (position !== data.position) { // Update position
+				if (position !== status.position) { // Update position
 					display("position", position);
-					if (data.position <= config.queueThreshold) { // Position notifications on Discord
-						notifier.sendToast("2B2T Queue Position: " + data.position);
+					if (status.position <= config.queueThreshold) { // Position notifications on Discord
+						notifier.sendToast("2B2T Queue Position: " + status.position);
 						updatePositionWebhook(true);
 					} else {
 						updatePositionWebhook(false);
@@ -103,9 +90,9 @@ function packetHandler(packetData, packetMeta) {
  */
 function updatePositionWebhook(ping) {
 	notifier.sendWebhook({
-		title: "2B2T Queue Position: " + data.position,
+		title: "2B2T Queue Position: " + status.position,
 		ping: ping,
-		footer: "ETA: " + data.eta,
+		footer: "ETA: " + status.eta,
 		url: config.discord.webhook.position
 	});
 }
@@ -115,8 +102,6 @@ function updatePositionWebhook(ping) {
 // =======
 
 module.exports = {
-	data,
 	display,
-	reset,
 	packetHandler
 };
