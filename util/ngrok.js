@@ -23,7 +23,7 @@ function createTunnel() {
 	const data = "authtoken: " + config.ngrok.authtoken;
 	fs.writeFile("./ngrok.yml", data, (error) => {
 		if (error) {
-			logger.log("updateCoordinatorStatus", error, "error");
+			logger.log("createTunnel", error, "error");
 			return;
 		}
 
