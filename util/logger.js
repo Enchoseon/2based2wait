@@ -56,7 +56,7 @@ function log(name, data, category) {
 		var stream = fs.createWriteStream(logFile, {
 			flags: "a"
 		});
-		stream.write("[" + getTimestamp() + "] [" + name.toUpperCase() + "] " + JSON.stringify(data) + "\n");
+		stream.write("[" + getTimestamp() + "] [" + name + "] " + JSON.stringify(data) + "\n");
 		stream.end();
 		// Increment filename if size is too big		
 		fs.stat(logFile, (err, stats) => {
