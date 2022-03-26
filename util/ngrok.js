@@ -7,9 +7,9 @@ const fs = require("fs");
 const ngrokWrapper = require("ngrok");
 
 const { config } = require("./config.js");
-const logger = require("./util/logger.js");
-const notifier = require("./util/notifier.js");
-const gui = require("./util/gui.js");
+const logger = require("./logger.js");
+const notifier = require("./notifier.js");
+const gui = require("./gui.js");
 
 // =========
 // Functions
