@@ -2,7 +2,7 @@
 // Imports
 // =======
 
-const { config, status, updateStatus, updateCoordinatorStatus } = require("./config.js");
+const { config, status, updateStatus } = require("./config.js");
 const logger = require("./logger.js");
 const notifier = require("./notifier.js");
 
@@ -44,9 +44,6 @@ function display(type, input) {
 
 		// Log gui object
 		logger.log("gui", status, "gui");
-		updateCoordinatorStatus(status);
-	} else {
-		logger.log("gui", "updateStatus() failed for: " + type + ", " + input, "error");
 	}
 }
 
