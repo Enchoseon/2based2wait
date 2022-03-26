@@ -2,7 +2,9 @@
 // Imports
 // =======
 
-const { config, status, coordinatorStatus } = require("./config.js");
+const fs = require("fs");
+
+const { config, status } = require("./config.js");
 const logger = require("./logger.js");
 const notifier = require("./notifier.js");
 const gui = require("./gui.js");
@@ -44,12 +46,13 @@ function packetHandler(packetData, packetMeta) {
 			}
 		}
 
-		// Livechat webhook relay, if not in queue
+		// Livechat webhook relay, if not in queue.
 		if (status.inQueue === "false") {
 			// If coordination is active...
 			if (config.coordination.active) {
 				// If no proxy in the pool is the designated livechat relayer, make this one the one
-				if (status.livechatRelay === "false" && JSON.stringify(coordinatorStatus).indexOf(`"livechatRelay":"true"`) === -1) {
+				const flagPath = config.coordination.path + "coordinator.flag";
+				if (status.livechatRelay === "false" && !fs.existsSync(flagPath)) {
 					gui.display("livechatRelay", "true");
 				}
 				// Relay livechat if this proxy is the designated livechat relayer
