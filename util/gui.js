@@ -35,11 +35,11 @@ function display(type, input) {
 		console.log("\x1b[33m", "Restart: " + status.restart);
 		console.log("\x1b[35m", "Mineflayer Running: " + status.mineflayer.toUpperCase());
 		console.log("\x1b[35m", "In Queue Server: " + status.inQueue.toUpperCase());
-		if (config.ngrok.active) {
-			console.log("\x1b[32m", "Ngrok URL: " + status.ngrokUrl);
-		}
 		if (config.coordination.active) {
 			console.log("\x1b[32m", "Livechat Relay: " + status.livechatRelay.toUpperCase());
+		}
+		if (config.ngrok.active) {
+			console.log("\x1b[32m", "Ngrok URL: " + status.ngrokUrl);
 		}
 
 		// Log gui object
