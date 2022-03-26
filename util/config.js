@@ -16,25 +16,39 @@ var status = {
 	"eta": "CHECKING...",
 	"restart": "None",
 	"mineflayer": "CHECKING...",
-	"inQueue": "false",
+	"inQueue": "true",
 	"ngrokUrl": "None",
 	"livechatRelay": "false"
 };
-var coordinatorStatus = {};
 
-// ===============
-// Process Configs
-// ===============
+// =======================
+// Process Config & Status
+// =======================
 
 config = JSON.parse(fs.readFileSync("config.json"));
 
 if (config.coordination.active) {
-	// Apply master config overrides
-	const masterConfig = JSON.parse(fs.readFileSync(config.coordination.masterConfigPath));
-	config = merge(config, masterConfig);
-	// Get current coordinator JSON file
-	coordinatorStatus = JSON.parse(fs.readFileSync(config.coordination.coordinatorPath));
+	// Create coordination path folder(s) if it doesn't exist
+	const dir = config.coordination.path;
+	if (!fs.existsSync(dir)) {
+		fs.mkdirSync(dir, {
+			recursive: true
+		});
+	}
+	// Apply master-config.json overrides if provided
+	const masterConfigPath = config.coordination.path + "master-config.json";
+	if (fs.existsSync(masterConfigPath)) {
+		const masterConfig = JSON.parse(fs.readFileSync(config.coordination.path + "master-config.json"));
+		config = merge(masterConfig, config);
+	}
 }
+
+// If server isn't 2b, default status.inQueue to false to fix bugs.
+/*
+if (config.server.host !== "connect.2b2t.org") {
+	status.inQueue = "false";
+}
+*/
 
 // =========
 // Functions
@@ -48,35 +62,31 @@ if (config.coordination.active) {
 function updateStatus(type, input) {
 	if (status[type] !== input.toString()) {
 		status[type] = input.toString();
+		if (config.coordination.active && type === "livechatRelay") { // Update coordinator status if livechatRelay changes
+			updateCoordinatorStatus();
+		}
 		return true;
 	}
 	return false;
 }
 
 /**
- * Merge GUI object into coordinator JSON
- * @param {object} data
+ * Update proxy coordinator status
  */
-function updateCoordinatorStatus(data) {
-	if (config.coordination.active) {
-		fs.readFile(config.coordination.coordinatorPath, (error, coordinatorData) => {
-			if (error && error.code == "ENOENT") { // If coordinator json doesn't exist, default to empty object
-				coordinatorData = {};
-			} else if (!error) { // Otherwise, read the coordinator JSON
-				coordinatorData = JSON.parse(coordinatorData);				
-			} else {
-				log("updateCoordinatorStatus", error, "error");
+function updateCoordinatorStatus() {
+	// Add or remove the flag
+	const flagPath = config.coordination.path + "coordinator.flag";
+	if (status.livechatRelay === "true") {
+		fs.writeFile(flagPath, config.account.username, (error) => {
+			if (error) {
+				// logger.log("updateCoordinatorStatus", error, "error");
 			}
-			// Merge GUI data object with coordinatorData
-			coordinatorData[config.account.username] = data;
-			// Write to coordinator JSON and coordinatorStatus
-			coordinatorStatus = coordinatorData;
-			fs.writeFile(config.coordination.coordinatorPath, JSON.stringify(coordinatorData), (error) => {
-				if (error) {
-					log("updateCoordinatorStatus", error, "error");
-				}
-			});
 		});
+	} else {
+		// Check if the flag is assigned to this proxy
+		if (fs.readFileSync(flagPath) === config.account.username) {
+			fs.unlinkSync(flagPath);
+		}
 	}
 }
 
@@ -87,7 +97,5 @@ function updateCoordinatorStatus(data) {
 module.exports = {
 	config,
 	status,
-	coordinatorStatus,
-	updateStatus,
-	updateCoordinatorStatus
+	updateStatus
 };
