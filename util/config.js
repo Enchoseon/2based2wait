@@ -38,17 +38,10 @@ if (config.coordination.active) {
 	// Apply master-config.json overrides if provided
 	const masterConfigPath = config.coordination.path + "master-config.json";
 	if (fs.existsSync(masterConfigPath)) {
-		const masterConfig = JSON.parse(fs.readFileSync(config.coordination.path + "master-config.json"));
+		const masterConfig = JSON.parse(fs.readFileSync(masterConfigPath));
 		config = merge(masterConfig, config);
 	}
 }
-
-// If server isn't 2b, default status.inQueue to false to fix bugs.
-/*
-if (config.server.host !== "connect.2b2t.org") {
-	status.inQueue = "false";
-}
-*/
 
 // =========
 // Functions
