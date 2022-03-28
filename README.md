@@ -26,9 +26,9 @@ Then run `npm install` and `npm start`. Instructions will appear in the console 
 
 # Things to Keep in Mind
 
-There is no auto-reconnect. Auto-reconnect would be better handled on your end with a robust keep-alive library like [Forever](https://github.com/foreversd/forever) or [Nodemon](https://github.com/remy/nodemon).
+There is no auto-reconnect by default. See [this guide](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor) for a very simple way to have a proxy auto-reconnect.
 
-Using this on a VPS probably won't go well due to the notifier library and the fact that pertinent info like the Microsoft auth code is only briefly visible in the console. Luckily, most use cases involving sharing accounts is handled by TCP forwarding with [Ngrok](https://ngrok.com/).
+Also, running this on a VPS probably won't go well due to the notifier library and the fact that pertinent info like the Microsoft auth code is only briefly visible in the console. Luckily, most use cases involving sharing accounts is handled by TCP forwarding with [Ngrok](https://ngrok.com/).
 
 Additionally, since disconnecting from the proxy won't disconnect the actual account on 2B2T, most auto-disconnect hacks won't work. Forcing a disconnect by sending incorrect packets works, but I don't know any clients that do that for their auto-disconnects.
 
