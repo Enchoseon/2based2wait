@@ -42,6 +42,15 @@ function display(type, input) {
 			console.log("\x1b[32m", "Ngrok URL: " + status.ngrokUrl);
 		}
 
+		if (type === "inQueue" && input === "false") { // Send notification when in server
+			notifier.sendToast("In Server!");
+			notifier.sendWebhook({
+				description: "In Server!",
+				ping: true,
+				url: config.discord.webhook.sensitive
+			});
+		}
+
 		// Log gui object
 		logger.log("gui", status, "gui");
 	}
