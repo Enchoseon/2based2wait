@@ -171,10 +171,13 @@ function startUncleanDisconnectMonitor() {
 // Functions
 // =========
 
-/** Reconnect (Remember to set up Nodemon or Forever or this will just cause the script to shut down!) */
+/** Reconnect (Remember to read https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor or this will just cause the script to shut down!) */
 function reconnect() {
 	logger.log("proxy", "Reconnecting...", "proxy");
-	notifier.updateSensitive("Reconnecting...");
+	notifier.sendWebhook({
+		description: "Reconnecting...",
+		url: config.discord.webhook.sensitive
+	});
 	gui.display("restart", "Reconnecting in " + config.reconnectInterval + " seconds...");
 	gui.display("livechatRelay", "false");
 	setTimeout(
@@ -184,11 +187,7 @@ function reconnect() {
 			conn.disconnect();
 			gui.display("restart", "Reconnecting now!");
 			notifier.sendToast("Reconnecting now!");
-			notifier.sendWebhook({
-				title: "Reconnecting now!",
-				ping: true
-			});
-			process.exit(0); // Nodemon or Forever or whatever should handle the restart
+			process.exit(0);
 		}, config.reconnectInterval * 1000
 	);
 }
