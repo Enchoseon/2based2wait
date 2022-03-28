@@ -31,6 +31,7 @@ function packetHandler(packetData, packetMeta) {
 				}
 			});
 		}
+		const msg = msgUsername + " " + msgText;
 
 		// Notify about server restarts (haven't been tested in a long time due to restarts being less common)
 		if (msgText && msgText.startsWith("[SERVER] Server restarting in ")) {
@@ -41,7 +42,7 @@ function packetHandler(packetData, packetMeta) {
 				notifier.sendWebhook({
 					title: "Server Restart In: " + status.restart,
 					ping: true,
-					url: config.discord.webhook.position
+					url: config.discord.webhook.sensitive
 				});
 			}
 		}
@@ -57,15 +58,17 @@ function packetHandler(packetData, packetMeta) {
 				}
 				// Relay livechat if this proxy is the designated livechat relayer
 				if (status.livechatRelay === "true") {
-					updateLivechatWebhook(msgUsername + " " + msgText);
+					updateLivechatWebhook(msg);
 				}
 			} else {
-				updateLivechatWebhook(msgUsername + " " + msgText);
+				updateLivechatWebhook(msg);
 			}
+		} else {
+			gui.display("livechatRelay", "false");
 		}
 
 		// Log message
-		logger.log(msgUsername, msgText, "chat");
+		logger.log("chat", msg, "chat");
 	}
 }
 
@@ -74,10 +77,12 @@ function packetHandler(packetData, packetMeta) {
  * @param {string} msg
  */
 function updateLivechatWebhook(msg) {
-	if (msg.length > 0) {
+	if (msg.trim().length > 0) {
 		notifier.sendWebhook({
-			description: msg,
-			url: config.discord.webhook.livechat
+			"description": msg,
+			"url": config.discord.webhook.livechat,
+			"footer": "Account: " + config.account.username,
+			"disableAuthor": true
 		});
 	}
 }
