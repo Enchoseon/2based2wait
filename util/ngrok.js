@@ -35,7 +35,10 @@ function createTunnel() {
 		}).then(url => {
 			url = url.split(`tcp://`)[1];
 			gui.display("ngrokUrl", url);
-			notifier.updateSensitive("Current IP: `" + url + "`");
+			notifier.sendWebhook({
+				description: "Current IP: `" + url + "`",
+				url: config.discord.webhook.sensitive
+			});
 		}).catch(error => {
 			console.error(error);
 		});
