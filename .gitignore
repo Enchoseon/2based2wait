@@ -1,0 +1,15 @@
+# Modules
+node_modules/
+
+# Lock
+package-lock.json
+
+# Logs
+logs/
+
+# Configs
+ngrok.yml
+config.json
+
+# VS
+.vs
