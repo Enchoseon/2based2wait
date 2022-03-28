@@ -33,6 +33,7 @@ function sendToast(titleText) {
  * @param {string} options.title
  * @param {string} options.description
  * @param {string} options.footer
+ * @param {boolean} options.disableAuthor
  * @param {boolean} options.ping
  */
 function sendWebhook(options) {
@@ -48,13 +49,16 @@ function sendWebhook(options) {
 				},
 				"image": {
 					"url": null
-				},
-				"author": {
-					"name": "Account: " + config.account.username,
-					"icon_url": "https://minotar.net/helm/" + config.account.username + "/69.png"
 				}
 			}
 		]
+	}
+	// Set author fields
+	if (!options.disableAuthor) {
+		params.embeds[0].author = {
+			"name": "Account: " + config.account.username,
+			"icon_url": "https://minotar.net/helm/" + config.account.username + "/69.png"
+		}
 	}
 	// Add Discord ping to description
 	if (options.ping) {
@@ -73,23 +77,11 @@ function sendWebhook(options) {
 	});
 }
 
-/**
- * Update sensitive webhook
- * @param {string} msg
- */
-function updateSensitive(msg) {
-	sendWebhook({
-		description: msg,
-		url: config.discord.webhook.sensitive
-	});
-}
-
 // =======
 // Exports
 // =======
 
 module.exports = {
 	sendToast,
-	sendWebhook,
-	updateSensitive
+	sendWebhook
 };
