@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 // =======
 // Imports
 // =======
@@ -91,7 +91,7 @@ function start() {
 	// Asoorted packet handlers
 	client.on("packet", (packetData, packetMeta) => {
 		// Check if in queue
-		if (conn.bot.game.serverBrand !== "" || config.server.host !== "connect.2b2t.org") {
+		if (packetMeta.name === "difficulty") { // Explanation: When rerouted by Waterfall, two MC|Brand packets are sent back-to-back followed by a difficulty packet. This statement ignores the first one, as it's just useless noise (it looks something like "Waterfall (git:Waterfall-Bootstrap:1.18-R0.1-SNAPSHOT:ba3bbcc:483)")
 			const inQueue = (conn.bot.game.serverBrand === "Waterfall <- 2b2t-lobby");
 			gui.display("inQueue", inQueue);
 		}
