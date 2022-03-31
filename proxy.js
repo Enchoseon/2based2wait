@@ -91,8 +91,10 @@ function start() {
 	// Asoorted packet handlers
 	client.on("packet", (packetData, packetMeta) => {
 		// Check if in queue
-		const inQueue = (conn.bot.game.serverBrand === "Waterfall <- 2b2t-lobby");
-		gui.display("inQueue", inQueue);
+		if (conn.bot.game.serverBrand !== "" || config.server.host !== "connect.2b2t.org") {
+			const inQueue = (conn.bot.game.serverBrand === "Waterfall <- 2b2t-lobby");
+			gui.display("inQueue", inQueue);
+		}
 
 		// Packet handler(s)
 		packetHandler(packetData, packetMeta);
