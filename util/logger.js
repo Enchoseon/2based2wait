@@ -58,7 +58,7 @@ function log(name, data, category) {
 		});
 		stream.write("[" + getTimestamp() + "] [" + name + "] " + JSON.stringify(data) + "\n");
 		stream.end();
-		// Increment filename if size is too big		
+		// Increment filename if size is too big
 		fs.stat(logFile, (err, stats) => {
 			if (!err) { // ez error handling
 				if (stats.size >= config.log.cutoff * 1000) {

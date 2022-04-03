@@ -90,5 +90,6 @@ function updateCoordinatorStatus() {
 module.exports = {
 	config,
 	status,
-	updateStatus
+	updateStatus,
+	updateCoordinatorStatus
 };

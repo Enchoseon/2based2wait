@@ -5,7 +5,8 @@
   "main": "proxy.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node proxy.js"
+    "start": "node proxy.js",
+    "supervisor": "supervisor -n='success' proxy.js"
   },
   "author": "Enchoseon",
   "license": "GPL-2.0",

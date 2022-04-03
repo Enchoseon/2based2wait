@@ -6,7 +6,7 @@
 const mcproxy = require("@rob9315/mcproxy");
 const mc = require("minecraft-protocol");
 
-const { config, status } = require("./util/config.js");
+const { config, status, updateCoordinatorStatus } = require("./util/config.js");
 const logger = require("./util/logger.js");
 const notifier = require("./util/notifier.js");
 const gui = require("./util/gui.js");
@@ -69,6 +69,9 @@ function start() {
 		"version": config.server.version,
 		"max-players": 1
 	});
+
+	// Delete any leftover coordinator.flag files
+	updateCoordinatorStatus();
 
 	// Log connect and start Mineflayer
 	client.on("connect", function() {
@@ -184,9 +187,6 @@ function reconnect() {
 	gui.display("livechatRelay", "false");
 	setTimeout(
 		function() {
-			server.close();
-			client.end();
-			conn.disconnect();
 			gui.display("restart", "Reconnecting now!");
 			notifier.sendToast("Reconnecting now!");
 			process.exit(0);
