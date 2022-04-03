@@ -71,7 +71,9 @@ function start() {
 	});
 
 	// Delete any leftover coordinator.flag files
-	updateCoordinatorStatus();
+	if (config.coordination.active) {
+		updateCoordinatorStatus();
+	}
 
 	// Log connect and start Mineflayer
 	client.on("connect", function() {
