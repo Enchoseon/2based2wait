@@ -24,6 +24,12 @@ Then run `npm install` and `npm start`. Instructions will appear in the console 
 - Extensive logging
 - Ngrok tunneling
 
+# Images
+
+![cli gui](https://files.catbox.moe/osgsqc.png "cli gui")
+![livechat relay](https://files.catbox.moe/b3fl8s.png "livechat relay")
+![queue relay](https://files.catbox.moe/dgepgx.png "queue gui")
+
 # Things to Keep in Mind
 
 There is no auto-reconnect by default. See [this guide](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor) for a very simple way to have a proxy auto-reconnect.
