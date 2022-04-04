@@ -77,7 +77,7 @@ function updateCoordinatorStatus() {
 		});
 	} else {
 		// Check if the flag is assigned to this proxy
-		if (fs.readFileSync(flagPath) === config.account.username) {
+		if (fs.existsSync(flagPath) && fs.readFileSync(flagPath) === config.account.username) {
 			fs.unlinkSync(flagPath);
 		}
 	}
