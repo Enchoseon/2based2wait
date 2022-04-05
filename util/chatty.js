@@ -42,7 +42,7 @@ function packetHandler(packetData, packetMeta) {
 				notifier.sendWebhook({
 					title: "Server Restart In: " + status.restart,
 					ping: true,
-					url: config.discord.webhook.sensitive
+					url: config.discord.webhook.position
 				});
 			}
 		}
