@@ -44,6 +44,12 @@
 		"region": "us"
 	},
 
+	"mineflayer": {
+		"active":  true,
+		"autoTotem": true,
+		"autoQueueMainInterval": 690
+	},
+	
 	"coordination": {
 		"active": false,
 		"path":  "./../"
