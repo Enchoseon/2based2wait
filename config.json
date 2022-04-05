@@ -45,9 +45,10 @@
 	},
 
 	"mineflayer": {
-		"active":  true,
-		"autoTotem": true,
-		"autoQueueMainInterval": 690
+		"active": true,
+		"autoQueueMainInterval": 690,
+		"killAuraInterval": 1,
+		"killAuraBlacklist": [ "zombie_pigman", "enderman" ]
 	},
 	
 	"coordination": {
