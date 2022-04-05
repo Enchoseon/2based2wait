@@ -12,6 +12,7 @@ const notifier = require("./util/notifier.js");
 const gui = require("./util/gui.js");
 const chatty = require("./util/chatty.js");
 const ngrok = require("./util/ngrok.js");
+const mineflayer = require("./util/mineflayer.js");
 
 // ===========
 // Global Vars
@@ -61,6 +62,7 @@ function start() {
 		"auth": config.account.auth
 	});
 	client = conn.bot._client;
+	mineflayer.initialize(conn.bot);
 	server = mc.createServer({
 		"online-mode": config.proxy.onlineMode,
 		"encryption": true,
@@ -136,7 +138,7 @@ server.on("login", (bridgeClient) => {
 
 	// Log successful connection attempt
 	logger.log("bridgeclient", bridgeClient.uuid + " has connected to the local server.", "proxy");
-
+	
 	// Bridge packets between you & the already logged-in client
 	bridgeClient.on("packet", (data, meta, rawData) => {
 		bridge(rawData, meta, client);
