@@ -48,7 +48,16 @@
 		"active": true,
 		"autoQueueMainInterval": 690,
 		"killAuraInterval": 1,
-		"killAuraBlacklist": [ "zombie_pigman", "enderman" ]
+		"killAuraBlacklist": [ "zombie_pigman", "enderman" ],
+		"safetyWaypoints": {
+			"maxDistance": 250,
+			"waypoints": {
+				1: {
+					"coordinates": [0, 0, 0],
+					"dimension": "overworld"
+				}
+			}
+		}
 	},
 	
 	"coordination": {
