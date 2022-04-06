@@ -109,14 +109,6 @@ function start() {
 		// Update local server motd
 		server.motd = "Position: " + status.position + " - ETA: " + status.eta;
 	})
-
-	// Mineflayer stuff
-	/*
-	client.on("physicTick", function() {
-		if (status.mineflayer === "true" && !status.inQueue) {
-		}
-	})
-	*/
 }
 
 // ============

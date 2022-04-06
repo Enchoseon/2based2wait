@@ -5,6 +5,7 @@
 const { config, status, updateStatus } = require("./config.js");
 const logger = require("./logger.js");
 const notifier = require("./notifier.js");
+const mineflayer = require("./mineflayer.js");
 
 // =========
 // Functions
@@ -18,6 +19,7 @@ const notifier = require("./notifier.js");
 function display(type, input) {
 	// Update status object and only continue if input being received is different from what's already stored in "status".
 	if (updateStatus(type, input)) {
+		/*
 		console.clear();
 		console.log("\x1b[36m", `
 88888                               88888
@@ -41,15 +43,7 @@ function display(type, input) {
 		if (config.ngrok.active) {
 			console.log("\x1b[32m", "Ngrok URL: " + status.ngrokUrl);
 		}
-
-		if (type === "inQueue" && input === false) { // Send notification when in server
-			notifier.sendToast("In Server!");
-			notifier.sendWebhook({
-				description: "In Server!",
-				ping: true,
-				url: config.discord.webhook.sensitive
-			});
-		}
+		*/
 
 		// Log gui object
 		logger.log("gui", status, "gui");
@@ -64,7 +58,7 @@ function display(type, input) {
 function packetHandler(packetData, packetMeta) {
 	switch (packetMeta.name) {
 		case "playerlist_header": // Handle playerlist packets
-			if (status.inQueue === "true") { // Check if in server
+			if (status.inQueue === "true") { // If we're in queue
 				const header = JSON.parse(packetData.header).text.split("\n");
 				const position = header[5].split("l")[1];
 				const eta = header[6].split("l")[1];
@@ -80,9 +74,24 @@ function packetHandler(packetData, packetMeta) {
 				}
 				// Update ETA
 				display("eta", eta);
-			} else {
+			} else { // If we're not in queue
 				display("position", "In Server!");
 				display("eta", "Now!");
+				// Send notification when in server
+				notifier.sendToast("In Server!");
+				notifier.sendWebhook({
+					description: "In Server!",
+					ping: true,
+					url: config.discord.webhook.sensitive
+				});
+				// Begin grace period countdown for someone to connect before heading to a safety waypoint.
+				/*
+				if (config.mineflayer.active) {
+					setTimeout(function () {
+						mineflayer.checkSafetyPathfinder();
+					}, config.mineflayer.safetyWaypoints.checkDelay * 1000);
+				}
+				*/
 			}
 			break;
 		default:
