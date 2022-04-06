@@ -34,13 +34,30 @@ function display(type, input) {
 		console.log("\x1b[33m", "Current Queue Position: " + status.position);
 		console.log("\x1b[33m", "ETA: " + status.eta);
 		console.log("\x1b[33m", "Restart: " + status.restart);
-		console.log("\x1b[35m", "Mineflayer Running: " + status.mineflayer.toUpperCase());
 		console.log("\x1b[35m", "In Queue Server: " + status.inQueue.toUpperCase());
+		if (config.mineflayer.active) {
+			console.log("\x1b[35m", "Mineflayer Running: " + status.mineflayer.toUpperCase());
+		}
 		if (config.coordination.active) {
 			console.log("\x1b[32m", "Livechat Relay: " + status.livechatRelay.toUpperCase());
 		}
 		if (config.ngrok.active) {
 			console.log("\x1b[32m", "Ngrok URL: " + status.ngrokUrl);
+		}
+		if (type === "inQueue" && input === false) { // The code in this janky statement runs one time when the proxy leaves queue.
+			// Send notification when in server
+			notifier.sendToast("In Server!");
+			notifier.sendWebhook({
+				description: "In Server!",
+				ping: true,
+				url: config.discord.webhook.sensitive
+			});
+			// Begin grace period countdown for someone to connect before pathfinding to a safety waypoint.
+			if (config.mineflayer.active) {
+				setTimeout(function () {
+					mineflayer.checkSafetyPathfinder();
+				}, config.mineflayer.safetyWaypoints.checkDelay * 1000);
+			}
 		}
 
 		// Log gui object
@@ -75,21 +92,6 @@ function packetHandler(packetData, packetMeta) {
 			} else { // If we're not in queue
 				display("position", "In Server!");
 				display("eta", "Now!");
-				// Send notification when in server
-				notifier.sendToast("In Server!");
-				notifier.sendWebhook({
-					description: "In Server!",
-					ping: true,
-					url: config.discord.webhook.sensitive
-				});
-				// Begin grace period countdown for someone to connect before heading to a safety waypoint.
-				/*
-				if (config.mineflayer.active) {
-					setTimeout(function () {
-						mineflayer.checkSafetyPathfinder();
-					}, config.mineflayer.safetyWaypoints.checkDelay * 1000);
-				}
-				*/
 			}
 			break;
 		default:

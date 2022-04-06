@@ -130,6 +130,11 @@ server.on("login", (bridgeClient) => {
 
 	// Log successful connection attempt
 	logger.log("bridgeclient", bridgeClient.uuid + " has connected to the local server.", "proxy");
+
+	// Stop pathfinding
+	if (config.mineflayer.active) {
+		conn.bot.pathfinder.stop();
+	}
 	
 	// Bridge packets between you & the already logged-in client
 	bridgeClient.on("packet", (data, meta, rawData) => {
@@ -190,17 +195,15 @@ function reconnect() {
 	);
 }
 
-/** Start Mineflayer modules */
+/** Start Mineflayer */
 function startMineflayer() {
 	logger.log("mineflayer", "Starting Mineflayer.", "proxy");
-	// meow
 	gui.display("mineflayer", true);
 }
 
-/** Stop all Mineflayer modules */
+/** Stop Mineflayer */
 function stopMineflayer() {
 	logger.log("mineflayer", "Stopping Mineflayer.", "proxy");
-	// woof
 	gui.display("mineflayer", false);
 }
 
