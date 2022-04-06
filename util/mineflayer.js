@@ -114,6 +114,18 @@ function initialize(bot) {
                 }
             }
         })
+        // =====
+        // Jesus
+        // =====
+        bot.on("breath", () => {
+            if (status.mineflayer === "true" && status.inQueue === "false") {
+                if (bot.oxygenLevel < 20) {
+                    bot.setControlState("jump", true);
+                } else {
+                    bot.setControlState("jump", false);
+                }
+            }
+        })
     });
 }
 
