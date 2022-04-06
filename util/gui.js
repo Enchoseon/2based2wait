@@ -19,7 +19,6 @@ const mineflayer = require("./mineflayer.js");
 function display(type, input) {
 	// Update status object and only continue if input being received is different from what's already stored in "status".
 	if (updateStatus(type, input)) {
-		/*
 		console.clear();
 		console.log("\x1b[36m", `
 88888                               88888
@@ -43,7 +42,6 @@ function display(type, input) {
 		if (config.ngrok.active) {
 			console.log("\x1b[32m", "Ngrok URL: " + status.ngrokUrl);
 		}
-		*/
 
 		// Log gui object
 		logger.log("gui", status, "gui");
