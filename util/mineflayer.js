@@ -2,6 +2,7 @@
 // Imports
 // =======
 
+const autoeat = require("mineflayer-auto-eat");
 const pathfinder = require("mineflayer-pathfinder").pathfinder;
 const Movements = require("mineflayer-pathfinder").Movements;
 const { GoalNear } = require("mineflayer-pathfinder").goals;
@@ -26,6 +27,7 @@ function initialize(bot) {
         return;
     }
     // Load plugins
+    bot.loadPlugin(autoeat);
     bot.loadPlugin(pathfinder);
     // Create bot
     bot.once("login", () => {
@@ -60,15 +62,20 @@ function initialize(bot) {
         // =========
         setInterval(() => {
             if (status.mineflayer === "true" && status.inQueue === "false") {
-                // Target hostile mobs within 3.5 blocks not in config.mineflayer.killAuraBlacklist
-                const mobFilter = e => (e.type === "mob") && (e.category === "Hostile mobs") && (e.position.distanceTo(bot.entity.position) < 3.5) && (config.mineflayer.killAuraBlacklist.findIndex(e.name) === -1);
+                // Target hostile mobs within 3.5 blocks not in config.mineflayer.killAura.blacklist
+                const mobFilter = e => (e.type === "mob") && (e.category === "Hostile mobs") && (e.position.distanceTo(bot.entity.position) < 3.5) && (config.mineflayer.killAura.blacklist.findIndex(e.name) === -1);
                 const victim = bot.nearestEntity(mobFilter);
                 if (victim) {
                     bot.lookAt(victim.position); // For some reason using the promise doesn't work
                     bot.attack(victim);
                 }
             }
-        }, config.mineflayer.killAuraInterval * 1000);
+        }, config.mineflayer.killAura.interval * 1000);
+        // ========
+        // Auto Eat
+        // ========
+        bot.autoEat.options = config.mineflayer.autoEat;
+        bot.autoEat.enable();
         // =================
         // Safety Pathfinder
         // =================

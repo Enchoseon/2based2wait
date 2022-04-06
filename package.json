@@ -14,6 +14,7 @@
     "@rob9315/mcproxy": "^0.3.0",
     "deepmerge": "^4.2.2",
     "minecraft-protocol": "^1.26.5",
+    "mineflayer-auto-eat": "^2.3.3",
     "mineflayer-pathfinder": "^2.0.0",
     "ngrok": "^4.3.1",
     "node-fetch": "^2.6.7",

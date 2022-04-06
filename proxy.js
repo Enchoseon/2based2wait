@@ -130,11 +130,6 @@ server.on("login", (bridgeClient) => {
 
 	// Log successful connection attempt
 	logger.log("bridgeclient", bridgeClient.uuid + " has connected to the local server.", "proxy");
-
-	// Stop pathfinding
-	if (config.mineflayer.active) {
-		conn.bot.pathfinder.stop();
-	}
 	
 	// Bridge packets between you & the already logged-in client
 	bridgeClient.on("packet", (data, meta, rawData) => {
@@ -199,12 +194,19 @@ function reconnect() {
 function startMineflayer() {
 	logger.log("mineflayer", "Starting Mineflayer.", "proxy");
 	gui.display("mineflayer", true);
+	if (config.mineflayer.active) {
+		conn.bot.autoEat.enable();
+	}
 }
 
 /** Stop Mineflayer */
 function stopMineflayer() {
 	logger.log("mineflayer", "Stopping Mineflayer.", "proxy");
 	gui.display("mineflayer", false);
+	if (config.mineflayer.active) {
+		conn.bot.pathfinder.stop();
+		conn.bot.autoEat.disable()
+	}
 }
 
 /** Send packets from Point A to Point B */
