@@ -54,7 +54,7 @@
 			"waypoints": {
 				1: {
 					"coordinates": [0, 0, 0],
-					"dimension": "overworld"
+					"dimension": "minecraft:overworld"
 				}
 			}
 		}
