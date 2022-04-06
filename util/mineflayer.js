@@ -38,6 +38,17 @@ function initialize(bot) {
                 }
             }, config.mineflayer.autoQueueMainInterval * 1000);
         }
+        // Kill aura
+        setInterval(() => {
+            if (status.mineflayer === "true" && status.inQueue === "false") {
+                const mobFilter = e => (e.type === "mob") && (e.category === "Hostile mobs") && (e.position.distanceTo(bot.entity.position) < 3.5) && (config.mineflayer.killAuraBlacklist.findIndex(e.name) === -1);
+                const victim = bot.nearestEntity(mobFilter);
+                if (victim) {
+                    bot.lookAt(victim.position); // For some reason using the promise doesn't work
+                    bot.attack(victim);
+                }
+            }
+        }, config.mineflayer.killAuraInterval * 1000);
     });
 }
 
