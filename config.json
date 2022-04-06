@@ -43,18 +43,26 @@
 		"authtoken": "YOUR AUTHTOKEN HERE",
 		"region": "us"
 	},
-
+	
 	"mineflayer": {
 		"active": true,
 		"autoQueueMainInterval": 690,
-		"killAuraInterval": 1,
-		"killAuraBlacklist": [ "zombie_pigman", "enderman" ],
+		"killAura": {
+			"interval": 1,
+			"blacklist": [ "zombie_pigman", "enderman" ]
+		},
+		"autoEat": {
+			"priority": "saturation",
+			"startAt": 17,
+			"bannedFood": [ "rotten_flesh", "pufferfish", "chorus_fruit", "poisonous_potato", "spider_eye" ]
+		},
 		"safetyWaypoints": {
+			"checkDelay": 10,
 			"maxDistance": 250,
 			"waypoints": {
 				1: {
 					"coordinates": [0, 0, 0],
-					"dimension": "overworld"
+					"dimension": "minecraft:overworld"
 				}
 			}
 		}
