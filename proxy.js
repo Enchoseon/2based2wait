@@ -123,14 +123,15 @@ server.on("login", (bridgeClient) => {
 		logger.log("bridgeclient", bridgeClient.uuid + " was denied connection to the local server.", "proxy");
 		return;
 	} else if (server.playerCount > 1) { // ... and another player isn't already connected
-		bridgeClient.end("Your account is whitelisted.\n\nHowever, this proxy is at max capacity.");
+		bridgeClient.end("This proxy is at max capacity.\n\nCurrent Controller: " + status.controller);
 		logger.log("bridgeclient", bridgeClient.uuid + " was denied connection to the local server.", "proxy");
 		return;
 	}
 
 	// Log successful connection attempt
 	logger.log("bridgeclient", bridgeClient.uuid + " has connected to the local server.", "proxy");
-	
+	gui.display("controller", bridgeClient.username);
+
 	// Bridge packets between you & the already logged-in client
 	bridgeClient.on("packet", (data, meta, rawData) => {
 		bridge(rawData, meta, client);
@@ -139,6 +140,7 @@ server.on("login", (bridgeClient) => {
 	// Start Mineflayer when disconnected
 	bridgeClient.on("end", () => {
 		logger.log("bridgeClient", bridgeClient.uuid + " has disconnected from the local server.", "proxy");
+		gui.display("controller", "None");
 		startMineflayer();
 	});
 
@@ -181,13 +183,11 @@ function reconnect() {
 	});
 	gui.display("restart", "Reconnecting in " + config.reconnectInterval + " seconds...");
 	gui.display("livechatRelay", "false");
-	setTimeout(
-		function() {
-			gui.display("restart", "Reconnecting now!");
-			notifier.sendToast("Reconnecting now!");
-			process.exit(0);
-		}, config.reconnectInterval * 1000
-	);
+	setTimeout(function() {
+		gui.display("restart", "Reconnecting now!");
+		notifier.sendToast("Reconnecting now!");
+		process.exit(0);
+	}, config.reconnectInterval * 1000);
 }
 
 /** Start Mineflayer */

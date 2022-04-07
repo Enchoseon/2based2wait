@@ -44,9 +44,7 @@ function sendWebhook(options) {
 				"title": options.title,
 				"description": options.description || "",
 				"timestamp": new Date(),
-				"footer": {
-					"text": options.footer
-				},
+				"footer": options.footer || {},
 				"image": {
 					"url": null
 				}
@@ -54,11 +52,14 @@ function sendWebhook(options) {
 		]
 	}
 	// Set author fields
-	if (!options.disableAuthor) {
+	const playerIconUrl = "https://minotar.net/helm/" + config.account.username + "/69.png";
+	if (!options.subtleAttribution) {
 		params.embeds[0].author = {
 			"name": "Account: " + config.account.username,
-			"icon_url": "https://minotar.net/helm/" + config.account.username + "/69.png"
+			"icon_url": playerIconUrl
 		}
+	} else {
+		params.embeds[0].footer.icon_url = playerIconUrl;
 	}
 	// Add Discord ping to description
 	if (options.ping) {

@@ -18,7 +18,8 @@ var status = {
 	"mineflayer": "CHECKING...",
 	"inQueue": "true",
 	"ngrokUrl": "None",
-	"livechatRelay": "false"
+	"livechatRelay": "false",
+	"controller": "None",
 };
 
 // =======================

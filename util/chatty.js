@@ -81,8 +81,10 @@ function updateLivechatWebhook(msg) {
 		notifier.sendWebhook({
 			"description": msg,
 			"url": config.discord.webhook.livechat,
-			"footer": "Account: " + config.account.username,
-			"disableAuthor": true
+			"footer": {
+				"text": "Controller: " + status.controller
+			},
+			"subtleAttribution": true
 		});
 	}
 }
