@@ -5,7 +5,7 @@
 const toast = require("node-notifier");
 const fetch = require("node-fetch");
 
-const { config } = require("./config.js");
+const { config, status } = require("./config.js");
 
 // =========
 // Functions
@@ -32,8 +32,7 @@ function sendToast(titleText) {
  * @param {object} options
  * @param {string} options.title
  * @param {string} options.description
- * @param {string} options.footer
- * @param {boolean} options.disableAuthor
+ * @param {boolean} options.disableAttribution
  * @param {boolean} options.ping
  */
 function sendWebhook(options) {
@@ -44,22 +43,24 @@ function sendWebhook(options) {
 				"title": options.title,
 				"description": options.description || "",
 				"timestamp": new Date(),
-				"footer": options.footer || {},
 				"image": {
 					"url": null
 				}
 			}
 		]
 	}
-	// Set author fields
-	const playerIconUrl = "https://minotar.net/helm/" + config.account.username + "/69.png";
-	if (!options.subtleAttribution) {
+	// If someone is controlling the bot add that to the embed
+	if (status.controller !== "None") {
+		params.embeds[0].footer = {
+			"text": "Controller: " + status.controller
+		}
+	}
+	// Set author fields so that we know where each embed came from
+	if (!options.disableAttribution) {
 		params.embeds[0].author = {
 			"name": "Account: " + config.account.username,
-			"icon_url": playerIconUrl
+			"icon_url": "https://minotar.net/helm/" + config.account.username + "/69.png"
 		}
-	} else {
-		params.embeds[0].footer.icon_url = playerIconUrl;
 	}
 	// Add Discord ping to description
 	if (options.ping) {

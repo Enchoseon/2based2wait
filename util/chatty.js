@@ -81,10 +81,7 @@ function updateLivechatWebhook(msg) {
 		notifier.sendWebhook({
 			"description": msg,
 			"url": config.discord.webhook.livechat,
-			"footer": {
-				"text": "Controller: " + status.controller
-			},
-			"subtleAttribution": true
+			"disableAttribution": true
 		});
 	}
 }
