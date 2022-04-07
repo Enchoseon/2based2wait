@@ -108,7 +108,7 @@ function updatePositionWebhook(ping) {
 	notifier.sendWebhook({
 		title: "2B2T Queue Position: " + status.position,
 		ping: ping,
-		footer: "ETA: " + status.eta,
+		description: "ETA: " + status.eta,
 		url: config.discord.webhook.position
 	});
 }
