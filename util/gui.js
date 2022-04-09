@@ -53,12 +53,6 @@ function display(type, input) {
 				ping: true,
 				url: config.discord.webhook.sensitive
 			});
-			// Begin grace period countdown for someone to connect before pathfinding to a safety waypoint.
-			if (config.mineflayer.active) {
-				setTimeout(function () {
-					mineflayer.checkSafetyPathfinder();
-				}, config.mineflayer.safetyWaypoints.checkDelay * 1000);
-			}
 		}
 
 		// Log gui object

@@ -3,19 +3,9 @@
 // =======
 
 const autoeat = require("mineflayer-auto-eat");
-const pathfinder = require("mineflayer-pathfinder").pathfinder;
-const Movements = require("mineflayer-pathfinder").Movements;
-const { GoalNear } = require("mineflayer-pathfinder").goals;
-const Vec3 = require("vec3");
 
 const { config, status } = require("./config.js");
 const mcData = require("minecraft-data")(config.server.version);
-
-// ===========
-// Global Vars
-// ===========
-
-var safetyPathfinderFlag = false; // God this is so messy. Make this variable true during runtime to begin pathfinding to the nearest safety waypoint.
 
 // ===
 // Bot
@@ -28,7 +18,6 @@ function initialize(bot) {
     }
     // Load plugins
     bot.loadPlugin(autoeat);
-    bot.loadPlugin(pathfinder);
     // Create bot
     bot.once("login", () => {
         // ==========
@@ -76,44 +65,6 @@ function initialize(bot) {
         // ========
         bot.autoEat.options = config.mineflayer.autoEat;
         bot.autoEat.enable();
-        // =================
-        // Safety Pathfinder
-        // =================
-        bot.on("physicTick", () => {
-            if (safetyPathfinderFlag) {
-                safetyPathfinderFlag = false;
-                // Apply movement configs
-                const movementConfig = new Movements(bot, mcData);
-                movementConfig.digCost = 75;
-                movementConfig.placeCost = 50;
-                bot.pathfinder.setMovements(movementConfig);
-                // Filter thru waypoints to find nearest valid waypoint
-                var nearestWaypoint;
-                const waypoints = config.mineflayer.safetyWaypoints.waypoints;
-                for (var key in waypoints) {
-                    const check = waypoints[key];
-                    if (bot.game.dimension === check.dimension) { // Check if in correct dimension
-                        // Calculate distance and store in object so that it doesn't have to be calculated again
-                        const waypointVec3 = new Vec3(check.coordinates[0], check.coordinates[1], check.coordinates[2]);
-                        check.distance = bot.entity.position.distanceTo(waypointVec3);
-                        // Check if in range
-                        if (check.distance <= config.mineflayer.safetyWaypoints.maxDistance) {
-                            // Assign to nearestWaypoint...
-                            if (nearestWaypoint !== undefined) { // ... if is closer than the existing nearestWaypoint
-                                if (check.distance < nearestWaypoint.distance) {
-                                    nearestWaypoint = check;
-                                }
-                            } else { // ... if it's the first eligible waypoint
-                                nearestWaypoint = check;
-                            }
-                        }
-                    }
-                }
-                if (nearestWaypoint !== undefined) {
-                    bot.pathfinder.setGoal(new GoalNear(nearestWaypoint.coordinates[0], nearestWaypoint.coordinates[1], nearestWaypoint.coordinates[2], 1));
-                }
-            }
-        })
         // =====
         // Jesus
         // =====
@@ -129,20 +80,10 @@ function initialize(bot) {
     });
 }
 
-// =========
-// Functions
-// =========
-function checkSafetyPathfinder() {
-    if (status.mineflayer === "true") {
-        safetyPathfinderFlag = true;
-    }
-}
-
 // =======
 // Exports
 // =======
 
 module.exports = {
-    initialize,
-    checkSafetyPathfinder
+    initialize
 };
