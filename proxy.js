@@ -204,7 +204,6 @@ function stopMineflayer() {
 	logger.log("mineflayer", "Stopping Mineflayer.", "proxy");
 	gui.display("mineflayer", false);
 	if (config.mineflayer.active) {
-		conn.bot.pathfinder.stop();
 		conn.bot.autoEat.disable()
 	}
 }

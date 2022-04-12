@@ -20,20 +20,6 @@ function initialize(bot) {
     bot.loadPlugin(autoeat);
     // Create bot
     bot.once("login", () => {
-        // ==========
-        // Auto-Totem
-        // ==========
-        const totem = mcData.itemsByName.totem_of_undying;
-        if (totem) {
-            setInterval(() => {
-                if (status.mineflayer === "true" && status.inQueue === "false") {
-                    const totemInInventory = bot.inventory.findInventoryItem(totem.id, null)
-                    if (totemInInventory) {
-                        bot.equip(totemInInventory, "off-hand")
-                    }
-                }
-            }, 690)
-        }
         // ===============
         // Auto-Queue Main
         // ===============
