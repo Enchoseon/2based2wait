@@ -26,6 +26,7 @@ var server;
 // Start Proxy
 // ===========
 
+restartUncleanDisconnectMonitor();
 start();
 
 // =================
@@ -43,8 +44,7 @@ function packetHandler(packetData, packetMeta) {
 	chatty.packetHandler(packetData, packetMeta); // Parse chat messages
 
 	// Reset uncleanDisconnectMonitor timer
-	clearTimeout(uncleanDisconnectMonitor)
-	startUncleanDisconnectMonitor();
+	restartUncleanDisconnectMonitor();
 }
 
 // ======
@@ -163,7 +163,9 @@ if (config.ngrok.active) {
 
 // If no packets are received for config.uncleanDisconnectInterval seconds, assume we were disconnected uncleanly.
 var uncleanDisconnectMonitor;
-function startUncleanDisconnectMonitor() {
+// Reset uncleanDisconnectMonitor timer
+function restartUncleanDisconnectMonitor() {
+	clearTimeout(uncleanDisconnectMonitor)
 	uncleanDisconnectMonitor = setTimeout(function () {
 		logger.log("proxy", "No packets were received for " + config.uncleanDisconnectInterval + " seconds. Assuming unclean disconnect.", "proxy");
 		reconnect();
