@@ -118,8 +118,8 @@ function start() {
 // Handle logins
 server.on("login", (bridgeClient) => {
 	// Block attempt if...
-	if (config.proxy.whitelist.indexOf(bridgeClient.uuid) > -1) { // ... player isn't in whitelist
-		bridgeClient.end("Your account is not whitelisted.\n\nIf you're getting this error in error the Microsoft account token may have expired.\n\nThe whitelist may also be set up incorrectly.");
+	if (config.proxy.whitelist.findIndex(needle => bridgeClient.username.toLowerCase() === needle.toLowerCase()) === -1) { // ... player isn't in whitelist
+		bridgeClient.end("Your account (" + bridgeClient.username + ") is not whitelisted.\n\nIf you're getting this error in error the Microsoft account token may have expired.");
 		logger.log("bridgeclient", bridgeClient.uuid + " was denied connection to the local server.", "proxy");
 		return;
 	} else if (server.playerCount > 1) { // ... and another player isn't already connected
