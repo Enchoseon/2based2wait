@@ -5,7 +5,6 @@
 const autoeat = require("mineflayer-auto-eat");
 
 const { config, status } = require("./config.js");
-const mcData = require("minecraft-data")(config.server.version);
 
 // ===
 // Bot
@@ -32,6 +31,8 @@ function initialize(bot) {
                 }
             }, config.mineflayer.autoQueueMainInterval * 1000);
         }
+    });
+    bot.once("spawn", () => {
         // =========
         // Kill Aura
         // =========
@@ -62,7 +63,7 @@ function initialize(bot) {
                     bot.setControlState("jump", false);
                 }
             }
-        })
+        });
     });
 }
 

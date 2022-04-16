@@ -5,7 +5,6 @@
 const { config, status, updateStatus } = require("./config.js");
 const logger = require("./logger.js");
 const notifier = require("./notifier.js");
-const mineflayer = require("./mineflayer.js");
 
 // =========
 // Functions
