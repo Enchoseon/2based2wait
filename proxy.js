@@ -108,7 +108,12 @@ function start() {
 
 		// Update local server motd
 		server.motd = "Position: " + status.position + " - ETA: " + status.eta;
-	})
+	});
+	
+	// Create ngrok tunnel
+	if (config.ngrok.active) {
+		ngrok.createTunnel();
+	}
 }
 
 // ============
@@ -148,14 +153,6 @@ server.on("login", (bridgeClient) => {
 	conn.sendPackets(bridgeClient);
 	conn.link(bridgeClient);
 });
-
-// ===================
-// Create Ngrok Tunnel
-// ===================
-
-if (config.ngrok.active) {
-	ngrok.createTunnel();
-}
 
 // ==========================
 // Unclean Disconnect Monitor
