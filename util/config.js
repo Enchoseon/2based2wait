@@ -19,7 +19,7 @@ var status = {
 	"inQueue": "true",
 	"ngrokUrl": "None",
 	"livechatRelay": "false",
-	"controller": "None",
+	"controller": "None"
 };
 
 // =======================

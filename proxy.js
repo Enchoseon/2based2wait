@@ -176,10 +176,6 @@ function restartUncleanDisconnectMonitor() {
 /** Reconnect (Remember to read https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor or this will just cause the script to shut down!) */
 function reconnect() {
 	logger.log("proxy", "Reconnecting...", "proxy");
-	notifier.sendWebhook({
-		description: "Reconnecting...",
-		url: config.discord.webhook.sensitive
-	});
 	gui.display("restart", "Reconnecting in " + config.reconnectInterval + " seconds...");
 	gui.display("livechatRelay", "false");
 	setTimeout(function() {

@@ -6,6 +6,12 @@ const { config, status, updateStatus } = require("./config.js");
 const logger = require("./logger.js");
 const notifier = require("./notifier.js");
 
+// ===========
+// Global Vars
+// ===========
+
+var sentNotification = false;
+
 // =========
 // Functions
 // =========
@@ -76,9 +82,17 @@ function packetHandler(packetData, packetMeta) {
 					display("position", position);
 					if (status.position <= config.queueThreshold) { // Position notifications on Discord
 						notifier.sendToast("2B2T Queue Position: " + status.position);
-						updatePositionWebhook(true);
+						updatePositionWebhook();
+						if (sentNotification) {
+							notifier.sendWebhook({
+								description: "Position " + status.position + "in queue.",
+								ping: true,
+								url: config.discord.webhook.sensitive
+							});
+						}
+						sentNotification = true;
 					} else {
-						updatePositionWebhook(false);
+						updatePositionWebhook();
 					}
 				}
 				// Update ETA
@@ -94,13 +108,11 @@ function packetHandler(packetData, packetMeta) {
 }
 
 /**
- * Update position in CLI GUI & webhook
- * @param {boolean} ping
+ * Update position in webhook
  */
-function updatePositionWebhook(ping) {
+function updatePositionWebhook() {
 	notifier.sendWebhook({
 		title: "2B2T Queue Position: " + status.position,
-		ping: ping,
 		description: "ETA: " + status.eta,
 		url: config.discord.webhook.position
 	});
