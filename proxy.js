@@ -191,7 +191,7 @@ function startMineflayer() {
 	gui.display("mineflayer", true);
 	if (config.mineflayer.active) {
 		conn.bot.autoEat.enable();
-		if (config.mineflayer.antiAfk.enabled) {
+		if (config.mineflayer.antiAfk.active) {
 			conn.bot.afk.start();
 		}
 	}
@@ -203,7 +203,7 @@ function stopMineflayer() {
 	gui.display("mineflayer", false);
 	if (config.mineflayer.active) {
 		conn.bot.autoEat.disable();
-		if (config.mineflayer.antiAfk.enabled) {
+		if (config.mineflayer.antiAfk.active) {
 			conn.bot.afk.stop();
 		}
 	}
