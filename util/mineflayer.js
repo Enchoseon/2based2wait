@@ -3,6 +3,7 @@
 // =======
 
 const autoeat = require("mineflayer-auto-eat");
+const antiafk = require("mineflayer-antiafk");
 
 const { config, status } = require("./config.js");
 
@@ -17,6 +18,14 @@ function initialize(bot) {
     }
     // Load plugins
     bot.loadPlugin(autoeat);
+    bot.loadPlugin(antiafk);
+    // Set plugin options
+    bot.autoEat.options = config.mineflayer.autoEat;
+    bot.afk.setOptions(config.mineflayer.antiAfk);
+    bot.afk.setOptions({ 
+        "killauraEnabled": false,
+        "autoEatEnabled": false
+    });
     // Create bot
     bot.once("login", () => {
         // ===============
@@ -47,11 +56,6 @@ function initialize(bot) {
                 }
             }
         }, config.mineflayer.killAura.interval * 1000);
-        // ========
-        // Auto Eat
-        // ========
-        bot.autoEat.options = config.mineflayer.autoEat;
-        bot.autoEat.enable();
         // =====
         // Jesus
         // =====
