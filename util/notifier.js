@@ -64,7 +64,7 @@ function sendWebhook(options) {
 	}
 	// Add Discord ping to description
 	if (options.ping) {
-		params.embeds[0].description += "<@" + config.discord.id + ">";
+		params.embeds[0].description += " <@" + config.discord.id + ">";
 	}
 
 	// Send embed (if no destination is provided, defaults to config.discord.webhook.position)
