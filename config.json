@@ -15,7 +15,7 @@
 		"id": "424701879151230977"
 	},
 	
-	"queueThreshold": 69,
+	"queueThreshold": 21,
 	
 	"reconnectInterval": 25,
 	
@@ -24,7 +24,7 @@
 	"log": {
 		"active": true,
 		"cutoff": 690420,
-		"filter": [ "map", "map_chunk", "player_info", "entity_metadata", "entity_velocity", "entity_move_look", "entity_look", "update_time", "world_particles", "unload_chunk", "teams", "rel_entity_move", "entity_head_rotation", "entity_update_attributes", "block_change"]
+		"filter": [ "map", "map_chunk", "player_info", "entity_metadata", "entity_velocity", "entity_move_look", "entity_look", "update_time", "world_particles", "unload_chunk", "teams", "rel_entity_move", "entity_head_rotation", "entity_update_attributes", "block_change" ]
 	},
 	
 	"server": {
@@ -53,8 +53,16 @@
 		},
 		"autoEat": {
 			"priority": "saturation",
-			"startAt": 17,
+			"startAt": 19,
 			"bannedFood": [ "rotten_flesh", "pufferfish", "chorus_fruit", "poisonous_potato", "spider_eye" ]
+		},
+		"antiAfk": {
+			"active": false,
+			"actions": [ "rotate", "walk", "jump", "jumpWalk", "swingArm" ],
+			"fishing": false,
+			"chatting": true,
+			"chatMessages": [ "!pt", "!queue" ],
+			"chatInterval": 690420
 		}
 	},
 	
