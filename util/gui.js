@@ -55,7 +55,7 @@ function display(type, input) {
 			notifier.sendToast("In Server!");
 			notifier.sendWebhook({
 				title: "In Server!",
-				description: "Current IP: `" + status.url + "`",
+				description: "Current IP: `" + status.ngrokUrl + "`",
 				ping: true,
 				url: config.discord.webhook.sensitive
 			});
@@ -87,7 +87,7 @@ function packetHandler(packetData, packetMeta) {
 						if (!sentNotification) {
 							notifier.sendWebhook({
 								title: "Position " + status.position + " in queue!",
-								description: "Current IP: `" + status.url + "`",
+								description: "Current IP: `" + status.ngrokUrl + "`",
 								ping: true,
 								url: config.discord.webhook.sensitive
 							});
