@@ -83,9 +83,9 @@ function packetHandler(packetData, packetMeta) {
 					if (status.position <= config.queueThreshold) { // Position notifications on Discord
 						notifier.sendToast("2B2T Queue Position: " + status.position);
 						updatePositionWebhook();
-						if (sentNotification) {
+						if (!sentNotification) {
 							notifier.sendWebhook({
-								description: "Position " + status.position + "in queue.",
+								title: "Position " + status.position + " in queue!",
 								ping: true,
 								url: config.discord.webhook.sensitive
 							});
