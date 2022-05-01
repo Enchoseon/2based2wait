@@ -36,6 +36,7 @@ function createTunnel() {
 			url = url.split(`tcp://`)[1];
 			gui.display("ngrokUrl", url);
 			notifier.sendWebhook({
+				title: "New Tunnel:",
 				description: "Current IP: `" + url + "`",
 				url: config.discord.webhook.sensitive
 			});
