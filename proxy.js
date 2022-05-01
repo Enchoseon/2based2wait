@@ -81,6 +81,10 @@ function start() {
 	client.on("connect", function() {
 		logger.log("connected", "Client connected", "proxy");
 		startMineflayer();
+		// Create ngrok tunnel
+		if (config.ngrok.active) {
+			ngrok.createTunnel();
+		}
 	});
 
 	// Log disconnect
@@ -108,11 +112,6 @@ function start() {
 
 		// Update local server motd
 		server.motd = "Position: " + status.position + " - ETA: " + status.eta;
-		
-		// Create ngrok tunnel
-		if (config.ngrok.active) {
-			ngrok.createTunnel();
-		}
 	});
 }
 
