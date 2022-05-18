@@ -23,6 +23,7 @@ Then run `npm install` and `npm start`. Instructions will appear in the console 
 - Toast notifications on restarts/position
 - Extensive logging
 - Ngrok tunneling
+- Share accounts without sharing email access or getting blocked by Microsoft
 
 # Images
 
