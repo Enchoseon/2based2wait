@@ -45,7 +45,5 @@ You can disconnect from the local server, swap out your clients, & change your m
 
 - Queue time estimator.
 - Automatic screenshotter.
-- Mineflayer bot (probably just kill aura and auto-eat).
-- Auto `/queue main`.
 - Make Microsoft auth less painful.
 - Scalability with multiple accounts.
