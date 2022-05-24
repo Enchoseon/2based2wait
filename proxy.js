@@ -102,8 +102,8 @@ function start() {
 	// Asoorted packet handlers
 	client.on("packet", (packetData, packetMeta) => {
 		// Check if in queue
-		if (packetMeta.name === "difficulty") { // Explanation: When rerouted by Waterfall, two MC|Brand packets are sent back-to-back followed by a difficulty packet. This statement ignores the first one, as it's just useless noise (it looks something like "Waterfall (git:Waterfall-Bootstrap:1.18-R0.1-SNAPSHOT:ba3bbcc:483)")
-			const inQueue = (conn.bot.game.serverBrand === "Waterfall <- 2b2t-lobby");
+		if (packetMeta.name === "difficulty") { // Explanation: When rerouted by Velocity, the difficulty packet is always sent after the MC|Brand packet.
+			const inQueue = (conn.bot.game.serverBrand === "2b2t (Velocity)") && (conn.bot.game.difficulty === "hard") && (conn.bot.game.gameMode === "survival");
 			gui.display("inQueue", inQueue);
 		}
 
@@ -124,16 +124,16 @@ server.on("login", (bridgeClient) => {
 	// Block attempt if...
 	if (config.proxy.whitelist.findIndex(needle => bridgeClient.username.toLowerCase() === needle.toLowerCase()) === -1) { // ... player isn't in whitelist
 		bridgeClient.end("Your account (" + bridgeClient.username + ") is not whitelisted.\n\nIf you're getting this error in error the Microsoft account token may have expired.");
-		logger.log("bridgeclient", bridgeClient.uuid + " was denied connection to the local server.", "proxy");
+		logger.log("bridgeclient", bridgeClient.username + "(" + bridgeClient.uuid + ")" + " was denied connection to the local server.", "proxy");
 		return;
 	} else if (server.playerCount > 1) { // ... and another player isn't already connected
 		bridgeClient.end("This proxy is at max capacity.\n\nCurrent Controller: " + status.controller);
-		logger.log("bridgeclient", bridgeClient.uuid + " was denied connection to the local server.", "proxy");
+		logger.log("bridgeclient", bridgeClient.username + "(" + bridgeClient.uuid + ")" + " was denied connection to the local server.", "proxy");
 		return;
 	}
 
 	// Log successful connection attempt
-	logger.log("bridgeclient", bridgeClient.uuid + " has connected to the local server.", "proxy");
+	logger.log("bridgeclient", bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has connected to the local server.", "proxy");
 	gui.display("controller", bridgeClient.username);
 
 	// Bridge packets between you & the already logged-in client
@@ -143,7 +143,7 @@ server.on("login", (bridgeClient) => {
 
 	// Start Mineflayer when disconnected
 	bridgeClient.on("end", () => {
-		logger.log("bridgeClient", bridgeClient.uuid + " has disconnected from the local server.", "proxy");
+		logger.log("bridgeClient", bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has disconnected from the local server.", "proxy");
 		gui.display("controller", "None");
 		startMineflayer();
 	});
