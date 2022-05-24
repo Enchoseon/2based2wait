@@ -103,7 +103,7 @@ function start() {
 	client.on("packet", (packetData, packetMeta) => {
 		// Check if in queue
 		if (packetMeta.name === "difficulty") { // Explanation: When rerouted by Velocity, the difficulty packet is always sent after the MC|Brand packet.
-			const inQueue = (conn.bot.game.serverBrand === "2b2t (Velocity)") && (conn.bot.game.difficulty === "hard") && (conn.bot.game.gameMode === "survival");
+			const inQueue = (conn.bot.game.serverBrand === "2b2t (Velocity)") && (conn.bot.game.dimension === "minecraft:end") && (packetData.difficulty === 1);
 			gui.display("inQueue", inQueue);
 		}
 
