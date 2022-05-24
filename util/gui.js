@@ -75,30 +75,31 @@ function packetHandler(packetData, packetMeta) {
 	switch (packetMeta.name) {
 		case "playerlist_header": // Handle playerlist packets
 			if (status.inQueue === "true") { // If we're in queue
-				const header = JSON.parse(packetData.header).text.split("\n");
-				const position = header[5].split("l")[1];
-				const eta = header[6].split("l")[1];
-
-				if (position !== status.position) { // Update position
-					display("position", position);
-					if (status.position <= config.queueThreshold) { // Position notifications on Discord
-						notifier.sendToast("2B2T Queue Position: " + status.position);
-						updatePositionWebhook();
-						if (!sentNotification) {
-							notifier.sendWebhook({
-								title: "Position " + status.position + " in queue!",
-								description: "Current IP: `" + status.ngrokUrl + "`",
-								ping: true,
-								url: config.discord.webhook.sensitive
-							});
+				const header = JSON.parse(packetData.header).extra;
+				if (header[4] && header[5]) {				
+					const position = header[4].extra[0].text.replace(/\n/, "");
+					const eta = header[5].extra[0].text.replace(/\n/, "");
+					if (position !== status.position) { // Update position
+						display("position", position);
+						if (status.position <= config.queueThreshold) { // Position notifications on Discord
+							notifier.sendToast("2B2T Queue Position: " + status.position);
+							updatePositionWebhook();
+							if (!sentNotification) {
+								notifier.sendWebhook({
+									title: "Position " + status.position + " in queue!",
+									description: "Current IP: `" + status.ngrokUrl + "`",
+									ping: true,
+									url: config.discord.webhook.sensitive
+								});
+							}
+							sentNotification = true;
+						} else {
+							updatePositionWebhook();
 						}
-						sentNotification = true;
-					} else {
-						updatePositionWebhook();
 					}
+					// Update ETA
+					display("eta", eta);
 				}
-				// Update ETA
-				display("eta", eta);
 			} else { // If we're not in queue
 				display("position", "In Server!");
 				display("eta", "Now!");
