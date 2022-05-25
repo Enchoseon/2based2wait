@@ -76,7 +76,7 @@ function packetHandler(packetData, packetMeta) {
 		case "playerlist_header": // Handle playerlist packets
 			if (status.inQueue === "true") { // If we're in queue
 				const header = JSON.parse(packetData.header).extra;
-				if (header[4] && header[5]) {				
+				if (header && header.length === 6) {				
 					const position = header[4].extra[0].text.replace(/\n/, "");
 					const eta = header[5].extra[0].text.replace(/\n/, "");
 					if (position !== status.position) { // Update position
