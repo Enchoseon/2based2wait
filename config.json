@@ -7,9 +7,9 @@
 	
 	"discord": {
 		"webhook": {
-			"position": "YOUR DISCORD WEBHOOK",
+			"spam": "YOUR DISCORD WEBHOOK",
 			"livechat": "YOUR DISCORD WEBHOOK",
-			"sensitive": "YOUR DISCORD WEBHOOK"
+			"status": "YOUR DISCORD WEBHOOK"
 		},
 		"color": 2123412,
 		"id": "424701879151230977"
