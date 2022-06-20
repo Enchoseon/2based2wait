@@ -57,7 +57,7 @@ function display(type, input) {
 				title: "In Server!",
 				description: "Current IP: `" + status.ngrokUrl + "`",
 				ping: true,
-				url: config.discord.webhook.sensitive
+				url: config.discord.webhook.status
 			});
 		}
 
@@ -89,7 +89,7 @@ function packetHandler(packetData, packetMeta) {
 									title: "Position " + status.position + " in queue!",
 									description: "Current IP: `" + status.ngrokUrl + "`",
 									ping: true,
-									url: config.discord.webhook.sensitive
+									url: config.discord.webhook.status
 								});
 							}
 							sentNotification = true;
@@ -117,7 +117,7 @@ function updatePositionWebhook() {
 	notifier.sendWebhook({
 		title: "2B2T Queue Position: " + status.position,
 		description: "ETA: " + status.eta,
-		url: config.discord.webhook.position
+		url: config.discord.webhook.spam
 	});
 }
 

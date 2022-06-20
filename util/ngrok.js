@@ -38,7 +38,7 @@ function createTunnel() {
 			notifier.sendWebhook({
 				title: "New Tunnel:",
 				description: "Current IP: `" + url + "`",
-				url: config.discord.webhook.sensitive
+				url: config.discord.webhook.spam
 			});
 		}).catch(error => {
 			console.error(error);

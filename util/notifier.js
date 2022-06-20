@@ -67,8 +67,8 @@ function sendWebhook(options) {
 		params.embeds[0].description += " <@" + config.discord.id + ">";
 	}
 
-	// Send embed (if no destination is provided, defaults to config.discord.webhook.position)
-	fetch(options.url || config.discord.webhook.position, {
+	// Send embed (if no destination is provided, defaults to config.discord.webhook.spam)
+	fetch(options.url || config.discord.webhook.spam, {
 		method: "POST",
 		headers: {
 			"Content-type": "application/json"

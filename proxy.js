@@ -124,16 +124,16 @@ server.on("login", (bridgeClient) => {
 	// Block attempt if...
 	if (config.proxy.whitelist.findIndex(needle => bridgeClient.username.toLowerCase() === needle.toLowerCase()) === -1) { // ... player isn't in whitelist
 		bridgeClient.end("Your account (" + bridgeClient.username + ") is not whitelisted.\n\nIf you're getting this error in error the Microsoft account token may have expired.");
-		logger.log("bridgeclient", bridgeClient.username + "(" + bridgeClient.uuid + ")" + " was denied connection to the local server.", "proxy");
+		logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " was denied connection to the proxy for not being whitelisted.");
 		return;
 	} else if (server.playerCount > 1) { // ... and another player isn't already connected
 		bridgeClient.end("This proxy is at max capacity.\n\nCurrent Controller: " + status.controller);
-		logger.log("bridgeclient", bridgeClient.username + "(" + bridgeClient.uuid + ")" + " was denied connection to the local server.", "proxy");
+		logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " was denied connection to the proxy despite being whitelisted because " + status.controller + " was already in control.");
 		return;
 	}
 
 	// Log successful connection attempt
-	logger.log("bridgeclient", bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has connected to the local server.", "proxy");
+	logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has connected to the proxy.");
 	gui.display("controller", bridgeClient.username);
 
 	// Bridge packets between you & the already logged-in client
@@ -143,7 +143,7 @@ server.on("login", (bridgeClient) => {
 
 	// Start Mineflayer when disconnected
 	bridgeClient.on("end", () => {
-		logger.log("bridgeClient", bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has disconnected from the local server.", "proxy");
+		logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has disconnected from the local server.");
 		gui.display("controller", "None");
 		startMineflayer();
 	});
@@ -151,6 +151,15 @@ server.on("login", (bridgeClient) => {
 	stopMineflayer();
 	conn.sendPackets(bridgeClient);
 	conn.link(bridgeClient);
+
+	/** Send message to logger and spam webhook **/
+	function logSpam(logMsg) {
+		logger.log("bridgeclient", logMsg, "proxy");
+		notifier.sendWebhook({
+			title: logMsg,
+			url: config.discord.webhook.spam
+		});
+	}
 });
 
 // ==========================
