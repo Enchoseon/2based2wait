@@ -7,6 +7,12 @@ const fetch = require("node-fetch");
 
 const { config, status } = require("./config.js");
 
+// ===========
+// Global Vars
+// ===========
+
+var deleteOnRestart = []; // Urls of messages to be deleted when restarting the proxy
+
 // =========
 // Functions
 // =========
@@ -34,6 +40,7 @@ function sendToast(titleText) {
  * @param {string} options.description
  * @param {boolean} options.disableAttribution
  * @param {boolean} options.ping
+ * @param {boolean} options.deleteOnRestart
  */
 function sendWebhook(options) {
 	var params = { // Create embed
@@ -68,14 +75,31 @@ function sendWebhook(options) {
 	}
 
 	// Send embed (if no destination is provided, defaults to config.discord.webhook.spam)
-	fetch(options.url || config.discord.webhook.spam, {
+	const webhookUrl = (options.url || config.discord.webhook.spam);
+	fetch(webhookUrl + "?wait=true", {
 		method: "POST",
 		headers: {
 			"Content-type": "application/json"
 		},
 		body: JSON.stringify(params)
-	}).then(res => {
-		// meow
+	}).then(response => {
+		if (options.deleteOnRestart) {
+			response.text().then(json => {
+				deleteOnRestart.push(webhookUrl + "/messages/" + JSON.parse(json).id); // URL to send DELETE request to when restarting the proxy
+			});
+		}
+	});
+}
+
+/** Delete webhook messages marked for deletion */
+function deleteMarkedMessages() {
+	deleteOnRestart.forEach(url => {
+		fetch(url, {
+			method: "DELETE",
+			headers: {
+				"Content-type": "application/json"
+			}
+		});
 	});
 }
 
@@ -85,5 +109,6 @@ function sendWebhook(options) {
 
 module.exports = {
 	sendToast,
-	sendWebhook
+	sendWebhook,
+	deleteMarkedMessages
 };

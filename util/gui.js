@@ -57,7 +57,8 @@ function display(type, input) {
 				title: "In Server!",
 				description: "Current IP: `" + status.ngrokUrl + "`",
 				ping: true,
-				url: config.discord.webhook.status
+				url: config.discord.webhook.status,
+				deleteOnRestart: true
 			});
 		}
 
@@ -89,7 +90,8 @@ function packetHandler(packetData, packetMeta) {
 									title: "Position " + status.position + " in queue!",
 									description: "Current IP: `" + status.ngrokUrl + "`",
 									ping: true,
-									url: config.discord.webhook.status
+									url: config.discord.webhook.status,
+									deleteOnRestart: true
 								});
 							}
 							sentNotification = true;
