@@ -5,6 +5,7 @@
 const { config, status, updateStatus } = require("./config.js");
 const logger = require("./logger.js");
 const notifier = require("./notifier.js");
+const ngrok = require("./ngrok.js");
 
 // ===========
 // Global Vars
@@ -50,17 +51,9 @@ function display(type, input) {
 		if (config.ngrok.active) {
 			console.log("\x1b[32m", "Ngrok URL: " + status.ngrokUrl);
 		}
-		if (type === "inQueue" && input === false) { // The code in this janky statement runs one time when the proxy leaves queue.
-			// Send notification when in server
-			notifier.sendToast("In Server!");
-			notifier.sendWebhook({
-				title: "In Server!",
-				description: "Current IP: `" + status.ngrokUrl + "`",
-				ping: true,
-				url: config.discord.webhook.status,
-				deleteOnRestart: true
-			});
-		}
+
+		// Notify when leaving queue
+		updateQueue(type, input);
 
 		// Log gui object
 		logger.log("gui", status, "gui");
@@ -80,21 +73,16 @@ function packetHandler(packetData, packetMeta) {
 				if (header && header.length === 6) {				
 					const position = header[4].extra[0].text.replace(/\n/, "");
 					const eta = header[5].extra[0].text.replace(/\n/, "");
-					if (position !== status.position) { // Update position
+					if (position !== status.position) {
 						display("position", position);
-						if (status.position <= config.queueThreshold) { // Position notifications on Discord
-							notifier.sendToast("2B2T Queue Position: " + status.position);
-							updatePositionWebhook();
-							if (!sentNotification) {
-								notifier.sendWebhook({
-									title: "Position " + status.position + " in queue!",
-									description: "Current IP: `" + status.ngrokUrl + "`",
-									ping: true,
-									url: config.discord.webhook.status,
-									deleteOnRestart: true
+						if (status.position <= config.queueThreshold) {
+							if (config.ngrok.active) { // Create ngrok tunnel if low in 2b2t queue
+								ngrok.createTunnel().then(() => {
+									updatePosition();
 								});
+							} else {
+								updatePosition();
 							}
-							sentNotification = true;
 						} else {
 							updatePositionWebhook();
 						}
@@ -110,6 +98,41 @@ function packetHandler(packetData, packetMeta) {
 		default:
 			break;
 	}
+}
+
+/**
+ * Update when leaving queue
+ */
+function updateQueue(type, input) {
+	if (type === "inQueue" && input === false) { // The code in this janky statement runs one time when the proxy leaves queue.
+		// Send notification when in server
+		notifier.sendToast("In Server!");
+		notifier.sendWebhook({
+			title: "In Server!",
+			description: "Current IP: `" + status.ngrokUrl + "`",
+			ping: true,
+			url: config.discord.webhook.status,
+			deleteOnRestart: true
+		});
+	}
+}
+
+/**
+ * Update position
+ */
+function updatePosition(position) {
+	notifier.sendToast("2B2T Queue Position: " + status.position); // Position notifications
+	updatePositionWebhook();
+	if (!sentNotification) {
+		notifier.sendWebhook({
+			title: "Position " + status.position + " in queue!",
+			description: "Current IP: `" + status.ngrokUrl + "`",
+			ping: true,
+			url: config.discord.webhook.status,
+			deleteOnRestart: true
+		});
+	}
+	sentNotification = true;
 }
 
 /**
