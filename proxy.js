@@ -81,6 +81,10 @@ function start() {
 	client.on("connect", function() {
 		logger.log("connected", "Client connected", "proxy");
 		startMineflayer();
+		// Create ngrok tunnel
+		if (config.ngrok.active) {
+			ngrok.createTunnel();
+		}
 	});
 
 	// Log disconnect
@@ -101,9 +105,6 @@ function start() {
 		if (packetMeta.name === "difficulty") { // Explanation: When rerouted by Velocity, the difficulty packet is always sent after the MC|Brand packet.
 			const inQueue = (conn.bot.game.serverBrand === "2b2t (Velocity)") && (conn.bot.game.dimension === "minecraft:end") && (packetData.difficulty === 1);
 			gui.display("inQueue", inQueue);
-			if (status.inQueue === "false" && config.ngrok.active) { // Create ngrok tunnel once out of queue
-				ngrok.createTunnel();
-			}
 		}
 
 		// Packet handler(s)
