@@ -18,13 +18,13 @@ const gui = require("./gui.js");
 /**
  * Create ngrok tunnel
  */
-async function createTunnel() {
+function createTunnel() {
 	// Create ngrok.yml for the authtoken (using the wrapper causes issues when running multiple tunnels, as it isn't an officially supported thing)
 	const data = "authtoken: " + config.ngrok.authtoken;
 	fs.writeFile("./ngrok.yml", data, (error) => {
 		if (error) {
 			logger.log("createTunnel", error, "error");
-			return false;
+			return;
 		}
 
 		ngrokWrapper.connect({
@@ -40,10 +40,8 @@ async function createTunnel() {
 				description: "Current IP: `" + url + "`",
 				url: config.discord.webhook.spam
 			});
-			return true;
 		}).catch(error => {
-			logger.log("createTunnel", error, "error");
-			return false;
+			console.error(error);
 		});
 	});
 }

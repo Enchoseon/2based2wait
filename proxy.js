@@ -81,10 +81,6 @@ function start() {
 	client.on("connect", function() {
 		logger.log("connected", "Client connected", "proxy");
 		startMineflayer();
-		// Create ngrok tunnel immediately if not on 2b2t (otherwise will wait until low in queue)
-		if (config.server.host !== "connect.2b2t.org" && config.ngrok.active) {
-			ngrok.createTunnel();
-		}
 	});
 
 	// Log disconnect
@@ -105,8 +101,7 @@ function start() {
 		if (packetMeta.name === "difficulty") { // Explanation: When rerouted by Velocity, the difficulty packet is always sent after the MC|Brand packet.
 			const inQueue = (conn.bot.game.serverBrand === "2b2t (Velocity)") && (conn.bot.game.dimension === "minecraft:end") && (packetData.difficulty === 1);
 			gui.display("inQueue", inQueue);
-			// Create ngrok tunnel if tunnel wasn't created while in queue (Fallback for instantly joining 2b2t)
-			if (!inQueue && config.server.host === "connect.2b2t.org" && config.ngrok.active && status.ngrokUrl === "None") {
+			if (status.inQueue === "false" && config.ngrok.active) { // Create ngrok tunnel once out of queue
 				ngrok.createTunnel();
 			}
 		}
