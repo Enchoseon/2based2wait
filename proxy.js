@@ -6,13 +6,13 @@
 const mcproxy = require("@rob9315/mcproxy");
 const mc = require("minecraft-protocol");
 
-const { config, status, updateCoordinatorStatus } = require("./util/config.js");
+const { config, status, updateStatus, updateCoordinatorStatus } = require("./util/config.js");
 const logger = require("./util/logger.js");
 const notifier = require("./util/notifier.js");
-const gui = require("./util/gui.js");
 const chatty = require("./util/chatty.js");
 const ngrok = require("./util/ngrok.js");
 const mineflayer = require("./util/mineflayer.js");
+const queue = require("./util/queue.js");
 
 // ===========
 // Global Vars
@@ -39,9 +39,22 @@ start();
  * @param {object} packetMeta
  */
 function packetHandler(packetData, packetMeta) {
-	logger.packetHandler(packetData, packetMeta); // Log packets
-	gui.packetHandler(packetData, packetMeta); // Process into CLI GUI and notifications
-	chatty.packetHandler(packetData, packetMeta); // Parse chat messages
+	// Log packets
+	logger.packetHandler(packetData, packetMeta);
+	
+	// Assorted packet handlers
+	switch (packetMeta.name) {
+		case "chat": // Forward chat packets to chatty.js for livechat relay and reading server restart messages
+			chatty.chatPacketHandler(packetData);
+			break;
+		case "difficulty": // Difficulty packet handler, checks whether or not we're in queue (explanation: when rerouted by Velocity, the difficulty packet is always sent after the MC|Brand packet.)
+			queue.difficultyPacketHandler(packetData, conn);
+			break;
+		case "playerlist_header": // Playerlist packet handler, checks position in queue
+			queue.playerlistHeaderPacketHandler(packetData, server);
+		default:
+			break;
+	}
 
 	// Reset uncleanDisconnectMonitor timer
 	restartUncleanDisconnectMonitor();
@@ -99,19 +112,9 @@ function start() {
 		reconnect();
 	});
 
-	// Asoorted packet handlers
+	// Packet handlers
 	client.on("packet", (packetData, packetMeta) => {
-		// Check if in queue
-		if (packetMeta.name === "difficulty") { // Explanation: When rerouted by Velocity, the difficulty packet is always sent after the MC|Brand packet.
-			const inQueue = (conn.bot.game.serverBrand === "2b2t (Velocity)") && (conn.bot.game.dimension === "minecraft:end") && (packetData.difficulty === 1);
-			gui.display("inQueue", inQueue);
-		}
-
-		// Packet handler(s)
 		packetHandler(packetData, packetMeta);
-
-		// Update local server motd
-		server.motd = "Position: " + status.position + " - ETA: " + status.eta;
 	});
 }
 
@@ -134,7 +137,7 @@ server.on("login", (bridgeClient) => {
 
 	// Log successful connection attempt
 	logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has connected to the proxy.");
-	gui.display("controller", bridgeClient.username);
+	updateStatus("controller", bridgeClient.username);
 
 	// Bridge packets between you & the already logged-in client
 	bridgeClient.on("packet", (data, meta, rawData) => {
@@ -144,7 +147,7 @@ server.on("login", (bridgeClient) => {
 	// Start Mineflayer when disconnected
 	bridgeClient.on("end", () => {
 		logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has disconnected from the local server.");
-		gui.display("controller", "None");
+		updateStatus("controller", "None");
 		startMineflayer();
 	});
 
@@ -184,11 +187,11 @@ function restartUncleanDisconnectMonitor() {
 /** Reconnect (Remember to read https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor or this will just cause the script to shut down!) */
 function reconnect() {
 	logger.log("proxy", "Reconnecting...", "proxy");
-	gui.display("restart", "Reconnecting in " + config.reconnectInterval + " seconds...");
-	gui.display("livechatRelay", "false");
+	updateStatus("restart", "Reconnecting in " + config.reconnectInterval + " seconds...");
+	updateStatus("livechatRelay", "false");
 	notifier.deleteMarkedMessages();
 	setTimeout(function() {
-		gui.display("restart", "Reconnecting now!");
+		updateStatus("restart", "Reconnecting now!");
 		notifier.sendToast("Reconnecting now!");
 		process.exit(0);
 	}, config.reconnectInterval * 1000);
@@ -197,7 +200,7 @@ function reconnect() {
 /** Start Mineflayer */
 function startMineflayer() {
 	logger.log("mineflayer", "Starting Mineflayer.", "proxy");
-	gui.display("mineflayer", true);
+	updateStatus("mineflayer", true);
 	if (config.mineflayer.active) {
 		conn.bot.autoEat.enable();
 		if (config.mineflayer.antiAfk.active) {
@@ -209,7 +212,7 @@ function startMineflayer() {
 /** Stop Mineflayer */
 function stopMineflayer() {
 	logger.log("mineflayer", "Stopping Mineflayer.", "proxy");
-	gui.display("mineflayer", false);
+	updateStatus("mineflayer", false);
 	if (config.mineflayer.active) {
 		conn.bot.autoEat.disable();
 		if (config.mineflayer.antiAfk.active) {

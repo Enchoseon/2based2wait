@@ -6,10 +6,9 @@ const fs = require("fs");
 
 const ngrokWrapper = require("ngrok");
 
-const { config } = require("./config.js");
+const { config, updateStatus } = require("./config.js");
 const logger = require("./logger.js");
 const notifier = require("./notifier.js");
-const gui = require("./gui.js");
 
 // =========
 // Functions
@@ -34,7 +33,7 @@ function createTunnel() {
 			configPath: "./ngrok.yml"
 		}).then(url => {
 			url = url.split(`tcp://`)[1];
-			gui.display("ngrokUrl", url);
+			updateStatus("ngrokUrl", url);
 			notifier.sendWebhook({
 				title: "New Tunnel:",
 				description: "Current IP: `" + url + "`",
