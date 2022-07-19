@@ -65,6 +65,13 @@
 			"chatInterval": 690420
 		}
 	},
+
+	"waitForControllerBeforeConnect": false,
+
+	"notify": {
+		"whenJoining": true,
+		"whenBelowQueueThreshold": true
+	},
 	
 	"coordination": {
 		"active": false,
