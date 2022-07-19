@@ -5,6 +5,7 @@
 const fs = require("fs");
 
 const merge = require("deepmerge");
+const JSON5 = require("json5");
 
 // ===========
 // Global Vars
@@ -27,7 +28,7 @@ var status = {
 // =======================
 
 // Read config.json
-config = JSON.parse(fs.readFileSync("config.json"));
+config = JSON5.parse(fs.readFileSync("config.json"));
 
 // If coordination is active...
 if (config.coordination.active) {
@@ -41,7 +42,7 @@ if (config.coordination.active) {
 	// ... and apply master-config.json overrides if provided
 	const masterConfigPath = config.coordination.path + "master-config.json";
 	if (fs.existsSync(masterConfigPath)) {
-		const masterConfig = JSON.parse(fs.readFileSync(masterConfigPath));
+		const masterConfig = JSON5.parse(fs.readFileSync(masterConfigPath));
 		config = merge(masterConfig, config);
 	}
 }
