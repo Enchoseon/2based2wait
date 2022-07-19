@@ -60,13 +60,41 @@ function packetHandler(packetData, packetMeta) {
 	restartUncleanDisconnectMonitor();
 }
 
-// ======
-// Client
-// ======
+// =================
+// Start Proxy Stack
+// =================
 
 /** Start proxy stack */
 function start() {
 	logger.log("proxy", "Starting proxy stack.", "proxy");
+
+	// Delete any leftover coordinator.flag files
+	if (config.coordination.active) {
+		updateCoordinatorStatus();
+	}
+
+	// Create local server
+	createLocalServer();
+
+	// Create client (connects to server)
+	if (!config.waitForControllerBeforeConnect) { // ... but if waitForControllerBeforeConnect is true, delay the creation of the client until someone connects to the local server
+		createClient();
+	} else {
+		console.log("Waiting for a controller...");
+		if (config.ngrok.active) { // Create ngrok tunnel
+			ngrok.createTunnel(); // Note: May overwrite MSA instructions in console(?)
+		}
+	}
+}
+
+// ==========================
+// Client (Connect to Server)
+// ==========================
+
+function createClient() {
+	console.log("Creating client (connecting to server)");
+	logger.log("proxy", "Creating client.", "proxy");
+	// Connect to server
 	conn = new mcproxy.Conn({
 		"host": config.server.host,
 		"version": config.server.version,
@@ -76,38 +104,25 @@ function start() {
 	});
 	client = conn.bot._client;
 	mineflayer.initialize(conn.bot);
-	server = mc.createServer({
-		"online-mode": config.proxy.onlineMode,
-		"encryption": true,
-		"host": "localhost",
-		"port": config.proxy.port,
-		"version": config.server.version,
-		"max-players": 1
-	});
-
-	// Delete any leftover coordinator.flag files
-	if (config.coordination.active) {
-		updateCoordinatorStatus();
-	}
 
 	// Log connect and start Mineflayer
-	client.on("connect", function() {
+	client.on("connect", function () {
 		logger.log("connected", "Client connected", "proxy");
 		startMineflayer();
-		// Create ngrok tunnel
-		if (config.ngrok.active) {
+		// Create ngrok tunnel (unless waitForControllerBeforeConnect is true, in which case the tunnel already exists)
+		if (config.ngrok.active && !config.waitForControllerBeforeConnect) {
 			ngrok.createTunnel();
 		}
 	});
 
 	// Log disconnect
-	client.on("disconnect", function(packet) {
+	client.on("disconnect", function (packet) {
 		logger.log("disconnected", packet.reason, "proxy");
 		reconnect();
 	});
 
 	// Log kick
-	client.on("kick_disconnect", function(packet) {
+	client.on("kick_disconnect", function (packet) {
 		logger.log("kick/disconnect", packet.reason, "proxy");
 		reconnect();
 	});
@@ -122,48 +137,69 @@ function start() {
 // Local Server
 // ============
 
-// Handle logins
-server.on("login", (bridgeClient) => {
-	// Block attempt if...
-	if (config.proxy.whitelist.findIndex(needle => bridgeClient.username.toLowerCase() === needle.toLowerCase()) === -1) { // ... player isn't in whitelist
-		bridgeClient.end("Your account (" + bridgeClient.username + ") is not whitelisted.\n\nIf you're getting this error in error the Microsoft account token may have expired.");
-		logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " was denied connection to the proxy for not being whitelisted.");
-		return;
-	} else if (server.playerCount > 1) { // ... and another player isn't already connected
-		bridgeClient.end("This proxy is at max capacity.\n\nCurrent Controller: " + status.controller);
-		logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " was denied connection to the proxy despite being whitelisted because " + status.controller + " was already in control.");
-		return;
-	}
-
-	// Log successful connection attempt
-	logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has connected to the proxy.");
-	updateStatus("controller", bridgeClient.username);
-
-	// Bridge packets between you & the already logged-in client
-	bridgeClient.on("packet", (data, meta, rawData) => {
-		bridge(rawData, meta, client);
+/** Create the local server. Handles players connecting and also bridges packets to the client **/
+function createLocalServer() {
+	console.log("Creating local server");
+	logger.log("proxy", "Creating local server.", "proxy");
+	// Create server
+	server = mc.createServer({
+		"online-mode": config.proxy.onlineMode,
+		"encryption": true,
+		"host": "localhost",
+		"port": config.proxy.port,
+		"version": config.server.version,
+		"max-players": 1
 	});
+	// Handle logins
+	server.on("login", (bridgeClient) => {
+		// Block attempt if...
+		if (config.proxy.whitelist.findIndex(needle => bridgeClient.username.toLowerCase() === needle.toLowerCase()) === -1) { // ... player isn't in whitelist
+			bridgeClient.end("Your account (" + bridgeClient.username + ") is not whitelisted.\n\nIf you're getting this error in error the Microsoft account token may have expired.");
+			logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " was denied connection to the proxy for not being whitelisted.");
+			return;
+		} else if (server.playerCount > 1) { // ... and another player isn't already connected
+			bridgeClient.end("This proxy is at max capacity.\n\nCurrent Controller: " + status.controller);
+			logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " was denied connection to the proxy despite being whitelisted because " + status.controller + " was already in control.");
+			return;
+		}
 
-	// Start Mineflayer when disconnected
-	bridgeClient.on("end", () => {
-		logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has disconnected from the local server.");
-		updateStatus("controller", "None");
-		startMineflayer();
-	});
+		// Log successful connection attempt
+		logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has connected to the proxy.");
+		updateStatus("controller", bridgeClient.username);
 
-	stopMineflayer();
-	conn.sendPackets(bridgeClient);
-	conn.link(bridgeClient);
+		// Create client if it hasn't been created yet (waitForControllerBeforeConnect)
+		if (config.waitForControllerBeforeConnect && typeof conn === "undefined") {
+			bridgeClient.end("Received signal to connect to server. Reconnect to the proxy to play.");
+			createClient();
+		}
 
-	/** Send message to logger and spam webhook **/
-	function logSpam(logMsg) {
-		logger.log("bridgeclient", logMsg, "proxy");
-		notifier.sendWebhook({
-			title: logMsg,
-			url: config.discord.webhook.spam
+		// Start Mineflayer when disconnected
+		bridgeClient.on("end", () => {
+			logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has disconnected from the local server.");
+			updateStatus("controller", "None");
+			startMineflayer();
 		});
-	}
-});
+
+		// Stop Mineflayer
+		stopMineflayer();
+
+		// Bridge packets
+		bridgeClient.on("packet", (data, meta, rawData) => {
+			bridge(rawData, meta, client);
+		});
+		conn.sendPackets(bridgeClient);
+		conn.link(bridgeClient);
+
+		/** Send message to logger and spam webhook **/
+		function logSpam(logMsg) {
+			logger.log("bridgeclient", logMsg, "proxy");
+			notifier.sendWebhook({
+				title: logMsg,
+				url: config.discord.webhook.spam
+			});
+		}
+	});
+}
 
 // ==========================
 // Unclean Disconnect Monitor

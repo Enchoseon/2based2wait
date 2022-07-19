@@ -25,7 +25,7 @@ function createTunnel() {
 			logger.log("createTunnel", error, "error");
 			return;
 		}
-
+		// Create tunnel
 		ngrokWrapper.connect({
 			proto: "tcp",
 			addr: config.proxy.port,
@@ -33,14 +33,22 @@ function createTunnel() {
 			configPath: "./ngrok.yml"
 		}).then(url => {
 			url = url.split(`tcp://`)[1];
-			updateStatus("ngrokUrl", url);
+			updateStatus("ngrokUrl", url); // Update cli gui and webhook
 			notifier.sendWebhook({
 				title: "New Tunnel:",
 				description: "Current IP: `" + url + "`",
 				url: config.discord.webhook.spam
 			});
+			if (config.waitForControllerBeforeConnect) { // Since the client isn't connected we'll need to send the tunnel IP to the status webhook (normally the tunnel IP would be sent to the status webhook after going under the queueThreshold and joining the server)
+				notifier.sendWebhook({
+					title: "Current Tunnel:",
+					description: "Current IP: `" + url + "`",
+					url: config.discord.webhook.status,
+					deleteOnRestart: true
+				});
+			}
 		}).catch(error => {
-			console.error(error);
+			logger.log("createTunnel", error, "error");
 		});
 	});
 }

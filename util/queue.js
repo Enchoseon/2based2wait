@@ -22,7 +22,7 @@ var sentNotification = false;
  */
 function difficultyPacketHandler(packetData, conn) {
 	const inQueue = (conn.bot.game.serverBrand === "2b2t (Velocity)") && (conn.bot.game.dimension === "minecraft:end") && (packetData.difficulty === 1);
-	if (updateStatus("inQueue", inQueue) && inQueue === false) { // Send notification when joining server
+	if (updateStatus("inQueue", inQueue) && inQueue === false && config.notify.whenJoining) { // Send notification when joining server
 		notifier.sendToast("In Server!");
 		notifier.sendWebhook({
 			title: "In Server!",
@@ -60,7 +60,7 @@ function playerlistHeaderPacketHandler(packetData, server) {
 					description: "ETA: " + status.eta,
 					url: config.discord.webhook.spam
 				});
-				if (!sentNotification) {
+				if (!sentNotification && config.notify.whenBelowQueueThreshold) {
 					notifier.sendWebhook({
 						title: "Position " + status.position + " in queue!",
 						description: "Current IP: `" + status.ngrokUrl + "`",
