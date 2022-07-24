@@ -41,7 +41,7 @@ start();
 function packetHandler(packetData, packetMeta) {
 	// Log packets
 	logger.packetHandler(packetData, packetMeta);
-	
+
 	// Assorted packet handlers
 	switch (packetMeta.name) {
 		case "chat": // Forward chat packets to chatty.js for livechat relay and reading server restart messages
@@ -137,7 +137,7 @@ function createClient() {
 // Local Server
 // ============
 
-/** Create the local server. Handles players connecting and also bridges packets to the client **/
+/** Create the local server. (Handles players connecting & bridging packets between client and local server) **/
 function createLocalServer() {
 	console.log("Creating local server");
 	logger.log("proxy", "Creating local server.", "proxy");
@@ -169,26 +169,37 @@ function createLocalServer() {
 
 		// Create client if it hasn't been created yet (waitForControllerBeforeConnect)
 		if (config.waitForControllerBeforeConnect && typeof conn === "undefined") {
-			bridgeClient.end("Received signal to connect to server. Reconnect to the proxy to play.");
 			createClient();
+			client.on("packet", (packetData, packetMeta) => {
+				if (packetMeta.name === "success") {
+					createBridge();
+				}
+			});
+		} else {
+			createBridge();
 		}
 
-		// Start Mineflayer when disconnected
-		bridgeClient.on("end", () => {
-			logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has disconnected from the local server.");
-			updateStatus("controller", "None");
-			startMineflayer();
-		});
+		/** Create bridge between client and local server */
+		function createBridge() {
+			console.log("Creating packet bridge");
+			logger.log("proxy", "Creating packet bridge.", "proxy");
+			// Start Mineflayer when disconnected
+			bridgeClient.on("end", () => {
+				logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has disconnected from the local server.");
+				updateStatus("controller", "None");
+				startMineflayer();
+			});
 
-		// Stop Mineflayer
-		stopMineflayer();
+			// Stop Mineflayer
+			stopMineflayer();
 
-		// Bridge packets
-		bridgeClient.on("packet", (data, meta, rawData) => {
-			bridge(rawData, meta, client);
-		});
-		conn.sendPackets(bridgeClient);
-		conn.link(bridgeClient);
+			// Bridge packets
+			bridgeClient.on("packet", (data, meta, rawData) => {
+				bridge(rawData, meta, client);
+			});
+			conn.sendPackets(bridgeClient);
+			conn.link(bridgeClient);
+		}
 
 		/** Send message to logger and spam webhook **/
 		function logSpam(logMsg) {
