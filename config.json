@@ -22,7 +22,13 @@
 	"uncleanDisconnectInterval": 420,
 	
 	"log": {
-		"active": true,
+		"active": {
+			"error": true,
+			"proxy": true,
+			"chat": true,
+			"bridgeClientPackets": true,
+			"serverPackets": true
+		},
 		"cutoff": 690420,
 		"packetFilters": {
 			"server": [ "map", "map_chunk", "player_info", "entity_metadata", "entity_velocity", "entity_move_look", "entity_look", "update_time", "world_particles", "unload_chunk", "teams", "rel_entity_move", "entity_head_rotation", "entity_update_attributes", "block_change" ],
