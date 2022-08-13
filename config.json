@@ -24,11 +24,15 @@
 	"log": {
 		"active": true,
 		"cutoff": 690420,
-		"filter": [ "map", "map_chunk", "player_info", "entity_metadata", "entity_velocity", "entity_move_look", "entity_look", "update_time", "world_particles", "unload_chunk", "teams", "rel_entity_move", "entity_head_rotation", "entity_update_attributes", "block_change" ]
+		"packetFilters": {
+			"server": [ "map", "map_chunk", "player_info", "entity_metadata", "entity_velocity", "entity_move_look", "entity_look", "update_time", "world_particles", "unload_chunk", "teams", "rel_entity_move", "entity_head_rotation", "entity_update_attributes", "block_change" ],
+			"bridgeClient": [ "position", "look", "position_look", "arm_animation" ]
+		}
 	},
 	
 	"server": {
 		"host": "connect.2b2t.org",
+		"port": 25565,
 		"version": "1.12.2"
 	},
 	
@@ -66,6 +70,10 @@
 		}
 	},
 
+	"experimental": {
+		"spoofPlayerInfo": true
+	},
+	
 	"waitForControllerBeforeConnect": false,
 
 	"notify": {
