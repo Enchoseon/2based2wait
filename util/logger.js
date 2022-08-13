@@ -18,20 +18,16 @@ const logRandomEnumerator = String(Math.random()).replace(".", "");
 // =========
 
 /**
- * Filter & log incoming packets
+ * Filter & log incoming packets from the server or bridgeClient
  * @param {object} packetData
  * @param {object} packetMeta
+ * @param {string} source
  */
-function packetHandler(packetData, packetMeta) {
-	if (config.log.active) {
-		const filter = config.log.filter;
-		for (var i = 0; i < filter.length; i++) {
-			if (packetMeta.name === filter[i]) {
-				return;
-			}
-		}
-		log(packetMeta.name + "meta", packetMeta, "packets");
-		log(packetMeta.name + "data", packetData, "packets");
+function packetHandler(packetData, packetMeta, category) {
+	var filter = [];
+	if (config.log.packetFilters[category].indexOf(packetMeta.name) === -1) { // Don't log filtered packets
+		log(packetMeta.name + "meta", packetMeta, category + "Packets");
+		log(packetMeta.name + "data", packetData, category + "Packets");
 	}
 }
 
@@ -42,31 +38,33 @@ function packetHandler(packetData, packetMeta) {
  * @param {object} category
  */
 function log(name, data, category) {
-	if (config.log.active) {
-		// Create log folder if it doesn't exist
-		const dir = "./log/" + category + "/";
-		if (!fs.existsSync(dir)) {
-			fs.mkdirSync(dir, {
-				recursive: true
-			});
-		}
-		// Create file name
-		var logFile = dir + category + "_" + getTimestamp(true) + "_" + logRandomEnumerator + "_" + logIndex + ".log";
-		// Write to log
-		var stream = fs.createWriteStream(logFile, {
-			flags: "a"
-		});
-		stream.write("[" + getTimestamp() + "] [" + name + "] " + JSON.stringify(data) + "\n");
-		stream.end();
-		// Increment filename if size is too big
-		fs.stat(logFile, (err, stats) => {
-			if (!err) { // ez error handling
-				if (stats.size >= config.log.cutoff * 1000) {
-					logIndex++;
-				}
-			}
+	// Don't proceed if logging is disabled
+	if (!config.log.active) {
+		return;
+	}
+	// Create log folder if it doesn't exist
+	const dir = "./log/" + category + "/";
+	if (!fs.existsSync(dir)) {
+		fs.mkdirSync(dir, {
+			recursive: true
 		});
 	}
+	// Create file name
+	var logFile = dir + category + "_" + getTimestamp(true) + "_" + logRandomEnumerator + "_" + logIndex + ".log";
+	// Write to log
+	var stream = fs.createWriteStream(logFile, {
+		flags: "a"
+	});
+	stream.write("[" + getTimestamp() + "] [" + name + "] " + JSON.stringify(data) + "\n");
+	stream.end();
+	// Increment filename if size is too big
+	fs.stat(logFile, (err, stats) => {
+		if (!err) { // ez error handling
+			if (stats.size >= config.log.cutoff * 1000) {
+				logIndex++;
+			}
+		}
+	});
 }
 
 /**

@@ -40,8 +40,8 @@ start();
  */
 function packetHandler(packetData, packetMeta) {
 	// Log packets
-	logger.packetHandler(packetData, packetMeta);
-
+	logger.packetHandler(packetData, packetMeta, "server");
+	
 	// Assorted packet handlers
 	switch (packetMeta.name) {
 		case "chat": // Forward chat packets to chatty.js for livechat relay and reading server restart messages
@@ -98,6 +98,7 @@ function createClient() {
 	conn = new mcproxy.Conn({
 		"host": config.server.host,
 		"version": config.server.version,
+		"port": config.server.port,
 		"username": config.account.username,
 		"password": config.account.password,
 		"auth": config.account.auth
@@ -192,6 +193,29 @@ function createLocalServer() {
 
 			// Stop Mineflayer
 			stopMineflayer();
+			
+			// Spoof player_info
+			if (config.experimental.spoofPlayerInfo) {
+				spoofPlayerInfo(0); // Create player
+				conn.bot.waitForTicks(1).then(() => {
+					spoofPlayerInfo(4); // Remove player
+				});
+				function spoofPlayerInfo(action) {
+					bridgeClient.write("player_info", {
+						action: action,
+						data: [{
+							UUID: bridgeClient.uuid,
+							name: "",
+							properties: []
+						}]
+					});
+				}
+			}
+
+			// Log packets
+			bridgeClient.on("packet", (packetData, packetMeta) => {
+				logger.packetHandler(packetData, packetMeta, "bridgeClient");
+			});
 
 			// Bridge packets
 			bridgeClient.on("packet", (data, meta, rawData) => {
@@ -273,8 +297,23 @@ function stopMineflayer() {
 }
 
 /** Send packets from Point A to Point B */
-function bridge(data, meta, dest) {
-	if (meta.name !== "keep_alive" && meta.name !== "update_time") { // Keep-alive packets are filtered bc the client already handles them. Sending double would kick us.
-		dest.writeRaw(data);
+function bridge(packetData, packetMeta, dest) {
+	if (packetMeta.name !== "keep_alive" && packetMeta.name !== "update_time") { // Keep-alive packets are filtered bc the client already handles them. Sending double would kick us.
+		dest.writeRaw(packetData);
 	}
 }
+
+/*
+const deserializer = mc.createDeserializer({ state: mc.states.PLAY, version: config.server.version, isServer: true });
+const serializer = mc.createSerializer({ state: mc.states.PLAY, version: config.server.version, isServer: true })
+
+// Convert buffer to an object
+function bufferToObject(packetData) {
+	return deserializer.parsePacketBuffer(packetData).data;
+}
+
+// Convert object to a buffer
+function objectToBuffer(object) {
+	return serializer.createPacketBuffer(object);
+}
+*/
