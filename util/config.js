@@ -137,7 +137,7 @@ const configSchema = joi.object({
 			"active": joi.boolean().default(false),
 			"delay": joi.number().min(0).default(7) // Not setting a minimum for this seems dangerous...
 		}).default()
-	}),
+	}).default(),
 	"waitForControllerBeforeConnect": joi.boolean().default(false),
 	"notify": joi.object({
 		"whenJoining": joi.boolean().default(true),
