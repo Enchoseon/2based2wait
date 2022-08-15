@@ -74,11 +74,18 @@ function chatPacketHandler(packetData) {
 function updateLivechatWebhook(msg) {
 	if (msg.trim().length > 0) {
 		notifier.sendWebhook({
-			"description": msg,
+			"description": escapeMarkdown(msg),
 			"url": config.discord.webhook.livechat,
 			"disableAttribution": true
 		});
 	}
+}
+
+/** Escape Discord markdown (https://stackoverflow.com/a/39543625) */
+function escapeMarkdown(text) {
+	const unescaped = text.replace(/\\(\*|_|`|~|\\)/g, '$1'); // Unescape backslashed characters
+	const escaped = unescaped.replace(/(\*|_|`|~|\\)/g, '\\$1'); // Escape *, _, `, ~, \
+	return escaped;
 }
 
 // =======
