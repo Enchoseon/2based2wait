@@ -6,13 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node proxy.js",
-    "supervisor": "supervisor -n='success' proxy.js"
+    "supervisor": "supervisor -n success proxy.js",
+    "supervisorAllGasNoBrakes": "supervisor proxy.js"
   },
   "author": "Enchoseon",
   "license": "GPL-2.0",
   "dependencies": {
     "@rob9315/mcproxy": "^0.3.1",
     "deepmerge": "^4.2.2",
+    "joi": "^17.6.0",
     "json5": "^2.2.1",
     "minecraft-protocol": "^1.35.0",
     "mineflayer-antiafk": "github:Etiaro/mineflayer-antiafk",

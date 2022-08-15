@@ -40,10 +40,17 @@ function sendToast(titleText) {
  * @param {string} options.description
  * @param {boolean} options.disableAttribution
  * @param {boolean} options.ping
+ * @param {string} options.url
  * @param {boolean} options.deleteOnRestart
  */
 function sendWebhook(options) {
-	var params = { // Create embed
+	// Don't proceed if Discord webhooks are disabled in config.json
+	if (!config.discord.active) {
+		return;
+	}
+
+	// Create embed
+	var params = {
 		embeds: [
 			{
 				"color": config.discord.color,
