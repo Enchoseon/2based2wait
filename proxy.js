@@ -194,22 +194,30 @@ function createLocalServer() {
 			// Stop Mineflayer
 			stopMineflayer();
 			
-			// Spoof player_info
-			if (config.experimental.spoofPlayerInfo) {
-				spoofPlayerInfo(0); // Create player
-				conn.bot.waitForTicks(1).then(() => {
-					spoofPlayerInfo(4); // Remove player
+			// Spoof player_info (skin fix)
+			if (config.experimental.spoofPlayerInfo.active) {
+				bridgeClient.write("player_info", { // Add spoofed player to tablist
+					action: 0,
+					data: [{
+						UUID: bridgeClient.uuid,
+						name: conn.bot.player.username,
+						properties: [{
+							"name": "textures", // Remember to get skin info from https://sessionserver.mojang.com/session/minecraft/profile/<uuid>?unsigned=false!
+							"value": config.experimental.spoofPlayerInfo.texture.value,
+							"signature": config.experimental.spoofPlayerInfo.texture.signature
+						}]
+					}]
 				});
-				function spoofPlayerInfo(action) {
-					bridgeClient.write("player_info", {
-						action: action,
+				conn.bot.waitForTicks(1).then(() => {
+					bridgeClient.write("player_info", { // Remove bot player from tablist
+						action: 4,
 						data: [{
-							UUID: bridgeClient.uuid,
-							name: "",
+							UUID: conn.bot.player.uuid,
+							name: conn.bot.player.username,
 							properties: []
 						}]
 					});
-				}
+				});
 			}
 
 			// Log packets
@@ -268,7 +276,7 @@ function reconnect() {
 	setTimeout(function() {
 		updateStatus("restart", "Reconnecting now!");
 		notifier.sendToast("Reconnecting now!");
-		process.exit(0);
+		process.exit(1);
 	}, config.reconnectInterval * 1000);
 }
 
@@ -278,9 +286,7 @@ function startMineflayer() {
 	updateStatus("mineflayer", true);
 	if (config.mineflayer.active) {
 		conn.bot.autoEat.enable();
-		if (config.mineflayer.antiAfk.active) {
-			conn.bot.afk.start();
-		}
+		conn.bot.afk.start();
 	}
 }
 
@@ -290,9 +296,7 @@ function stopMineflayer() {
 	updateStatus("mineflayer", false);
 	if (config.mineflayer.active) {
 		conn.bot.autoEat.disable();
-		if (config.mineflayer.antiAfk.active) {
-			conn.bot.afk.stop();
-		}
+		conn.bot.afk.stop();
 	}
 }
 
@@ -302,18 +306,3 @@ function bridge(packetData, packetMeta, dest) {
 		dest.writeRaw(packetData);
 	}
 }
-
-/*
-const deserializer = mc.createDeserializer({ state: mc.states.PLAY, version: config.server.version, isServer: true });
-const serializer = mc.createSerializer({ state: mc.states.PLAY, version: config.server.version, isServer: true })
-
-// Convert buffer to an object
-function bufferToObject(packetData) {
-	return deserializer.parsePacketBuffer(packetData).data;
-}
-
-// Convert object to a buffer
-function objectToBuffer(object) {
-	return serializer.createPacketBuffer(object);
-}
-*/
