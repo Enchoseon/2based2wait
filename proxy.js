@@ -216,8 +216,7 @@ function createLocalServer() {
 				// Disconnect if no controller
 				if (config.experimental.disconnectIfNoController.active && status.inQueue === "false") {
 					setTimeout(function () {
-						clearTimeout(controllerMonitor);
-						logger.log("proxy", "Restarting proxy because noone was in control 69 seconds after someone DCed from proxy while it was on the server.", "proxy");
+						logger.log("proxy", "Restarting proxy because noone was in control " + config.experimental.disconnectIfNoController.delay + " seconds after someone DCed from proxy while it was on the server.", "proxy");
 						reconnect();
 					}, config.experimental.disconnectIfNoController.delay * 1000);
 				}
@@ -227,22 +226,22 @@ function createLocalServer() {
 
 			// Stop Mineflayer
 			stopMineflayer();
-			
+
 			// Spoof player_info (skin fix)
 			if (config.experimental.spoofPlayerInfo.active) {
-				bridgeClient.write("player_info", { // Add spoofed player to tablist
-					action: 0,
-					data: [{
-						UUID: bridgeClient.uuid,
-						name: conn.bot.player.username,
-						properties: [{
-							"name": "textures", // Remember to get skin info from https://sessionserver.mojang.com/session/minecraft/profile/<uuid>?unsigned=false!
-							"value": config.experimental.spoofPlayerInfo.texture.value,
-							"signature": config.experimental.spoofPlayerInfo.texture.signature
-						}]
-					}]
-				});
 				conn.bot.waitForTicks(1).then(() => {
+					bridgeClient.write("player_info", { // Add spoofed player to tablist
+						action: 0,
+						data: [{
+							UUID: bridgeClient.uuid,
+							name: conn.bot.player.username,
+							properties: [{
+								"name": "textures", // Remember to get skin info from https://sessionserver.mojang.com/session/minecraft/profile/<uuid>?unsigned=false!
+								"value": config.experimental.spoofPlayerInfo.texture.value,
+								"signature": config.experimental.spoofPlayerInfo.texture.signature
+							}]
+						}]
+					});
 					bridgeClient.write("player_info", { // Remove bot player from tablist
 						action: 4,
 						data: [{
