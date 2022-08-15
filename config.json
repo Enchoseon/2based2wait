@@ -1,64 +1,47 @@
+/*
+ * This is a heavily trimmed-down configuration file that you can use as a starting point!
+ * 
+ * It's HIGHLY recommended you read the wiki if you want to:
+ * - Learn every single feature this proxy has (https://github.com/Enchoseon/2based2wait/wiki/Configuration-Guide)
+ *   - ^ A LOT of useful features aren't shown in this file and aren't enabled by default, such as ngrok tunneling
+ *   - ^ Change values away from their defaults (e.g. log cutoff)
+ * - Enable robust autoreconnecting (https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor)
+ * - Coordinate multiple accounts (https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts)
+ * - Learn the ideal setup for accounts with priority queue (https://github.com/Enchoseon/2based2wait/wiki/How-to-Configure-Accounts-With-Priority-Queue)
+ */
 {
 	"account": {
-		"username": "YOUR USERNAME",
-		"password": "",
-		"auth": "microsoft"
+		"username": "YOUR USERNAME"
 	},
-	
+
+	"proxy": {
+		"whitelist": [ "YOUR WHITELISTED PLAYERNAMES" ],
+		"port": 25565
+	},
+
 	"discord": {
+		"active": false,
 		"webhook": {
 			"spam": "YOUR DISCORD WEBHOOK",
 			"livechat": "YOUR DISCORD WEBHOOK",
 			"status": "YOUR DISCORD WEBHOOK"
 		},
-		"color": 2123412,
 		"id": "424701879151230977"
 	},
-	
+
 	"queueThreshold": 21,
-	
-	"reconnectInterval": 25,
-	
-	"uncleanDisconnectInterval": 420,
-	
-	"log": {
-		"active": {
-			"error": true,
-			"proxy": true,
-			"chat": true,
-			"bridgeClientPackets": true,
-			"serverPackets": true
-		},
-		"cutoff": 690420,
-		"packetFilters": {
-			"server": [ "map", "map_chunk", "player_info", "entity_metadata", "entity_velocity", "entity_move_look", "entity_look", "update_time", "world_particles", "unload_chunk", "teams", "rel_entity_move", "entity_head_rotation", "entity_update_attributes", "block_change" ],
-			"bridgeClient": [ "position", "look", "position_look", "arm_animation" ]
-		}
-	},
-	
+
 	"server": {
 		"host": "connect.2b2t.org",
 		"port": 25565,
 		"version": "1.12.2"
 	},
-	
-	"proxy": {
-		"whitelist": [ "YOUR WHITELISTED PLAYERNAMES" ],
-		"onlineMode": true,
-		"port": 25565
-	},
-	
-	"ngrok": {
-		"active": false,
-		"authtoken": "YOUR AUTHTOKEN HERE",
-		"region": "us"
-	},
-	
+
 	"mineflayer": {
 		"active": true,
 		"autoQueueMainInterval": 690,
 		"killAura": {
-			"interval": 1,
+			"interval": 0.69,
 			"blacklist": [ "zombie_pigman", "enderman" ]
 		},
 		"autoEat": {
@@ -67,26 +50,14 @@
 			"bannedFood": [ "rotten_flesh", "pufferfish", "chorus_fruit", "poisonous_potato", "spider_eye" ]
 		},
 		"antiAfk": {
-			"active": false,
-			"actions": [ "rotate", "walk", "jump", "jumpWalk", "swingArm" ],
+			"actions": [ "rotate", "swingArm" ],
 			"fishing": false,
-			"chatting": true,
+			"chatting": false,
 			"chatMessages": [ "!pt", "!queue" ],
 			"chatInterval": 690420
 		}
 	},
 
-	"experimental": {
-		"spoofPlayerInfo": true
-	},
-	
-	"waitForControllerBeforeConnect": false,
-
-	"notify": {
-		"whenJoining": true,
-		"whenBelowQueueThreshold": true
-	},
-	
 	"coordination": {
 		"active": false,
 		"path":  "./../"
