@@ -149,7 +149,17 @@ function createLocalServer() {
 		"host": "localhost",
 		"port": config.proxy.port,
 		"version": config.server.version,
-		"max-players": 1
+		"max-players": 1,
+		"beforePing": (function (response, client, answerToPing) {
+			if (!config.experimental.spoofPing.active) { // Don't proceed if noPing isn't enabled in config.json
+				return;
+			}
+			if (config.experimental.spoofPing.noResponse) { // Don't return a response
+				answerToPing(false);
+			} else { // Or return a fake response
+				answerToPing(null, config.experimental.spoofPing.fakeResponse);
+			}
+		})
 	});
 	// Handle logins
 	server.on("login", (bridgeClient) => {

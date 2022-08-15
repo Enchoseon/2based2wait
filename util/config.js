@@ -39,7 +39,7 @@ const configSchema = joi.object({
 	"account": joi.object({
 		"username": usernameSchema,
 		"password": joi.string().empty("").default(""), // to-do: add a mojang password regex
-		"auth": joi.string().valid("microsoft", "mojang").default("microsoft")
+		"auth": joi.string().valid("microsoft", "mojang", "offline").default("microsoft")
 	}),
 	"discord": joi.object({
 		"active": joi.boolean().default(false),
@@ -109,6 +109,28 @@ const configSchema = joi.object({
 			"texture": joi.object({
 				"value": joi.string().empty("").base64({ urlSafe: true, paddingRequired: true }).default(""),
 				"signature": joi.string().empty("").base64({ paddingRequired: true }).default(""),
+			})
+		}),
+		"spoofPing": joi.object({
+			"active": joi.boolean().default(false),
+			"noResponse": joi.boolean().default(false),
+			"fakeResponse": joi.object({ // From: https://wiki.vg/Server_List_Ping#Status_Response (default values simulate a normal server)
+				"version": joi.object({
+					"name": joi.string().default("1.12.2"),
+					"protocol": joi.number().integer().default(340) // From: https://wiki.vg/Protocol_version_numbers
+				}),
+				"players": joi.object({
+					"max": joi.number().integer().default(20), // From: https://minecraft.fandom.com/wiki/Server.properties#Java_Edition_2 (under "max-players")
+					"online": joi.number().integer().default(0),
+					"sample": joi.array().items(joi.object({
+						"name": usernameSchema,
+						"id": joi.string().uuid({ version: "uuidv4", separator: "-" })
+					})).default([])
+				}),
+				"description": joi.object({
+					"text": joi.string().default("A Minecraft server")
+				}),
+				"favicon": joi.string().default("undefined")
 			})
 		})
 	}),
