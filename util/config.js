@@ -106,7 +106,7 @@ const configSchema = joi.object({
 	"experimental": joi.object({
 		"spoofPlayerInfo": joi.object({
 			"active": joi.boolean().default(true),
-			"texture": joi.object({
+			"texture": joi.object({ // From: https://wiki.vg/Mojang_API#UUID_to_Profile_and_Skin.2FCape
 				"value": joi.string().empty("").base64({ urlSafe: true, paddingRequired: true }).default(""),
 				"signature": joi.string().empty("").base64({ paddingRequired: true }).default(""),
 			})
@@ -132,12 +132,17 @@ const configSchema = joi.object({
 				}),
 				"favicon": joi.string().default("undefined")
 			})
+		}),
+		"disconnectIfNoController": joi.object({
+			"active": joi.boolean().default(false),
+			"delay": joi.number().min(0).default(7) // Not setting a minimum for this seems dangerous...
 		})
 	}),
 	"waitForControllerBeforeConnect": joi.boolean().default(false),
 	"notify": joi.object({
 		"whenJoining": joi.boolean().default(true),
 		"whenBelowQueueThreshold": joi.boolean().default(true),
+		"whenControlling": joi.boolean().default(false)
 	}),
 	"coordination": joi.object({
 		"active": joi.boolean().default(false),

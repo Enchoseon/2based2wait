@@ -38,8 +38,8 @@ function packetHandler(packetData, packetMeta, category) {
  * @param {object} category
  */
 function log(name, data, category) {
-	// Don't proceed if logging is disabled or if category not active in config.json
-	if (!config.log.active || !config.log.active[category]) {
+	// Don't proceed if logging category is disabled in config.json
+	if (!config.log.active[category]) {
 		return;
 	}
 	// Create log folder if it doesn't exist

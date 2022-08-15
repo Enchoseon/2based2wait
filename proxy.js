@@ -177,6 +177,13 @@ function createLocalServer() {
 		// Log successful connection attempt
 		logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has connected to the proxy.");
 		updateStatus("controller", bridgeClient.username);
+		if (config.notify.whenControlling) { // optional: send message to status webhook
+			notifier.sendWebhook({
+				title: bridgeClient.username + " is using the proxy.",
+				url: config.discord.webhook.status,
+				deleteOnRestart: true
+			});
+		}
 
 		// Create client if it hasn't been created yet (waitForControllerBeforeConnect)
 		if (config.waitForControllerBeforeConnect && typeof conn === "undefined") {
@@ -196,8 +203,25 @@ function createLocalServer() {
 			logger.log("proxy", "Creating packet bridge.", "proxy");
 			// Start Mineflayer when disconnected
 			bridgeClient.on("end", () => {
+				// Log disconnect
 				logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has disconnected from the local server.");
 				updateStatus("controller", "None");
+				if (config.notify.whenControlling) { // optional: send message to status webhook
+					notifier.sendWebhook({
+						title: bridgeClient.username + " is no longer using the proxy.",
+						url: config.discord.webhook.status,
+						deleteOnRestart: true
+					});
+				}
+				// Disconnect if no controller
+				if (config.experimental.disconnectIfNoController.active && status.inQueue === "false") {
+					setTimeout(function () {
+						clearTimeout(controllerMonitor);
+						logger.log("proxy", "Restarting proxy because noone was in control 69 seconds after someone DCed from proxy while it was on the server.", "proxy");
+						reconnect();
+					}, config.experimental.disconnectIfNoController.delay * 1000);
+				}
+				// Start Mineflayer
 				startMineflayer();
 			});
 
