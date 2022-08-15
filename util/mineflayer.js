@@ -47,10 +47,10 @@ function initialize(bot) {
         // =========
         setInterval(() => {
             if (status.mineflayer === "true" && status.inQueue === "false") {
-                // Target hostile mobs within 3.5 blocks not in config.mineflayer.killAura.blacklist
-                const mobFilter = e => (e.type === "mob") && (e.category === "Hostile mobs") && (e.position.distanceTo(bot.entity.position) < 3.5) && (config.mineflayer.killAura.blacklist.findIndex(e.name) === -1);
+                // Target hostile mobs within 3.5 blocks
+                const mobFilter = e => (e.kind === "Hostile mobs") && (e.position.distanceTo(bot.entity.position) < 3.5)
                 const victim = bot.nearestEntity(mobFilter);
-                if (victim) {
+                if (victim && config.mineflayer.killAura.blacklist.indexOf(victim.name) === -1) { // Don't target mobs in config.mineflayer.killAura.blacklist
                     bot.lookAt(victim.position); // For some reason using the promise doesn't work
                     bot.attack(victim);
                 }
