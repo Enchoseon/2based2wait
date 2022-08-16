@@ -1,0 +1,9 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily" 
+    ignore:
+    - dependency-name: "node-fetch"
+      versions: "3.x"
