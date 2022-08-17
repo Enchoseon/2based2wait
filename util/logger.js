@@ -26,8 +26,7 @@ const logRandomEnumerator = String(Math.random()).replace(".", "");
 function packetHandler(packetData, packetMeta, category) {
 	var filter = [];
 	if (config.log.packetFilters[category].indexOf(packetMeta.name) === -1) { // Don't log filtered packets
-		log(packetMeta.name + "meta", packetMeta, category + "Packets");
-		log(packetMeta.name + "data", packetData, category + "Packets");
+		log(packetMeta.name, packetData, category + "Packets");
 	}
 }
 
@@ -43,7 +42,10 @@ function log(name, data, category) {
 		return;
 	}
 	// Create log folder if it doesn't exist
-	const dir = "./log/" + category + "/";
+	var dir = "./log/" + category + "/";
+	if (typeof global.it === "function") { // Change directory to test directory if being ran by mocha.
+		dir = "./test/log/" + category + "/";
+	}
 	if (!fs.existsSync(dir)) {
 		fs.mkdirSync(dir, {
 			recursive: true
