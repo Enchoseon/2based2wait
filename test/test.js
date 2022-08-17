@@ -34,7 +34,8 @@ describe("2Bored2Wait Testing", () => {
         });
     });
     describe("proxy.js", () => {
-        it("Can perform login sequence", async function() {
+        it("Can perform login sequence", async function () {
+            this.timeout(13000);
             const proxy = require("./../proxy.js");
             const username = await waitForLogin();
             console.log("Received Login:", username);
