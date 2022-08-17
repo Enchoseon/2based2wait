@@ -1,4 +1,5 @@
 ﻿"use strict";
+
 // =======
 // Imports
 // =======
@@ -41,7 +42,7 @@ start();
 function packetHandler(packetData, packetMeta) {
 	// Log packets
 	logger.packetHandler(packetData, packetMeta, "server");
-	
+
 	// Assorted packet handlers
 	switch (packetMeta.name) {
 		case "chat": // Forward chat packets to chatty.js for livechat relay and reading server restart messages
@@ -166,16 +167,16 @@ function createLocalServer() {
 		// Block attempt if...
 		if (config.proxy.whitelist.findIndex(needle => bridgeClient.username.toLowerCase() === needle.toLowerCase()) === -1) { // ... player isn't in whitelist
 			bridgeClient.end("Your account (" + bridgeClient.username + ") is not whitelisted.\n\nIf you're getting this error in error the Microsoft account token may have expired.");
-			logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " was denied connection to the proxy for not being whitelisted.");
+			logSpam(bridgeClient.username + " (" + bridgeClient.uuid + ")" + " was denied connection to the proxy for not being whitelisted.");
 			return;
 		} else if (server.playerCount > 1) { // ... and another player isn't already connected
 			bridgeClient.end("This proxy is at max capacity.\n\nCurrent Controller: " + status.controller);
-			logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " was denied connection to the proxy despite being whitelisted because " + status.controller + " was already in control.");
+			logSpam(bridgeClient.username + " (" + bridgeClient.uuid + ")" + " was denied connection to the proxy despite being whitelisted because " + status.controller + " was already in control.");
 			return;
 		}
 
 		// Log successful connection attempt
-		logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has connected to the proxy.");
+		logSpam(bridgeClient.username + " (" + bridgeClient.uuid + ")" + " has connected to the proxy.");
 		updateStatus("controller", bridgeClient.username);
 		if (config.notify.whenControlling) { // optional: send message to status webhook
 			notifier.sendWebhook({
@@ -204,7 +205,7 @@ function createLocalServer() {
 			// Start Mineflayer when disconnected
 			bridgeClient.on("end", () => {
 				// Log disconnect
-				logSpam(bridgeClient.username + "(" + bridgeClient.uuid + ")" + " has disconnected from the local server.");
+				logSpam(bridgeClient.username + " (" + bridgeClient.uuid + ")" + " has disconnected from the local server.");
 				updateStatus("controller", "None");
 				if (config.notify.whenControlling) { // optional: send message to status webhook
 					notifier.sendWebhook({
