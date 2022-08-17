@@ -47,7 +47,7 @@ const configSchema = joi.object({
 			"spam": joi.string().empty("").default(""),
 			"livechat": joi.string().empty("").default(""),
 			"status": joi.string().empty("").default("")
-		}),
+		}).default(),
 		"color": joi.number().integer().min(0).max(16777215).default(2123412),
 		"id": joi.string().default(0) // although this can be an number for users, it can be a string for roles!
 	}).default(),
@@ -144,6 +144,7 @@ const configSchema = joi.object({
 		"whenBelowQueueThreshold": joi.boolean().default(true),
 		"whenControlling": joi.boolean().default(false)
 	}).default(),
+	"noCliGui": joi.boolean().default(false),
 	"coordination": joi.object({
 		"active": joi.boolean().default(false),
 		"path": joi.string().default("./../")
@@ -155,7 +156,11 @@ const configSchema = joi.object({
 // =======================
 
 // Read config.json
-config = JSON5.parse(fs.readFileSync("config.json"));
+if (typeof global.it !== "function") {
+	config = JSON5.parse(fs.readFileSync("config.json"));
+} else { // Unless we're running a unit test, in which case read the test config.
+	config = JSON5.parse(fs.readFileSync("./test/test-config.json"));
+}
 
 // If coordination is active...
 if (config.coordination.active) {
@@ -222,6 +227,9 @@ function updateCoordinatorStatus() {
  * Display a basic CLI GUI
  */
 function updateGui() {
+	if (config.noCliGui) {
+		return;
+	}
 	// Cli GUI
 	console.clear();
 	console.log("\x1b[36m", `
@@ -283,10 +291,10 @@ function validate() {
 			console.log("\x1b[32m", "- Invalid Value: " + error.context.value);
 			console.log("\x1b[32m", "- Should Be Type: " + error.type);
 			if (i !== errors.details.length) {
-				console.log("");
+				console.log("\x1b[36m", "");
 			}
 		};
-		process.exit(0); // Kill process with code 0 so that supervisor won't restart it
+		throw new Error("Couldn't validate config.json");
 	}
 	return result.value;
 
