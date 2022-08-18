@@ -2,8 +2,6 @@
 // Imports
 // =======
 
-const fs = require("fs");
-
 const { config, status, updateStatus } = require("./config.js");
 const notifier = require("./notifier.js");
 
