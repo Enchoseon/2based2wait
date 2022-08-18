@@ -445,5 +445,6 @@ module.exports = {
 	config,
 	status,
 	updateStatus,
-	updateCoordinatorStatus
+	updateCoordinatorStatus,
+	configSchema
 };

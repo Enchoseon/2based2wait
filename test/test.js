@@ -28,9 +28,12 @@ describe("2Bored2Wait Testing", () => {
     });
     describe("config.js", () => {
         it("Can generate a valid config.json from bare-minimum information", () => {
-            const { config } = require("./../util/config.js");
-            console.log("Generated Config:", config);
-            assert.equal(typeof config, "object");
+            const { configSchema } = require("./../util/config.js");
+            const generated = configSchema.validate({
+                username: "UnitTester"
+            });
+            console.log("Generated Config:", generated);
+            assert.equal(typeof generated, "object");
         });
     });
     describe("proxy.js", () => {

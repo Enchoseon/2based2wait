@@ -4,7 +4,7 @@
   "description": "Private & lightweight 2b2t proxy.",
   "main": "proxy.js",
   "scripts": {
-    "test": "mocha --exit",
+    "test": "mocha --exit --bail",
     "start": "node proxy.js",
     "supervisor": "supervisor -n success proxy.js",
     "supervisorAllGasNoBrakes": "supervisor proxy.js",
