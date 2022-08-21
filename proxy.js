@@ -174,6 +174,17 @@ function createLocalServer() {
 			logSpam(bridgeClient.username + " (" + bridgeClient.uuid + ")" + " was denied connection to the proxy despite being whitelisted because " + status.controller + " was already in control.");
 			return;
 		}
+		
+		// Finally, kick the player if the proxy is restarting
+		if (status.restart === ("Reconnecting in " + config.reconnectInterval + " seconds...")) {
+			if (config.ngrok.active) {
+				bridgeClient.end("This proxy is currently restarting.\n\nPlease wait at least " + config.reconnectInterval + " seconds and try again using the new tunnel.");
+			} else {
+				bridgeClient.end("This proxy is currently restarting.\n\nPlease wait at least " + config.reconnectInterval + " seconds and try again.");
+			}
+			logSpam(bridgeClient.username + " (" + bridgeClient.uuid + ")" + " was denied connection to the proxy despite being whitelisted because the proxy was restarting.");
+			return;
+		}
 
 		// Log successful connection attempt
 		logSpam(bridgeClient.username + " (" + bridgeClient.uuid + ")" + " has connected to the proxy.");
