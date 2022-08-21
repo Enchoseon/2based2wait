@@ -30,10 +30,12 @@ describe("2Bored2Wait Testing", () => {
         it("Can generate a valid config.json from bare-minimum information", () => {
             const { configSchema } = require("./../util/config.js");
             const generated = configSchema.validate({
-                username: "UnitTester"
+                account: {
+					username: "UnitTester"
+				}
             });
             console.log("Generated Config:", generated);
-            assert.equal(typeof generated, "object");
+            assert.equal(typeof generated.error, "undefined"); // Check that schema validation returned no errors
         });
     });
     describe("proxy.js", () => {
