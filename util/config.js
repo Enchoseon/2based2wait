@@ -153,9 +153,9 @@ const configSchema = joi.object({
 				.description("Whether to spoof the [Player Info packet](https://wiki.vg/Protocol#Player_Info) to set a custom skin"),
 			"texture": joi.object({ // From: https://wiki.vg/Mojang_API#UUID_to_Profile_and_Skin.2FCape
 				"value": joi.string().empty("").base64({ urlSafe: true, paddingRequired: true }).default("")
-					.description("Base64 string of skin from https://sessionserver.mojang.com/session/minecraft/profile/<UUID>?unsigned=false"),
+					.description("Base64 string of skin from [https://sessionserver.mojang.com/session/minecraft/profile/<UUID\>?unsigned=false](https://wiki.vg/Mojang_API#UUID_to_Profile_and_Skin.2FCape)"),
 				"signature": joi.string().empty("").base64({ paddingRequired: true }).default("")
-					.description("Base64 string of signed data using Yggdrasil's private key from https://sessionserver.mojang.com/session/minecraft/profile/<UUID>?unsigned=false"),
+					.description("Base64 string of signed data using Yggdrasil's private key from [https://sessionserver.mojang.com/session/minecraft/profile/<UUID\>?unsigned=false](https://wiki.vg/Mojang_API#UUID_to_Profile_and_Skin.2FCape)"),
 			}).default()
 		}).default(),
 		"spoofPing": joi.object({
