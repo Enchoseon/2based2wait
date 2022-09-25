@@ -125,7 +125,7 @@ function createClient() {
 				title: "Someone is already connected to the server using this proxy's account.",
 				category: "spam"
 			});
-			if (typeof server.clients[0] !== "undefined") {
+			if (typeof server !== "undefined" && typeof server.clients[0] !== "undefined") { // Make sure client exists
 				server.clients[0].end("Someone is already connected to the server using this proxy's account.") // Disconnect client from the proxy with a helpful message
 			}
 		}
@@ -319,9 +319,12 @@ function restartUncleanDisconnectMonitor() {
 
 /** Reconnect (Remember to read https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor or this will just cause the script to shut down!) */
 function reconnect() {
+	console.log("Reconnecting...");
 	logger.log("proxy", "Reconnecting...", "proxy");
-	conn.disconnect(); // Disconnect proxy from the server
-	if (typeof server.clients[0] !== "undefined") {
+	if (typeof conn !== "undefined") { // Make sure connection exists
+		conn.disconnect(); // Disconnect proxy from the server
+	}
+	if (typeof server !== "undefined" && typeof server.clients[0] !== "undefined") { // Make sure client exists
 		server.clients[0].end("Proxy restarting...") // Disconnect client from the proxy
 	}
 	notifier.sendWebhook({
