@@ -31,8 +31,8 @@ describe("2Bored2Wait Testing", () => {
             const { configSchema } = require("./../util/config.js");
             const generated = configSchema.validate({
                 account: {
-					username: "UnitTester"
-				}
+                    username: "UnitTester"
+                }
             });
             console.log("Generated Config:", generated);
             assert.equal(typeof generated.error, "undefined"); // Check that schema validation returned no errors
@@ -57,9 +57,9 @@ describe("2Bored2Wait Testing", () => {
 function waitForLogin() {
     return new Promise((resolve) => {
         server.on("login", function (client) { // This is not an accurate login sequence.
-            // ============================
-            // Simulate 2B2T Login Sequence
-            // ============================
+            // ===================
+            // 2B2T Login Sequence
+            // ===================
             client.write("chat", {
                 "message": JSON.stringify({
                     "color": "gold",
@@ -76,9 +76,9 @@ function waitForLogin() {
                 "levelType": "default",
                 "reducedDebugInfo": false
             });
-            // ==============
-            // Server Restart
-            // ==============
+            // ===================
+            // 2B2T Server Restart
+            // ===================
             client.write("chat", {
                 message: JSON.stringify({
                     "text": "[SERVER] Server restarting in 7 seconds..."
