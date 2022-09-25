@@ -81,10 +81,10 @@ function updateLivechatWebhook(msg) {
 	}
 }
 
-/** Escape Discord markdown (https://stackoverflow.com/a/39543625) */
+/** Escape Discord markdown and emojis (https://stackoverflow.com/a/39543625) */
 function escapeMarkdown(text) {
-	const unescaped = text.replace(/\\(\*|_|`|~|\\)/g, '$1'); // Unescape backslashed characters
-	const escaped = unescaped.replace(/(\*|_|`|~|\\)/g, '\\$1'); // Escape *, _, `, ~, \
+	const unescaped = text.replace(/\\(\*|_|:|`|~|\\)/g, '$1'); // Unescape backslashed characters
+	const escaped = unescaped.replace(/(\*|_|:|`|~|\\)/g, '\\$1'); // Escape *, _, :, `, ~, \
 	return escaped;
 }
 
