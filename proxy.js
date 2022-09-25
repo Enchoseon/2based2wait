@@ -123,7 +123,7 @@ function createClient() {
 		if (JSON.parse(packet.reason).text === "You are already connected to this proxy!") { // Send notifications when the proxy is unable to log on because the account is already in use
 			notifier.sendWebhook({
 				title: "Someone is already connected to the server using this proxy's account.",
-				url: config.discord.webhook.spam
+				category: "spam"
 			});
 			if (typeof server.clients[0] !== "undefined") {
 				server.clients[0].end("Someone is already connected to the server using this proxy's account.") // Disconnect client from the proxy with a helpful message
@@ -201,7 +201,7 @@ function createLocalServer() {
 		if (config.notify.whenControlling) { // optional: send message to status webhook
 			notifier.sendWebhook({
 				title: bridgeClient.username + " is using the proxy.",
-				url: config.discord.webhook.status,
+				category: "status",
 				deleteOnRestart: true
 			});
 		}
@@ -230,7 +230,7 @@ function createLocalServer() {
 				if (config.notify.whenControlling) { // optional: send message to status webhook
 					notifier.sendWebhook({
 						title: bridgeClient.username + " is no longer using the proxy.",
-						url: config.discord.webhook.status,
+						category: "status",
 						deleteOnRestart: true
 					});
 				}
@@ -292,7 +292,7 @@ function createLocalServer() {
 			logger.log("bridgeclient", logMsg, "proxy");
 			notifier.sendWebhook({
 				title: logMsg,
-				url: config.discord.webhook.spam
+				category: "spam"
 			});
 		}
 	});
@@ -326,7 +326,7 @@ function reconnect() {
 	}
 	notifier.sendWebhook({
 		title: "Reconnecting...",
-		url: config.discord.webhook.spam
+		category: "spam"
 	});
 	updateStatus("restart", "Reconnecting in " + config.reconnectInterval + " seconds...");
 	updateStatus("livechatRelay", "false");

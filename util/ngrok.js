@@ -37,13 +37,13 @@ function createTunnel() {
 			notifier.sendWebhook({
 				title: "New Tunnel:",
 				description: "Current IP: `" + url + "`",
-				url: config.discord.webhook.spam
+				category: "spam"
 			});
 			if (config.waitForControllerBeforeConnect) { // Since the client isn't connected we'll need to send the tunnel IP to the status webhook (normally the tunnel IP would be sent to the status webhook after going under the queueThreshold and joining the server)
 				notifier.sendWebhook({
 					title: "Current Tunnel:",
 					description: "Current IP: `" + url + "`",
-					url: config.discord.webhook.status,
+					category: "status",
 					deleteOnRestart: true
 				});
 			}

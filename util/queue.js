@@ -26,7 +26,7 @@ function difficultyPacketHandler(packetData, conn) {
 			title: "In Server!",
 			description: "Current IP: `" + status.ngrokUrl + "`",
 			ping: true,
-			url: config.discord.webhook.status,
+			category: "status",
 			deleteOnRestart: true
 		});
 	}
@@ -56,14 +56,14 @@ function playerlistHeaderPacketHandler(packetData, server) {
 				notifier.sendWebhook({
 					title: "2B2T Queue Position: " + status.position,
 					description: "ETA: " + status.eta,
-					url: config.discord.webhook.spam
+					category: "spam"
 				});
 				if (!sentNotification && config.notify.whenBelowQueueThreshold) {
 					notifier.sendWebhook({
 						title: "Position " + status.position + " in queue!",
 						description: "Current IP: `" + status.ngrokUrl + "`",
 						ping: true,
-						url: config.discord.webhook.status,
+						category: "status",
 						deleteOnRestart: true
 					});
 				}
@@ -72,7 +72,7 @@ function playerlistHeaderPacketHandler(packetData, server) {
 				notifier.sendWebhook({
 					title: "2B2T Queue Position: " + status.position,
 					description: "ETA: " + status.eta,
-					url: config.discord.webhook.spam
+					category: "spam"
 				});
 			}
 		}

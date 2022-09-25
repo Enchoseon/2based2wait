@@ -38,7 +38,7 @@ function chatPacketHandler(packetData) {
 			notifier.sendWebhook({
 				title: "Server Restart In: " + status.restart,
 				ping: true,
-				url: config.discord.webhook.spam
+				category: "spam"
 			});
 		}
 	}
@@ -75,7 +75,7 @@ function updateLivechatWebhook(msg) {
 	if (msg.trim().length > 0) {
 		notifier.sendWebhook({
 			"description": escapeMarkdown(msg),
-			"url": config.discord.webhook.livechat,
+			"category": "livechat",
 			"disableAttribution": true
 		});
 	}

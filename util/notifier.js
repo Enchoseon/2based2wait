@@ -25,7 +25,7 @@ function sendToast(titleText) {
 	toast.notify({
 		"title": titleText,
 		"message": " ",
-		"subtitle": "2B Queue Tool",
+		"subtitle": "2Based2Wait",
 		"icon": "null",
 		"contentImage": "null",
 		"sound": "ding.mp3",
@@ -39,8 +39,8 @@ function sendToast(titleText) {
  * @param {string} options.title
  * @param {string} options.description
  * @param {boolean} options.disableAttribution
- * @param {boolean} options.ping
- * @param {string} options.url
+ * @param {string} options.category
+ * @param {string} options.imageUrl
  * @param {boolean} options.deleteOnRestart
  */
 function sendWebhook(options) {
@@ -69,20 +69,28 @@ function sendWebhook(options) {
 			"text": "Controller: " + status.controller
 		}
 	}
-	// Set author fields so that we know where each embed came from
+	// Set author fields so that we know where each embed originated. If disabled, the only way to tell the source of a message (without checking logs) would be through embed color.
 	if (!options.disableAttribution) {
 		params.embeds[0].author = {
 			"name": "Account: " + config.account.username,
 			"icon_url": "https://minotar.net/helm/" + config.account.username + "/69.png"
 		}
 	}
-	// Add Discord ping to description
+
+	// Add Discord ping to message content
 	if (options.ping) {
-		params.embeds[0].description += " <@" + config.discord.id + ">";
+		params.content = " <@" + config.discord.id + ">";
 	}
 
+	// Add image to embed
+	if (options.imageUrl) {
+		params.embeds[0].image = {
+			url: options.imageUrl,
+		};
+    }
+
 	// Send embed (if no destination is provided, defaults to config.discord.webhook.spam)
-	const webhookUrl = (options.url || config.discord.webhook.spam);
+	const webhookUrl = (config.discord.webhook[options.category] || config.discord.webhook.spam);
 	fetch(webhookUrl + "?wait=true", {
 		method: "POST",
 		headers: {
