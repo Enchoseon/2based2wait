@@ -15,8 +15,7 @@
 - [Quick Start](#quick-start)
 - [Features](#features)
 - [Images](#images)
-- [Things to Keep in Mind](#things-to-keep-in-mind)
-- [Planned Features](#planned-features)
+- [Keep in Mind](#keep-in-mind)
 
 # Quick Start
 
@@ -32,20 +31,27 @@
 
 # Features
 
-- Low resource overhead
-- Robust auto-reconnection & coordination
+- Extremely low RAM and CPU usage
+- Robust auto-reconnection
+  - Battle-tested to be online 24/7/365
 - High configurability
-- Livechat relay
-- Queue position relay
+  - Easily configure small-to-medium-sized networks
+- Convenient Discord webhooks for:
+  - Livechat
+  - Queue position
+  - Tunnels & connections
 - Toast notifications
 - Auto `/queue main`
-- Mineflayer support
-  - Kill aura
-  - Auto eat
-  - Anti afk
-  - Anti drowning
+- Mineflayer support and extensibility *(see: `./utils/mineflayer.js`)*
+  - Already comes with:
+    - Kill aura
+    - Auto eat
+    - Anti afk
+    - Anti drowning
 - Extensive logging
-- Ngrok tunneling
+- Share proxies with plug-and-play Ngrok tunnels
+  - Your machine's IP is never shared with players connecting to your proxy
+  - Your players' IPs are never shared with your machine
 
 # Images
 
@@ -53,10 +59,8 @@
 ![livechat relay](https://files.catbox.moe/b3fl8s.png "livechat relay")
 ![queue relay](https://files.catbox.moe/dgepgx.png "queue gui")
 
-# Things to Keep in Mind
+# Keep in Mind
 
-Many important features are __disabled by default__, such as [auto-reconnect](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor), ngrok tunneling, Discord webhooks, and much more.
+Many important features are __disabled by default__, such as [auto-reconnect](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor), [ngrok tunneling](https://github.com/Enchoseon/2based2wait/wiki/How-to-Share-Accounts-With-A-Reverse-Proxy) (for sharing accounts), Discord webhooks, and much more.
 
-If you want to enable these features or configure a proxy (or multiple) for your use case, you will need to read the Wiki.
-
-You can disconnect from the proxy, swap out your clients, & change your mods without disconnecting the proxy client (as long as you do it in a timely manner)—which is very useful if you don't have priority queue and/or you have a mod stack with fatal memory leaks. Not to mention the fact that you can sit in queue spending orders of magnitude less RAM and CPU. You can even play on other servers while queueing with the same account!
+If you want to enable these features or configure a proxy ([or multiple](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts)), you'll need to read the [Wiki](https://github.com/Enchoseon/2based2wait/wiki).
