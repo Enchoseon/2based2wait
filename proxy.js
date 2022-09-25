@@ -120,6 +120,15 @@ function createClient() {
 	// Log disconnect
 	client.on("disconnect", function (packet) {
 		logger.log("disconnected", packet.reason, "proxy");
+		if (JSON.parse(packet.reason).text === "You are already connected to this proxy!") { // Send notifications when the proxy is unable to log on because the account is already in use
+			notifier.sendWebhook({
+				title: "Someone is already connected to the server using this proxy's account.",
+				url: config.discord.webhook.spam
+			});
+			if (typeof server.clients[0] !== "undefined") {
+				server.clients[0].end("Someone is already connected to the server using this proxy's account.") // Disconnect client from the proxy with a helpful message
+			}
+		}
 		reconnect();
 	});
 
@@ -311,6 +320,10 @@ function restartUncleanDisconnectMonitor() {
 /** Reconnect (Remember to read https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor or this will just cause the script to shut down!) */
 function reconnect() {
 	logger.log("proxy", "Reconnecting...", "proxy");
+	conn.disconnect(); // Disconnect proxy from the server
+	if (typeof server.clients[0] !== "undefined") {
+		server.clients[0].end("Proxy restarting...") // Disconnect client from the proxy
+	}
 	notifier.sendWebhook({
 		title: "Reconnecting...",
 		url: config.discord.webhook.spam
