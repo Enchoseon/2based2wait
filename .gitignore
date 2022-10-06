@@ -6,6 +6,8 @@ package-lock.json
 
 # Logs
 *.log
+*.mca
+*.gz
 
 # Configs
 ngrok.yml

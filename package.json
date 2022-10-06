@@ -8,7 +8,8 @@
     "start": "node proxy.js",
     "supervisor": "supervisor -n success proxy.js",
     "supervisorAllGasNoBrakes": "supervisor proxy.js",
-    "generate-documentation": "node proxy.js --documentation"
+    "generate-documentation": "node proxy.js --documentation",
+    "process-archives": "node ./scripts/processArchives.js "
   },
   "author": "Enchoseon",
   "license": "GPL-2.0",
@@ -22,7 +23,8 @@
     "mineflayer-auto-eat": "^2.3.3",
     "ngrok": "^4.3.1",
     "node-fetch": "^2.6.7",
-    "node-notifier": "^10.0.1"
+    "node-notifier": "^10.0.1",
+    "prismarine-provider-anvil": "^2.7.0"
   },
   "devDependencies": {
     "mocha": "^10.0.0"

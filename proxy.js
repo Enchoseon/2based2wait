@@ -14,6 +14,7 @@ const chatty = require("./util/chatty.js");
 const ngrok = require("./util/ngrok.js");
 const mineflayer = require("./util/mineflayer.js");
 const queue = require("./util/queue.js");
+const downloader = require("./util/downloader.js");
 
 // ===========
 // Global Vars
@@ -22,11 +23,16 @@ const queue = require("./util/queue.js");
 var conn;
 var client;
 var server;
+// ==============
+// Initialization
+// ==============
 
-// ===========
-// Start Proxy
-// ===========
+// Max out the threadpool (if enabled)
+if (config.experimental.maxThreadpool.active) {
+	process.env.UV_THREADPOOL_SIZE = require("os").cpus().length;
+}
 
+// Start proxy
 restartUncleanDisconnectMonitor();
 start();
 
@@ -53,6 +59,10 @@ function packetHandler(packetData, packetMeta) {
 			break;
 		case "playerlist_header": // Playerlist packet handler, checks position in queue
 			queue.playerlistHeaderPacketHandler(packetData, server);
+			break;
+		case "map_chunk":
+			downloader.mapChunkPacketHandler(packetData);
+			break;
 		default:
 			break;
 	}

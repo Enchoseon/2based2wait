@@ -82,7 +82,7 @@ const configSchema = joi.object({
 			"serverPackets": joi.boolean().default(true)
 				.description("Whether to log packets being sent from 2b2t to the proxy"),
 		}).default(),
-		"cutoff": joi.number().integer().positive().default(42069) // Not setting a minimum for this seems dangerous...
+		"cutoff": joi.number().integer().positive().default(69000) // Not setting a minimum for this seems dangerous...
 			.description("Maximum size a log file can be (in bytes) before it gets split up"),
 		"packetFilters": joi.object({
 			"server": joi.array().items(packetSchema).default(["map", "map_chunk", "player_info", "entity_metadata", "entity_velocity", "entity_move_look", "entity_look", "update_time", "world_particles", "unload_chunk", "teams", "rel_entity_move", "entity_head_rotation", "entity_update_attributes", "block_change"])
@@ -90,6 +90,13 @@ const configSchema = joi.object({
 			"bridgeClient": joi.array().items(packetSchema).default(["position", "look", "position_look", "arm_animation"])
 				.description("Packets being sent from the controller to not log")
 		}).default(),
+		"compression": joi.object({
+			"active": joi.boolean().default(false)
+				.description("Whether to compress log files with Gzip"),
+			"level": joi.number().integer().min(1).max(9).default(9)
+				.description("Amount of file compression to apply between 1 and 9"),
+
+		}).default()
 	}).default(),
 	"server": joi.object({
 		"host": joi.string().hostname().default("connect.2b2t.org")
@@ -195,7 +202,17 @@ const configSchema = joi.object({
 				.description("Whether to disconnect if noone is controlling the proxy disconnectIfNoController.delay seconds after a controller disconnects from the proxy while it isn't in queue"),
 			"delay": joi.number().min(0).default(7) // Not setting a minimum for this seems dangerous...
 				.description("How long to wait (in seconds) after a controller disconnects from the proxy while it isn't in queue before disconnecting from the server")
-		}).default()
+		}).default(),
+		"worldDownloader": joi.object({
+			"active": joi.boolean().default(false)
+				.description("**Warning, CPU and storage-intensive!** Whether to use the experimental world downloader"),
+			"compressionLevel": joi.number().integer().min(1).max(9).default(7)
+				.description("Amount of file compression to apply between 1 and 9"),
+		}).default(),
+		"maxThreadpool": joi.object({
+			"active": joi.boolean().default(true)
+				.description("Whether to set UV_THREADPOOL_SIZE to use all possible CPU logic cores")
+		}).default(),
 	}).default(),
 	"waitForControllerBeforeConnect": joi.boolean().default(false)
 		.description("Whether the proxy will wait for someone to connect to it before connecting to the server"),
