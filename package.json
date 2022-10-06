@@ -1,6 +1,6 @@
 {
   "name": "2based2wait",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Private & lightweight 2b2t proxy.",
   "main": "proxy.js",
   "scripts": {
