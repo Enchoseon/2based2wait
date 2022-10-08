@@ -33,7 +33,7 @@ for (const category in config.log.active) {
 		}
 	});
 	var file = findExisting(dir, category, files); // Pick a filename (either a valid existing one or a new one)
-	if (!file) {
+	if (!file || config.log.alwaysIncrement) {
 		file = createFilename(category, files.length + 1);
 	}
 	logFiles[category] = dir + file; // Push file path to logFiles

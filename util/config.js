@@ -96,7 +96,9 @@ const configSchema = joi.object({
 			"level": joi.number().integer().min(1).max(9).default(9)
 				.description("Amount of file compression to apply between 1 and 9"),
 
-		}).default()
+		}).default(),
+		"alwaysIncrement": joi.boolean().default(false)
+				.description("Whether increment the log file every session (can lead to thousands of 1kb log files)"),
 	}).default(),
 	"server": joi.object({
 		"host": joi.string().hostname().default("connect.2b2t.org")
