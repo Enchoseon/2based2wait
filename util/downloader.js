@@ -37,7 +37,7 @@ function mapChunkPacketHandler(packetData) {
 		strategy: 1,
 		windowBits: 15
 	}));
-	// stream.write(chunkStack.join("\u{0D9E}") + "\u{0D9E}");
+	// stream.write(serialized + "\u{0D9E}");
 	stream.end();
 }
 
