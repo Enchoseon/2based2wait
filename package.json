@@ -28,5 +28,9 @@
   },
   "devDependencies": {
     "mocha": "^10.0.0"
+  },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/Enchoseon/2based2wait.git"
   }
 }
