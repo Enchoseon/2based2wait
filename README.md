@@ -1,5 +1,4 @@
 <div align="center">
-	<img src="https://files.catbox.moe/42ee3q.png" alt="2Based2Wait Logo" width="25%">
 	<h1>2Based2Wait</h1>
 	<p>Lightweight & (theoretically) extensible 2b2t proxy.</p>
 	<h4>
