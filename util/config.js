@@ -37,6 +37,16 @@ const packetSchema = joi.string().pattern(/^[a-z_]*$/).lowercase();
 // Schema used to validate Discord webhooks (to-do: update this to only recognize webhooks)
 const webhookSchema = joi.string().empty("").default("");
 
+// Schema used to validate a handful of the most important Zlib options, based off of information available on https://zlib.net/manual.html
+const zlibOptionsSchema = joi.object({
+	"level": joi.number().integer().min(1).max(9).default(1)
+		.description("How much compression to apply between 1 and 9. Higher values result in better compression ratio at the expense of speed (**\[Warning, Event Thread-Blocking!\]**)"),
+	"memLevel": joi.number().integer().min(1).max(9).default(9)
+		.description("How much memory to allocate to the internal compression state between 1 and 9. Higher values result in better compression ratio and speed at the expense of memory usage"),
+	"windowBits": joi.number().integer().min(8).max(15).default(15)
+		.description("How much memory to allocate to the history buffer between 8 and 15. Higher values result in better compression ratio at the expense of memory usage"),
+}).default();
+
 // Schema used to validate config.json
 const configSchema = joi.object({
 	"account": joi.object({
@@ -59,12 +69,12 @@ const configSchema = joi.object({
 				.description("Url of webhook to relay pertinent info for connecting and nothing else (e.g. joining server, low queue position)")
 		}).default(),
 		"color": joi.number().integer().min(0).max(16777215).default(2123412)
-			.description("Color of Discord embeds sent to the webhooks in **decimal value** (you can use convertingcolors.com to find the **decimal value** of a color you want)"),
+			.description("Color of Discord embeds sent to the webhooks in **decimal value** (you can use convertingcolors.com to find the decimal value of a color you want)"),
 		"id": joi.string().default(0) // although this can be an number for users, it can be a string for roles!
 			.description("ID of the Discord user or role to ping when below the queueThreshold")
 	}).default(),
 	"queueThreshold": joi.number().integer().min(0).default(21)
-		.description("Minimum queue position before desktop notifications & Discord pings start getting sent"),
+		.description("Minimum queue position before toast notifications & Discord pings start getting sent"),
 	"reconnectInterval": joi.number().positive().default(69)
 		.description("Time (in seconds) between each reconnection attempt (see: [How to Auto-Reconnect with Supervisor](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor))"),
 	"uncleanDisconnectInterval": joi.number().positive().default(420)
@@ -81,7 +91,8 @@ const configSchema = joi.object({
 				.description("Whether to log packets being sent from the controller to the proxy"),
 			"serverPackets": joi.boolean().default(true)
 				.description("Whether to log packets being sent from 2b2t to the proxy"),
-		}).default(),
+		}).default()
+			.description("Settings for which logging categories should be enabled"),
 		"cutoff": joi.number().integer().positive().default(69000) // Not setting a minimum for this seems dangerous...
 			.description("Maximum size a log file can be (in bytes) before it gets split up"),
 		"packetFilters": joi.object({
@@ -89,16 +100,15 @@ const configSchema = joi.object({
 				.description("Packets being sent from 2b2t to not log"),
 			"bridgeClient": joi.array().items(packetSchema).default(["position", "look", "position_look", "arm_animation"])
 				.description("Packets being sent from the controller to not log")
-		}).default(),
+		}).default()
+			.description("Settings for which packets we shouldn't log"),
 		"compression": joi.object({
 			"active": joi.boolean().default(false)
-				.description("Whether to compress log files with Gzip"),
-			"level": joi.number().integer().min(1).max(9).default(9)
-				.description("Amount of file compression to apply between 1 and 9"),
-
-		}).default(),
+				.description("**\[Warning, Event Thread-Blocking!\]** Whether to compress log files with Gzip. Leave this off unless you have a really good reason to enable it"),
+		}).concat(zlibOptionsSchema).default()
+			.description("Settings for log compression. Tweak with caution. The default options maximize memory usage for the fastest speed"),
 		"alwaysIncrement": joi.boolean().default(false)
-				.description("Whether increment the log file every session (can lead to thousands of 1kb log files)"),
+				.description("Whether to increment the log file every session (can lead to thousands of 1kb log files in production, but is pretty useful when rapidly testing during development)"),
 	}).default(),
 	"server": joi.object({
 		"host": joi.string().hostname().default("connect.2b2t.org")
@@ -107,7 +117,8 @@ const configSchema = joi.object({
 			.description("Version of Minecraft the server is on "),
 		"port": joi.number().port().default(25565)
 			.description("Port of the server to connect to")
-	}).default(),
+	}).default()
+		.description("Settings for how the proxy connects to the server"),
 	"proxy": joi.object({
 		"whitelist": joi.array().items(usernameSchema)
 			.description("Playernames of accounts that are allowed to connect to the proxy"),
@@ -115,7 +126,8 @@ const configSchema = joi.object({
 			.description("Whether to enable online-mode on the proxy—this probably should never be touched"),
 		"port": joi.number().port().default(25565)
 			.description("Port on the machine to connect to the proxy")
-	}).default(),
+	}).default()
+		.description("Settings for how you connect to the proxy"),
 	"ngrok": joi.object({
 		"active": joi.boolean().default(false)
 			.description("Whether to create an ngrok tunnel"),
@@ -123,7 +135,8 @@ const configSchema = joi.object({
 			.description("The auth token for your Ngrok.io account"),
 		"region": joi.string().valid("us", "eu", "au", "ap", "sa", "jp", "in").default("us") // From: https://ngrok.com/docs/ngrok-agent/ (under "--region string")
 			.description("Tunnel region (options: 'us', 'eu', 'au', 'ap', 'sa', 'jp', or 'in')")
-	}).default(),
+	}).default()
+		.description("Settings for ngrok tunneling"),
 	"mineflayer": joi.object({
 		"active": joi.boolean().default(true)
 			.description("Whether to enable Mineflayer"),
@@ -134,7 +147,8 @@ const configSchema = joi.object({
 				.description("Time (in seconds) between every attack attempt"),
 			"blacklist": joi.array().items(packetSchema).default(["zombie_pigman", "enderman"])
 				.description("Array of mobs that will not be attacked")
-		}).default(),
+		}).default()
+			.description("Settings for killaura"),
 		"autoEat": joi.object({
 			"priority": joi.string().valid("saturation", "foodPoints", "effectiveQuality").default("saturation") // From: https://github.com/link-discord/mineflayer-auto-eat#botautoeatoptionspriority
 				.description("What type of food to prioritize eating (options: 'saturation', 'foodPoints', 'effectiveQuality')"),
@@ -142,7 +156,8 @@ const configSchema = joi.object({
 				.description("Hunger level at which to start eating"),
 			"bannedFood": joi.array().items(packetSchema).default(["rotten_flesh", "pufferfish", "chorus_fruit", "poisonous_potato", "spider_eye"])
 				.description("Foods that will not be eaten")
-		}).default(),
+		}).default()
+			.description("Settings for autoeat"),
 		"antiAfk": joi.object({
 			"actions": joi.array().items(joi.string().valid("rotate", "walk", "jump", "jumpWalk", "swingArm", "breakBlock")).default(["rotate"])
 				.description("Actions the proxy can do (options: 'rotate', 'walk', 'jump', 'jumpWalk', 'swingArm', 'breakBlock')"),
@@ -155,7 +170,9 @@ const configSchema = joi.object({
 			"chatInterval": joi.number().integer().positive().default(690420) // Not setting a minimum for this seems dangerous...
 				.description("Time (in milliseconds) between each chat message")
 		}).default()
-	}).default(),
+			.description("Settings for antiafk")
+	}).default()
+		.description("Settings for the mineflayer bot"),
 	"experimental": joi.object({
 		"spoofPlayerInfo": joi.object({
 			"active": joi.boolean().default(true)
@@ -207,25 +224,27 @@ const configSchema = joi.object({
 		}).default(),
 		"worldDownloader": joi.object({
 			"active": joi.boolean().default(false)
-				.description("**Warning, CPU and storage-intensive!** Whether to use the experimental world downloader"),
-			"compressionLevel": joi.number().integer().min(1).max(9).default(7)
-				.description("Amount of file compression to apply between 1 and 9"),
+				.description("**\[Warning, Event Thread-Blocking!\]** Whether to use the experimental world downloader"),
+			"compression": zlibOptionsSchema.default()
+				.description("Settings for packet archive compression. Tweak with caution. The default options maximize memory usage for the fastest speed")
 		}).default(),
 		"maxThreadpool": joi.object({
 			"active": joi.boolean().default(true)
 				.description("Whether to set UV_THREADPOOL_SIZE to use all possible CPU logic cores")
 		}).default(),
-	}).default(),
+	}).default()
+		.description("Settings for experimental features that may be more unstable in resource usage and/or server and version parity"),
 	"waitForControllerBeforeConnect": joi.boolean().default(false)
-		.description("Whether the proxy will wait for someone to connect to it before connecting to the server"),
+		.description("Whether the proxy will wait for someone to take control before it connects to the server"),
 	"notify": joi.object({
 		"whenJoining": joi.boolean().default(true)
-			.description("Whether to send a toast notification & status webhook message when proxy joins server from queue"),
+			.description("Whether to send a toast notification and status webhook message when the proxy joins the server from queue"),
 		"whenBelowQueueThreshold": joi.boolean().default(true)
-			.description("Whether to send a toast notification & status webhook message when proxy dips below position `queueThreshold` in queue"),
+			.description("Whether to send a toast notification and status webhook message when the proxy dips below position `queueThreshold` in queue"),
 		"whenControlling": joi.boolean().default(false)
 			.description("Whether to send a status webhook message when a controller connects and disconnects from the proxy")
-	}).default(),
+	}).default()
+		.description("Settings for what the proxy will send notifications about"),
 	"noCliGui": joi.boolean().default(false)
 		.description("Whether to disable the cli gui"),
 	"coordination": joi.object({
@@ -234,6 +253,7 @@ const configSchema = joi.object({
 		"path": joi.string().default("./../")
 			.description("Path to the folder where the shared master-config.json and coordinator.flag files should go")
 	}).default()
+		.description("Settings for coordinating multiple proxies")
 });
 
 if (process.argv.indexOf("--documentation") !== -1) {
@@ -411,15 +431,15 @@ function joiToMarkdown(schema) {
 		const flags = get(schema.keys, path).flags;
 		if (flags) {
 			const info = { // Key information
-				type: get(schema.keys, path).type,
-				default: flags.default,
-				description: flags.description
+				"type": get(schema.keys, path).type,
+				"default": flags.default,
+				"description": flags.description
 			};
 			if ((key !== "empty" && JSON.stringify(info.type) !== "any") && (key !== "0")) { // Don't return empty objects
 				output += indent(level) + "- **" + key + "**";
-				output += " `{type: " + info.type + "}`";
+				output += " <samp>`{type: " + info.type + "}`</samp>";
 				if (typeof info.default !== "undefined" && info.default.special !== "deep") { // If it exists, output the object's default value(s)
-					output += " `{default: " + JSON.stringify(info.default) + "}`";
+					output += " <samp>`{default: " + JSON.stringify(info.default) + "}`</samp>";
 				}
 				if (typeof info.description !== "undefined") { // If it exists, output the object's description
 					output += " : " + info.description;

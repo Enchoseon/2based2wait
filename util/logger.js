@@ -77,8 +77,10 @@ function log(name, data, category) {
 	});
 	if (config.log.compression.active) {
 		stream.write(zlib.gzipSync(logMessage, { // Save Gzipped
-			level: config.log.compression.level,
-			strategy: 1,
+			"level": config.log.compression.level,
+			"memLevel": config.log.compression.memLevel,
+			"windowBits": config.log.compression.windowBits,
+			"strategy": 1,
 		}));
 	} else {
 		stream.write(logMessage); // Save raw
@@ -99,7 +101,7 @@ function createDirectory(category) {
 	// Create directory if it doesn't exist
 	if (!fs.existsSync(dir)) {
 		fs.mkdirSync(dir, {
-			recursive: true
+			"recursive": true
 		});
 	}
 	return dir;

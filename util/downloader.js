@@ -32,10 +32,10 @@ function mapChunkPacketHandler(packetData) {
 	const packetFile = createOutputDir("default") + logger.getTimestamp(true) + ".packets.gz"; // Save to log
 	var stream = fs.createWriteStream(packetFile, { flags: "a" });
 	stream.write(zlib.gzipSync(serialized + "\u{0D9E}", { // Gzip
-		level: config.experimental.worldDownloader.compressionLevel,
-		memLevel: 9,
-		strategy: 1,
-		windowBits: 15
+		"level": config.experimental.worldDownloader.compression.level,
+		"memLevel": config.experimental.worldDownloader.compression.memLevel,
+		"windowBits": config.experimental.worldDownloader.compression.windowBits,
+		"strategy": 1
 	}));
 	// stream.write(serialized + "\u{0D9E}");
 	stream.end();
@@ -49,7 +49,7 @@ function createOutputDir(worldName) {
 	const outputDir = "./log/worldDownloader/" + config.server.host + "/" + worldName.replace(/:/g, "_") + "/";
 	if (!fs.existsSync(outputDir)) {
 		fs.mkdirSync(outputDir, {
-			recursive: true
+			"recursive": true
 		});
 	}
 	return outputDir;
