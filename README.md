@@ -1,4 +1,5 @@
 <div align="center">
+	<img src="https://files.catbox.moe/42ee3q.png" alt="2Based2Wait Logo" width="25%">
 	<h1>2Based2Wait</h1>
 	<p>Lightweight & (theoretically) extensible 2b2t proxy.</p>
 	<h4>
@@ -6,6 +7,10 @@
 		<span> · </span>
 		<a href="https://github.com/Enchoseon/2based2wait/issues">Report Bug</a>
 	</h4>
+	<img src="https://img.shields.io/github/last-commit/Enchoseon/2based2wait?color=2A0944&labelColor=525E75&style=flat" alt="Last Commit">
+	<img src="https://img.shields.io/github/languages/code-size/Enchoseon/2based2wait?color=3FA796&labelColor=525E75&style=flat" alt="Code Size">
+	<img src="https://img.shields.io/github/package-json/v/Enchoseon/2based2wait?color=FEC260&labelColor=525E75&style=flat" alt="Current Version">
+	<img src="https://img.shields.io/github/license/Enchoseon/2based2wait?color=A10035&labelColor=525E75&style=flat" alt="License">
 </div>
 
 <br />
