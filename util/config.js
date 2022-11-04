@@ -429,23 +429,28 @@ function joiToMarkdown(schema) {
 	for (var [key, value, path, parent] of traverse(schema.keys)) {
 		const level = path.length;
 		const flags = get(schema.keys, path).flags;
-		if (flags) {
-			const info = { // Key information
+		if (flags && key !== "empty" && key !== "0") { // Don't proceed if the object doesn't have any flags or is empty
+			const info = { // Important information about the entry
 				"type": get(schema.keys, path).type,
 				"default": flags.default,
 				"description": flags.description
 			};
-			if ((key !== "empty" && JSON.stringify(info.type) !== "any") && (key !== "0")) { // Don't return empty objects
-				output += indent(level) + "- **" + key + "**";
-				output += " <samp>`{type: " + info.type + "}`</samp>";
-				if (typeof info.default !== "undefined" && info.default.special !== "deep") { // If it exists, output the object's default value(s)
-					output += " <samp>`{default: " + JSON.stringify(info.default) + "}`</samp>";
-				}
-				if (typeof info.description !== "undefined") { // If it exists, output the object's description
-					output += " : " + info.description;
-				}
-				output += "\n";
+			if (level !== 1) { // Indent nested entries
+				output += indent(level) + "- "
+			} else { // Add a newlines in-between top-level entries to stop GitHub's markdown interpreter from merging everything into one giant list
+				output += "\n"
 			}
+			const anchor = path.join("-").replace(/-keys-/g, "-").toLowerCase(); // Create a unique and URL-friendly anchor for the entry
+			output += "<span id='" + anchor + "'></span>"; // Add the anchor to an invisible pair of <span> tags
+			output += "**[" + key + "](#user-content-" + anchor + ")**"; // Output the entry's name
+			output += " <samp>`{type: " + info.type + "}`</samp>"; // Output the entry's type
+			if (info.default && info.default.special !== "deep") { // If provided, output the entry's default value(s)
+				output += " <samp>`{default: " + JSON.stringify(info.default) + "}`</samp>";
+			}
+			if (info.description) { // If provided, output the entry's description
+				output += " : " + info.description;
+			}
+			output += "\n";
 		}
 	}
 	return output;
@@ -469,7 +474,7 @@ function joiToMarkdown(schema) {
 	 */
 	function indent(level) {
 		var output = "";
-		for (var i = 0; i < level; i++) {
+		for (var i = 1; i < level; i++) {
 			output += " ";
 		}
 		return output;
