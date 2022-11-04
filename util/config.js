@@ -162,7 +162,7 @@ const configSchema = joi.object({
 			"actions": joi.array().items(joi.string().valid("rotate", "walk", "jump", "jumpWalk", "swingArm", "breakBlock")).default(["rotate"])
 				.description("Actions the proxy can do (options: 'rotate', 'walk', 'jump', 'jumpWalk', 'swingArm', 'breakBlock')"),
 			"fishing": joi.boolean().default(false)
-				.description("Whether the proxy will fish"),
+				.description("Whether the proxy will fish. The account must be standing in water and have a fishing rod to autofish."),
 			"chatting": joi.boolean().default(false)
 				.description("Whether the proxy will chat"),
 			"chatMessages": joi.array().items(joi.string().min(1).max(256)).default(["!pt", "!queue"]) // to-do: find out any other chat limits
