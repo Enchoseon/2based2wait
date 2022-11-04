@@ -123,7 +123,7 @@ const configSchema = joi.object({
 		"whitelist": joi.array().items(usernameSchema)
 			.description("Playernames of accounts that are allowed to connect to the proxy"),
 		"onlineMode": joi.boolean().default(true)
-			.description("Whether to enable online-mode on the proxy�this probably should never be touched"),
+			.description("Whether to enable online-mode on the proxy. This probably should never be touched"),
 		"port": joi.number().port().default(25565)
 			.description("Port on the machine to connect to the proxy")
 	}).default()

@@ -131,6 +131,10 @@ function createClient() {
 	// Log disconnect
 	client.on("disconnect", function (packet) {
 		logger.log("disconnected", packet.reason, "proxy");
+		notifier.sendWebhook({
+			title: "Disconnected from Server: " + packet.reason,
+			category: "spam"
+		});
 		if (JSON.parse(packet.reason).text === "You are already connected to this proxy!") { // Send notifications when the proxy is unable to log on because the account is already in use
 			notifier.sendWebhook({
 				title: "Someone is already connected to the server using this proxy's account.",
@@ -146,6 +150,10 @@ function createClient() {
 	// Log kick
 	client.on("kick_disconnect", function (packet) {
 		logger.log("kick/disconnect", packet.reason, "proxy");
+		notifier.sendWebhook({
+			title: "Kicked from Server: " + packet.reason,
+			category: "spam"
+		});
 		reconnect();
 	});
 
