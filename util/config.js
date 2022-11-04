@@ -123,7 +123,7 @@ const configSchema = joi.object({
 		"whitelist": joi.array().items(usernameSchema)
 			.description("Playernames of accounts that are allowed to connect to the proxy"),
 		"onlineMode": joi.boolean().default(true)
-			.description("Whether to enable online-mode on the proxy—this probably should never be touched"),
+			.description("Whether to enable online-mode on the proxyï¿½this probably should never be touched"),
 		"port": joi.number().port().default(25565)
 			.description("Port on the machine to connect to the proxy")
 	}).default()
@@ -351,7 +351,7 @@ function updateGui() {
 8     8    8 8   8     8 8    88  8 8     8  8  8 8   8 8   8
 88888 888888 8   8 88888 8888 88888 88888 8888888 8   8 8   8
 	`);
-	console.log("\x1b[30m", "Enchoseon#1821 was here!");
+	console.log("\x1b[30m", "");
 	console.log("\x1b[37m", "Last Update: [" + getTimestamp() + "]");
 	console.log("\x1b[37m", "Account: " + config.account.username);
 	console.log("\x1b[37m", "Current Controller: " + status.controller);
