@@ -258,7 +258,14 @@ const configSchema = joi.object({
 
 if (process.argv.indexOf("--documentation") !== -1) {
 	console.clear();
-	console.log(joiToMarkdown(configSchema));
+	const doc = joiToMarkdown(configSchema);
+	const dir = "./docs/";
+	if (!fs.existsSync(dir)) { // Create directory if it doesn't exist
+		fs.mkdirSync(dir, {
+			"recursive": true
+		});
+	}
+	fs.writeFileSync(dir + "configuration-guide.md", doc); // Write documentation to markdown file
 	process.exit();
 }
 
