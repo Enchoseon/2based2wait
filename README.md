@@ -62,9 +62,9 @@
 # Images
 
 <div align="center">
-  <img src="docs/images/cliGui.png" title="What else would you need?" alt="Cli Gui" width="85%"><br><em>No-Frills Cli Gui</em><br>
-  <img src="docs/images/webhooks.png" title="EZ elasticsearch integration :sunglasses:" alt="Webhooks" width="85%"><br><em>Convenient Discord Webhooks</em><br>
-  <img src="docs/images/grep.png" title="grep -rih 'Popbob Sex' *" alt="Grep" width="85%"><br><em>Extensive Logs</em><br>
+  <img src="docs/images/cliGui.png" title="What else would you need?" alt="Cli Gui" width="92.5%"><br><em>No-Frills Cli Gui</em><br>
+  <img src="docs/images/webhooks.png" title="EZ elasticsearch integration :sunglasses:" alt="Webhooks" width="92.5%"><br><em>Convenient Discord Webhooks</em><br>
+  <img src="docs/images/grep.png" title="grep -rih 'Popbob Sex' *" alt="Grep" width="92.5%"><br><em>Extensive Logs</em><br>
 </div>
 
 # For Developers
@@ -78,6 +78,6 @@ If you have a local copy of 2based2wait with a personal config.json that's being
 2based2wait ships with as many options __disabled by default__ as possible; including [auto-reconnect](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor), [ngrok tunneling](https://github.com/Enchoseon/2based2wait/wiki/How-to-Share-Accounts-With-A-Reverse-Proxy) (for sharing accounts), [coordination](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts) (for multiple proxies), Discord webhooks, and much more.
 
 <div align="center">
-  <img src="https://files.catbox.moe/abuoh7.png" alt="Read the Fun Manual">
+  <img src="docs/images/RTFM.png" alt="Read the Fun Manual">
   <p><strong>If you want to utilize all the proxy's features you'll need to <a href="https://en.wikipedia.org/wiki/RTFM">RTFM</a>, <em>especially</em> the <a href="https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md">configuration guide</a>.</strong></p>
 </div>
