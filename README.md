@@ -20,6 +20,7 @@
 - [Features](#features)
 - [Images](#images)
 - [Keep in Mind](#keep-in-mind)
+- [For Developers](#for-developers)
 
 # Quick Start
 
@@ -30,6 +31,7 @@
 3. Run `npm start`
 4. Enter the auth code that appears in the console into microsoft.com/link
 5. Connect to `127.0.0.1` in Minecraft
+    - If `127.0.0.1` doesn't work try `0.0.0.0`
 
 *(See [configuration guide](https://github.com/Enchoseon/2based2wait/wiki/Configuration-Guide) to see how to enable features like Ngrok tunneling or Discord webhooks.)*
 
@@ -59,12 +61,23 @@
 
 # Images
 
-![cli gui](https://files.catbox.moe/osgsqc.png "cli gui")
-![livechat relay](https://files.catbox.moe/b3fl8s.png "livechat relay")
-![queue relay](https://files.catbox.moe/dgepgx.png "queue gui")
+<div align="center">
+  <img src="docs/images/cliGui.png" title="What else would you need?" alt="Cli Gui" width="85%"><br><em>No-Frills Cli Gui</em><br>
+  <img src="docs/images/webhooks.png" title="EZ elasticsearch integration :sunglasses:" alt="Webhooks" width="85%"><br><em>Convenient Discord Webhooks</em><br>
+  <img src="docs/images/grep.png" title="grep -rih 'Popbob Sex' *" alt="Grep" width="85%"><br><em>Extensive Logs</em><br>
+</div>
+
+# For Developers
+
+If you have a local copy of 2based2wait with a personal config.json that's being tracked by git despite the .gitignore rule, run the following command:
+
+`git update-index --assume-unchanged config.json`
 
 # Keep in Mind
 
-Many important features are __disabled by default__, such as [auto-reconnect](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor), [ngrok tunneling](https://github.com/Enchoseon/2based2wait/wiki/How-to-Share-Accounts-With-A-Reverse-Proxy) (for sharing accounts), Discord webhooks, and much more.
+2based2wait ships with as many options __disabled by default__ as possible; including [auto-reconnect](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor), [ngrok tunneling](https://github.com/Enchoseon/2based2wait/wiki/How-to-Share-Accounts-With-A-Reverse-Proxy) (for sharing accounts), [coordination](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts) (for multiple proxies), Discord webhooks, and much more.
 
-If you want to enable these features or configure a proxy ([or multiple](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts)), you'll need to read the [Wiki](https://github.com/Enchoseon/2based2wait/wiki).
+<div align="center">
+  <img src="https://files.catbox.moe/abuoh7.png" alt="Read the Fun Manual">
+  <p><strong>If you want to utilize all the proxy's features you'll need to <a href="https://en.wikipedia.org/wiki/RTFM">RTFM</a>, <em>especially</em> the <a href="https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md">configuration guide</a>.</strong></p>
+</div>
