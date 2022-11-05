@@ -11,7 +11,7 @@ const { config } = require("./config.js");
 // Global Vars
 // ===========
 
-var logFiles = {};
+let logFiles = {};
 
 // ===================
 // Initialize Logfiles
@@ -32,7 +32,7 @@ for (const category in config.log.active) {
 			return f.name.endsWith(".log");
 		}
 	});
-	var file = findExisting(dir, category, files); // Pick a filename (either a valid existing one or a new one)
+	let file = findExisting(dir, category, files); // Pick a filename (either a valid existing one or a new one)
 	if (!file || config.log.alwaysIncrement) {
 		file = createFilename(category, files.length + 1);
 	}
@@ -68,11 +68,11 @@ function log(name, data, category) {
 	}
 	// Create file name
 	createDirectory(category);
-	var logFile = logFiles[category];
+	let logFile = logFiles[category];
 	// Create log message
 	const logMessage = "[" + getTimestamp() + "] [" + name + "] " + JSON.stringify(data) + "\n";
 	// Write to log (either gzipped or raw)
-	var stream = fs.createWriteStream(logFile, {
+	let stream = fs.createWriteStream(logFile, {
 		flags: "a"
 	});
 	if (config.log.compression.active) {
@@ -94,7 +94,7 @@ function log(name, data, category) {
  */
 function createDirectory(category) {
 	// Choose the directory
-	var dir = "./log/" + category + "/";
+	let dir = "./log/" + category + "/";
 	if (typeof global.it === "function") { // (Change to a test directory if being ran by mocha.)
 		dir = "./test/log/" + category + "/";
 	}
@@ -113,7 +113,7 @@ function createDirectory(category) {
  * @param {number} index
  */
 function createFilename(category, index) {
-	var filename = category + "_" + index + ".log";
+	let filename = category + "_" + index + ".log";
 	if (config.log.compression.active) {
 		filename += ".gz";
 	}
@@ -127,7 +127,7 @@ function createFilename(category, index) {
  * @param {string} files
  */
 function findExisting(dir, category, files) {
-	for (var i = files.length - 1; i >= 0; i--) {
+	for (let i = files.length - 1; i >= 0; i--) {
 		const file = files[i].name;
 		// Check if there's an existing log file to reuse and whether it has enough space to write to
 		if (file === createFilename(category, files.length) && fs.existsSync(dir) && fs.statSync(dir + file).size < config.log.cutoff * 1000) {
@@ -142,7 +142,7 @@ function findExisting(dir, category, files) {
  * @param {boolean} includeTime
  */
 function getTimestamp(includeTime) {
-	var timestamp = new Date();
+	let timestamp = new Date();
 	if (includeTime) {
 		timestamp = timestamp.toLocaleDateString();
 	} else {

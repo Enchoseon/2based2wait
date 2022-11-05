@@ -30,7 +30,7 @@ function mapChunkPacketHandler(packetData) {
 		packetData.blockEntities,
 	]);
 	const packetFile = createOutputDir("default") + logger.getTimestamp(true) + ".packets.gz"; // Save to log
-	var stream = fs.createWriteStream(packetFile, { flags: "a" });
+	let stream = fs.createWriteStream(packetFile, { flags: "a" });
 	stream.write(zlib.gzipSync(serialized + "\u{0D9E}", { // Gzip
 		"level": config.experimental.worldDownloader.compression.level,
 		"memLevel": config.experimental.worldDownloader.compression.memLevel,

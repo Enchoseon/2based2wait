@@ -20,9 +20,9 @@ const downloader = require("./util/downloader.js");
 // Global Vars
 // ===========
 
-var conn;
-var client;
-var server;
+let conn;
+let client;
+let server;
 
 // ==============
 // Initialization
@@ -34,7 +34,6 @@ if (config.experimental.maxThreadpool.active) {
 }
 
 // Start proxy
-restartUncleanDisconnectMonitor();
 start();
 
 // =================
@@ -69,7 +68,7 @@ function packetHandler(packetData, packetMeta) {
 	}
 
 	// Reset uncleanDisconnectMonitor timer
-	restartUncleanDisconnectMonitor();
+	refreshMonitor();
 }
 
 // =================
@@ -322,14 +321,16 @@ function createLocalServer() {
 // ==========================
 
 // If no packets are received for config.uncleanDisconnectInterval seconds, assume we were disconnected uncleanly.
-var uncleanDisconnectMonitor;
-// Reset uncleanDisconnectMonitor timer
-function restartUncleanDisconnectMonitor() {
-	clearTimeout(uncleanDisconnectMonitor)
-	uncleanDisconnectMonitor = setTimeout(function () {
-		logger.log("proxy", "No packets were received for " + config.uncleanDisconnectInterval + " seconds. Assuming unclean disconnect.", "proxy");
-		reconnect();
-	}, config.uncleanDisconnectInterval * 1000);
+let uncleanDisconnectMonitor;
+function refreshMonitor() {
+	if (!uncleanDisconnectMonitor) { // Create timer on the first packet
+		uncleanDisconnectMonitor = setTimeout(function () {
+			logger.log("proxy", "No packets were received for " + config.uncleanDisconnectInterval + " seconds. Assuming unclean disconnect.", "proxy");
+			reconnect();
+		}, config.uncleanDisconnectInterval * 1000);
+		return;
+	}
+	uncleanDisconnectMonitor.refresh(); // Restart the timer
 }
 
 // =========

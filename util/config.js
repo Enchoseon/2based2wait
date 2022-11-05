@@ -12,8 +12,8 @@ const joi = require("joi");
 // Global Vars
 // ===========
 
-var config = {}; // Stores parsed and validated user configuration
-var status = { // Stores pertinent information (to-do: set up setters and getters)
+let config = {}; // Stores parsed and validated user configuration
+let status = { // Stores pertinent information (to-do: set up setters and getters)
 	"position": "CHECKING...",
 	"eta": "CHECKING...",
 	"restart": "None",
@@ -77,7 +77,7 @@ const configSchema = joi.object({
 		.description("Minimum queue position before toast notifications & Discord pings start getting sent"),
 	"reconnectInterval": joi.number().positive().default(69)
 		.description("Time (in seconds) between each reconnection attempt (see: [How to Auto-Reconnect with Supervisor](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor))"),
-	"uncleanDisconnectInterval": joi.number().positive().default(420)
+	"uncleanDisconnectInterval": joi.number().positive().default(196)
 		.description("Time (in seconds) proxy will go without getting a single packet from 2B2T before assuming it was uncleanly disconnected and initiating a reconnect attempt"),
 	"log": joi.object({
 		"active": joi.object({
@@ -383,7 +383,7 @@ function updateGui() {
  * Get current timestamp
  */
 function getTimestamp(includeTime) {
-	var timestamp = new Date();
+	let timestamp = new Date();
 	timestamp = timestamp.toLocaleString();
 	return timestamp.replace(/\//g, "-") // Replace forward-slash with hyphen
 		.replace(",", ""); // Remove comma
@@ -405,7 +405,7 @@ function validate() {
 		} else {
 			console.log("\x1b[36m", "Stopped proxy, encountered " + errors.details.length + " errors in config.json (you must fix them): \n");
 		}
-		for (var i = 0; i < errors.details.length; i++) { // Print errors to console
+		for (let i = 0; i < errors.details.length; i++) { // Print errors to console
 			const error = errors.details[i];
 			console.log("\x1b[33m", "ERROR #" + i + ": " + error.message);
 			console.log("\x1b[32m", "- Invalid Value: " + error.context.value);
@@ -430,13 +430,13 @@ function validate() {
  * @param {boolean} includeAnchors
  */
 function joiToMarkdown(schema, includeAnchors) {
-	var output = "";
+	let output = "";
 	// Convert to JSON
 	schema = schema.describe();
 	// Get value from path (https://stackoverflow.com/a/70356013)
 	const get = (record, path) => path.reduce((record, item) => record[item], record);
 	// Traverse configSchema
-	for (var [key, value, path, parent] of traverse(schema.keys)) {
+	for (let [key, value, path, parent] of traverse(schema.keys)) {
 		const level = path.length;
 		const flags = get(schema.keys, path).flags;
 		if (flags && key !== "empty" && key !== "0") { // Don't proceed if the object doesn't have any flags or is empty
@@ -474,7 +474,7 @@ function joiToMarkdown(schema, includeAnchors) {
 	 * @param {object} path
 	 */
 	function* traverse(o, path = []) {
-		for (var i in o) {
+		for (let i in o) {
 			const itemPath = path.concat(i);
 			yield [i, o[i], itemPath, o];
 			if (o[i] !== null && typeof (o[i]) == "object") {
@@ -487,8 +487,8 @@ function joiToMarkdown(schema, includeAnchors) {
 	 * @param {number} level
 	 */
 	function indent(level) {
-		var output = "";
-		for (var i = 1; i < level; i++) {
+		let output = "";
+		for (let i = 1; i < level; i++) {
 			output += " ";
 		}
 		return output;

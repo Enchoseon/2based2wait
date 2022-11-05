@@ -17,7 +17,7 @@
 
 <span id='reconnectinterval'></span>**[reconnectInterval](#user-content-reconnectinterval)** <samp>`{type: number}`</samp> <samp>`{default: 69}`</samp> : Time (in seconds) between each reconnection attempt (see: [How to Auto-Reconnect with Supervisor](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor))
 
-<span id='uncleandisconnectinterval'></span>**[uncleanDisconnectInterval](#user-content-uncleandisconnectinterval)** <samp>`{type: number}`</samp> <samp>`{default: 420}`</samp> : Time (in seconds) proxy will go without getting a single packet from 2B2T before assuming it was uncleanly disconnected and initiating a reconnect attempt
+<span id='uncleandisconnectinterval'></span>**[uncleanDisconnectInterval](#user-content-uncleandisconnectinterval)** <samp>`{type: number}`</samp> <samp>`{default: 196}`</samp> : Time (in seconds) proxy will go without getting a single packet from 2B2T before assuming it was uncleanly disconnected and initiating a reconnect attempt
 
 <span id='log'></span>**[log](#user-content-log)** <samp>`{type: object}`</samp>
   - <span id='log-active'></span>**[active](#user-content-log-active)** <samp>`{type: object}`</samp> : Settings for which logging categories should be enabled

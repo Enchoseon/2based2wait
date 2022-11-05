@@ -55,7 +55,7 @@ class Delimited extends Transform {
  */
 async function packetsToAnvil(inputDirectory, stoppingDate) {
 	// Get all files in the directory to convert
-	var files = fs.readdirSync(inputDirectory, {
+	let files = fs.readdirSync(inputDirectory, {
 		"withFileTypes": true
 	}).filter(f => f.name.endsWith(".packets.gz")); // (Check the extension to make sure)
 	// Process each file in sequential order

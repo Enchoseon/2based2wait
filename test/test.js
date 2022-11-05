@@ -11,7 +11,7 @@ const mc = require("minecraft-protocol");
 // Global Vars
 // ===========
 
-var server;
+let server;
 
 // =====
 // Mocha

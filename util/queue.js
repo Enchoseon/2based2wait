@@ -9,7 +9,7 @@ const notifier = require("./notifier.js");
 // Global Vars
 // ===========
 
-var sentNotification = false;
+let sentNotification = false;
 
 // =========
 // Functions

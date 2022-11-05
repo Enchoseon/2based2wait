@@ -11,7 +11,7 @@ const { config, status } = require("./config.js");
 // Global Vars
 // ===========
 
-var deleteOnRestart = []; // Urls of messages to be deleted when restarting the proxy
+let deleteOnRestart = []; // Urls of messages to be deleted when restarting the proxy
 
 // =========
 // Functions
@@ -50,7 +50,7 @@ function sendWebhook(options) {
 	}
 
 	// Create embed
-	var params = {
+	let params = {
 		embeds: [
 			{
 				"color": config.discord.color,

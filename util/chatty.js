@@ -25,7 +25,7 @@ function chatPacketHandler(packetData) {
 
 	// Notify about server restarts (haven't been tested in a long time due to restarts being less common)
 	if (msg && msg.startsWith("[SERVER] Server restarting in ")) {
-		var restart = msg.replace("[SERVER] Server restarting in ", "").replace(" ...", "");
+		let restart = msg.replace("[SERVER] Server restarting in ", "").replace(" ...", "");
 		if (updateStatus("restart", restart)) {
 			notifier.sendToast("Server Restart In: " + status.restart);
 			notifier.sendWebhook({
