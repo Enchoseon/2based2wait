@@ -258,7 +258,7 @@ const configSchema = joi.object({
 
 if (process.argv.indexOf("--documentation") !== -1) {
 	console.clear();
-	const doc = joiToMarkdown(configSchema);
+	const doc = joiToMarkdown(configSchema, true); // Generate documentation with anchor links
 	const dir = "./docs/";
 	if (!fs.existsSync(dir)) { // Create directory if it doesn't exist
 		fs.mkdirSync(dir, {
@@ -266,6 +266,8 @@ if (process.argv.indexOf("--documentation") !== -1) {
 		});
 	}
 	fs.writeFileSync(dir + "configuration-guide.md", doc); // Write documentation to markdown file
+	// Output documentation without any anchor links for the GitHub Wiki, which annoyingly doesn't support anchor links
+	console.log("### See [this page](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md) for a better version of this guide with anchor links\n---\n" + joiToMarkdown(configSchema, false));
 	process.exit();
 }
 
@@ -425,8 +427,9 @@ function validate() {
 /**
  * Generate markdown documentation from Joi schema.
  * @param {object} schema
+ * @param {boolean} includeAnchors
  */
-function joiToMarkdown(schema) {
+function joiToMarkdown(schema, includeAnchors) {
 	var output = "";
 	// Convert to JSON
 	schema = schema.describe();
@@ -447,9 +450,13 @@ function joiToMarkdown(schema) {
 			} else { // Add a newlines in-between top-level entries to stop GitHub's markdown interpreter from merging everything into one giant list
 				output += "\n"
 			}
-			const anchor = path.join("-").replace(/-keys-/g, "-").toLowerCase(); // Create a unique and URL-friendly anchor for the entry
-			output += "<span id='" + anchor + "'></span>"; // Add the anchor to an invisible pair of <span> tags
-			output += "**[" + key + "](#user-content-" + anchor + ")**"; // Output the entry's name
+			if (includeAnchors) {
+				const anchor = path.join("-").replace(/-keys-/g, "-").toLowerCase(); // Create a unique and URL-friendly anchor for the entry
+				output += "<span id='" + anchor + "'></span>"; // Add the anchor to an invisible pair of <span> tags
+				output += "**[" + key + "](#user-content-" + anchor + ")**"; // Output the entry's name
+			} else {
+				output += "**" + key + "**"; // Output the entry's name
+			}
 			output += " <samp>`{type: " + info.type + "}`</samp>"; // Output the entry's type
 			if (info.default && info.default.special !== "deep") { // If provided, output the entry's default value(s)
 				output += " <samp>`{default: " + JSON.stringify(info.default) + "}`</samp>";
