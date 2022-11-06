@@ -14,7 +14,7 @@
   "author": "Enchoseon",
   "license": "GPL-2.0",
   "dependencies": {
-    "@rob9315/mcproxy": "^0.3.1",
+    "@rob9315/mcproxy": "github:Enchoseon/mcproxy",
     "deepmerge": "^4.2.2",
     "joi": "^17.6.0",
     "json5": "^2.2.1",
