@@ -34,14 +34,15 @@ describe("2Bored2Wait Testing", () => {
                     username: "UnitTester"
                 }
             });
-            console.log("Generated Config:", generated);
+            console.log("Generated Config:");
+            console.dir(generated, { depth: null });
             assert.equal(typeof generated.error, "undefined"); // Check that schema validation returned no errors
         });
     });
     describe("proxy.js", () => {
         it("Can perform login sequence", async function () {
             this.timeout(13000);
-            const proxy = require("./../proxy.js");
+            require("./../proxy.js"); // Start proxy
             const username = await waitForLogin();
             console.log("Received Login:", username);
             assert.equal(username, "UnitTester");
@@ -76,14 +77,12 @@ function waitForLogin() {
                 "levelType": "default",
                 "reducedDebugInfo": false
             });
-            // ===================
-            // 2B2T Server Restart
-            // ===================
-            client.write("chat", {
-                message: JSON.stringify({
-                    "text": "[SERVER] Server restarting in 7 seconds..."
-                }),
-                position: 0
+            client.write("custom_payload", {
+                "channel": "MC|Brand",
+                "data": Buffer.from("2b2t (Velocity)", "utf8")
+            });
+            client.write("difficulty", {
+                "difficulty": 1
             });
             // ============
             // Chat Message
@@ -91,6 +90,15 @@ function waitForLogin() {
             client.write("chat", {
                 message: JSON.stringify({
                     "text": "<UnitTester> Chat message."
+                }),
+                position: 0
+            });
+            // ===================
+            // 2B2T Server Restart
+            // ===================
+            client.write("chat", {
+                message: JSON.stringify({
+                    "text": "[SERVER] Server restarting in 7 seconds..."
                 }),
                 position: 0
             });
