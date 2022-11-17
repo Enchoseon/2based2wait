@@ -62,4 +62,6 @@
 		"active": false,
 		"path":  "./../"
 	}
+	"noCliGui": false,
+	"webinterface": true
 }
