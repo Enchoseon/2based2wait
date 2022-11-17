@@ -121,6 +121,7 @@ function updateStatus(type, input) {
 			updateCoordinatorStatus();
 		}
 		updateGui();
+		updateWebserver();
 		return true;
 	}
 	return false;
