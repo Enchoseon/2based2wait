@@ -8,6 +8,7 @@ const merge = require("deepmerge");
 const JSON5 = require("json5");
 
 const { configSchema } = require("./schemas.js");
+const webserver = require("./webserver.js");
 
 // ===========
 // Global Vars
