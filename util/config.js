@@ -25,6 +25,10 @@ let status = { // Stores pertinent information (to-do: set up setters and getter
 	"controller": "None"
 };
 
+// ======================
+// Generate Documentation
+// ======================
+
 if (process.argv.indexOf("--documentation") !== -1) {
 	console.clear();
 	const doc = joiToMarkdown(configSchema, true); // Generate documentation with anchor links
@@ -51,11 +55,15 @@ if (process.argv.indexOf("--documentation") !== -1) {
  */
 function processConfig() {
 	let config;
-	// Read config.json
-	if (typeof global.it !== "function") {
-		config = JSON5.parse(fs.readFileSync("config.json"));
-	} else { // Unless we're running a unit test, in which case read the test config.
-		config = JSON5.parse(fs.readFileSync("./test/test-config.json"));
+	try { // Read config.json
+		if (typeof global.it !== "function") {
+			config = JSON5.parse(fs.readFileSync("config.json"));
+		} else { // If we're running a unit test read the test config instead
+			config = JSON5.parse(fs.readFileSync("./test/test-config.json"));
+		}
+	} catch (error) { // JSON5 Parsing Error
+		console.error(error);
+		throw new Error("Couldn't read config.json, likely due to user error near or at Line" + error.lineNumber + ", Column" + error.columnNumber); // Kill the process here
 	}
 	// If coordination is active...
 	if (config.coordination.active) {
