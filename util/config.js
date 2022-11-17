@@ -25,7 +25,13 @@ let status = { // Stores pertinent information (to-do: set up setters and getter
 	"livechatRelay": "false",
 	"controller": "None"
 };
-
+// ======================
+// For webserver
+// ======================
+webserver.site.username = config.account.username
+webserver.site.ETA = status.eta
+webserver.site.queuePlace = status.position
+webserver.site.controller = status.controller
 // ======================
 // Generate Documentation
 // ======================
@@ -82,6 +88,10 @@ function processConfig() {
 			config = merge(masterConfig, config);
 		}
 	}
+	//if webui is active
+	if (config.webinterface){
+		webserver.startwebUI();
+	}
 	// Validate the config with Joi
 	const validationResult = configSchema.validate(config, { // Validate schema
 		"abortEarly": false, // (find all errors)
@@ -122,6 +132,7 @@ function updateStatus(type, input) {
 		}
 		updateGui();
 		updateWebserver();
+		webserver.updatewebUI();
 		return true;
 	}
 	return false;
@@ -147,10 +158,12 @@ function updateCoordinatorStatus() {
 	}
 }
 function updateWebserver() {
-	webserver.username = config.account.username
-	webserver.ETA = status.eta
-	webserver.queuePlace = status.position
-	webserver.controller = status.controller
+
+	webserver.site.username = config.account.username
+	webserver.site.ETA = status.eta
+	webserver.site.queuePlace = status.position
+	webserver.site.controller = status.controller
+
 }
 /**
  * Display a basic CLI GUI
