@@ -231,6 +231,8 @@ const configSchema = joi.object({
 		.description("Settings for what the proxy will send notifications about"),
 	"noCliGui": joi.boolean().default(false)
 		.description("Whether to disable the cli gui"),
+	"webinterface": joi.boolean().default(false)
+		.description("Whether to enable the cli gui"),
 	"coordination": joi.object({
 		"active": joi.boolean().default(false)
 			.description("Whether to use a [master config file and coordinator](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts)"),
