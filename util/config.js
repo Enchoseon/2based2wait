@@ -144,7 +144,12 @@ function updateCoordinatorStatus() {
 		}
 	}
 }
-
+function updateWebserver() {
+	webserver.username = config.account.username
+	webserver.ETA = status.eta
+	webserver.queuePlace = status.position
+	webserver.controller = status.controller
+}
 /**
  * Display a basic CLI GUI
  */
