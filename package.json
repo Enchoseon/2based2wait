@@ -14,7 +14,7 @@
   "author": "Enchoseon",
   "license": "GPL-2.0",
   "dependencies": {
-    "@rob9315/mcproxy": "^0.3.1",
+    "@rob9315/mcproxy": "github:Enchoseon/mcproxy",
     "deepmerge": "^4.2.2",
     "joi": "^17.6.0",
     "json5": "^2.2.1",
@@ -24,7 +24,9 @@
     "ngrok": "^4.3.1",
     "node-fetch": "^2.6.7",
     "node-notifier": "^10.0.1",
-    "prismarine-provider-anvil": "^2.7.0"
+    "prismarine-provider-anvil": "^2.7.0",
+    "socket.io": "^4.5.3",
+    "express": "^4.18.2",
   },
   "devDependencies": {
     "mocha": "^10.0.0"
