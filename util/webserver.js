@@ -1,7 +1,6 @@
 //webserver.js
 const express = require("express");
 const app = express();
-const port = 3000
 var server = require('http').createServer(app); 
 var io = require('socket.io')(server); 
 
@@ -10,8 +9,8 @@ const startwebUI = function startwebUI() {
 	app.use(express.static("public")); // public folder for css and images
 	app.set("view engine", "ejs"); // seting the engine for ejs
 	app.get('/', function (req, res){res.render('index');});
-	server.listen(3000, function(){
-	  console.log('listening on *:3000');
+	server.listen(site.webport, function(){
+	  console.log('listening on *:' + site.webport);
 	}); 
 io.on('connection', function(client) { 
 	io.emit('updateUsername', site.username);
@@ -30,7 +29,8 @@ var site = {
 	ETA: "None", //ETA
 	username: "None", //username for webserver
 	queuePlace: "None", //our place in queue
-	controller: "None" //controller 
+	controller: "None", //controller 
+	webport: 3000
 }
 module.exports = {
 	site,
