@@ -1,4 +1,5 @@
 <div align="center">
+([See a live example!](https://2based2wait.rickspage.io/))
 	<h1>2Based2Wait</h1>
 	<p>Lightweight & (theoretically) extensible 2b2t proxy.</p>
 	<h4>
