@@ -89,7 +89,8 @@ function processConfig() {
 		}
 	}
 	//if webui is active
-	if (config.webinterface){
+	if (config.webinterface.enabled){
+		webserver.site.webport = config.webinterface.port
 		webserver.startwebUI();
 	}
 	// Validate the config with Joi
