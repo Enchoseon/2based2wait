@@ -231,8 +231,13 @@ const configSchema = joi.object({
 		.description("Settings for what the proxy will send notifications about"),
 	"noCliGui": joi.boolean().default(false)
 		.description("Whether to disable the cli gui"),
-	"webinterface": joi.boolean().default(false)
-		.description("Whether to enable the cli gui"),
+	"webinterface": joi.object({
+		"enabled": joi.boolean().default(false)
+			.description("Address of the server to connect to"),
+		"port": joi.number().port().default(3000)
+			.description("Port of the server to connect to")
+	}).default()
+		.description("Settings for how the proxy connects to the server"),
 	"coordination": joi.object({
 		"active": joi.boolean().default(false)
 			.description("Whether to use a [master config file and coordinator](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts)"),
