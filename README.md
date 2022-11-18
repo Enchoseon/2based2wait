@@ -1,5 +1,5 @@
 <div align="center">
-	<a href="https://mcproxy.rickspage.io/">See a live example!</a>
+
 	<h1>2Based2Wait</h1>
 	<p>Lightweight & (theoretically) extensible 2b2t proxy.</p>
 	<h4>
