@@ -11,11 +11,11 @@
  */
 {
 	"account": {
-		"username": "YOUR USERNAME"
+		"username": "Stockfish15"
 	},
 
 	"proxy": {
-		"whitelist": [ "YOUR WHITELISTED PLAYERNAMES" ],
+		"whitelist": [ "DrinkTech", "Stockfish15", "iMessenger"],
 		"port": 25565
 	},
 
@@ -50,7 +50,7 @@
 			"bannedFood": [ "rotten_flesh", "pufferfish", "chorus_fruit", "poisonous_potato", "spider_eye" ]
 		},
 		"antiAfk": {
-			"actions": [ "rotate", "swingArm" ],
+			"actions": ["rotate", "walk", "jump", "jumpWalk", "swingArm"],
 			"fishing": false,
 			"chatting": false,
 			"chatMessages": [ "!pt", "!queue" ],
@@ -61,7 +61,10 @@
 	"coordination": {
 		"active": false,
 		"path":  "./../"
-	}
+	},
 	"noCliGui": false,
-	"webinterface": true
+	"webinterface": {
+		"enabled": true,
+		"port": 3000
+	}
 }
