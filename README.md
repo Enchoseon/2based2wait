@@ -1,5 +1,4 @@
 <div align="center">
-
 	<h1>2Based2Wait</h1>
 	<p>Lightweight & (theoretically) extensible 2b2t proxy.</p>
 	<h4>
@@ -63,7 +62,7 @@
 # Images
 
 <div align="center">
-  <img src="docs/images/webui.jpg" title="What else would you need?" alt="Cli Gui" width="92.5%"><br><em>No-Frills Cli Gui</em><br>
+  <img src="docs/images/webui.png" title="good stuff?" alt="Cli Gui" width="92.5%"><br><emIts a work in progress</em><br>
   <img src="docs/images/cliGui.png" title="What else would you need?" alt="Cli Gui" width="92.5%"><br><em>No-Frills Cli Gui</em><br>
   <img src="docs/images/webhooks.png" title="EZ elasticsearch integration :sunglasses:" alt="Webhooks" width="92.5%"><br><em>Convenient Discord Webhooks</em><br>
   <img src="docs/images/grep.png" title="grep -rih 'Popbob Sex' *" alt="Grep" width="92.5%"><br><em>Extensive Logs</em><br>
