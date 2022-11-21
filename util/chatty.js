@@ -10,6 +10,8 @@ const notifier = require("./notifier.js");
 
 const ChatMessage = require("prismarine-chat")(config.server.version);
 
+const webserver = require("./webserver.js");
+
 // =========
 // Functions
 // =========
@@ -58,6 +60,7 @@ function chatPacketHandler(packetData) {
 
 	// Log message
 	logger.log("chat", msg, "chat");
+	webserver.updateChat(msg);
 }
 
 /**
