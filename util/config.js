@@ -9,6 +9,7 @@ const JSON5 = require("json5");
 
 const { configSchema } = require("./schemas.js");
 const webserver = require("./webserver.js");
+const io = require('./webserver.js').io();
 
 // ===========
 // Global Vars
@@ -28,10 +29,18 @@ let status = { // Stores pertinent information (to-do: set up setters and getter
 // ======================
 // For webserver
 // ======================
-webserver.site.username = config.account.username
-webserver.site.ETA = status.eta
-webserver.site.queuePlace = status.position
-webserver.site.controller = status.controller
+webserver.site.webusername = config.webinterface.username
+webserver.site.webpassword = config.webinterface.password
+io.on('connection', function(client) {
+        client.on('whitelist', (msg) => {
+            config.proxy.whitelist.push(msg)
+            webserver.updatewebUI();
+        });
+        client.on('clicked', function() {
+            config.proxy.whitelist.pop()
+            webserver.updatewebUI();
+        });
+    });
 // ======================
 // Generate Documentation
 // ======================
@@ -164,6 +173,7 @@ function updateWebserver() {
 	webserver.site.ETA = status.eta
 	webserver.site.queuePlace = status.position
 	webserver.site.controller = status.controller
+	webserver.site.whitelist = config.proxy.whitelist
 
 }
 /**
