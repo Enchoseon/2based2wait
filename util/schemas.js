@@ -235,7 +235,11 @@ const configSchema = joi.object({
 		"enabled": joi.boolean().default(false)
 			.description("Address of the server to connect to"),
 		"port": joi.number().port().default(3000)
-			.description("Port of the server to connect to")
+			.description("Port of the server to connect to"),
+		"username": joi.string().default("admin")
+			.description("Webserver username."),
+		"password": joi.string().default("password")
+			.description("Webserver password."),
 	}).default()
 		.description("Settings for how the proxy connects to the server"),
 	"coordination": joi.object({
