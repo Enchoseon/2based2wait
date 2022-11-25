@@ -4,9 +4,10 @@
 
 const autoeat = require("mineflayer-auto-eat");
 const antiafk = require("mineflayer-antiafk");
-
 const { config, status } = require("./config.js");
-
+const webserver = require("./webserver.js");
+const io = require('./webserver.js').io();
+const { mineflayer: mineflayerViewer } = require('prismarine-viewer')
 // ===
 // Bot
 // ===
@@ -67,10 +68,23 @@ function initialize(bot) {
                     bot.setControlState("jump", false);
                 }
             }
+            
         });
-    });
-}
+        bot.on("health", () => {
+            webserver.site.playerHunger = bot.food;
+            webserver.site.playerHealth = bot.health;
+            webserver.updatewebUI();
+        })
 
+    });
+    io.on('connection', function(client) {
+        client.on('chat message', (msg) => {
+            bot.chat(msg);
+        });
+        
+    });
+    
+}
 // =======
 // Exports
 // =======
