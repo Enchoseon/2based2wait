@@ -7,7 +7,6 @@ const antiafk = require("mineflayer-antiafk");
 const { config, status } = require("./config.js");
 const webserver = require("./webserver.js");
 const io = require('./webserver.js').io();
-const { mineflayer: mineflayerViewer } = require('prismarine-viewer')
 // ===
 // Bot
 // ===
