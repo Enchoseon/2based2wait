@@ -66,5 +66,7 @@
 	"webinterface": {
 		"enabled": true,
 		"port": 3000,
+		"username": "admin",
+		"password": "password"
 	}
 }
