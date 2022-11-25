@@ -151,6 +151,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                 Logged in as</div>
+                                                <img src="https://mc-heads.net/avatar/imessenger" />
                                             <div class="h5 mb-0 font-weight-bold text-gray-800" id="mcusername">Loading....</div>
                                         </div>
                                         <div class="col-auto">
@@ -181,21 +182,25 @@
 
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
+                            <div class="card border-left-danger shadow h-100 py-2">
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Estimated wait time
+                                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Health
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="mcwaittime">Loading...</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="healthtext"></div>
                                                 </div>
-
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" ID="health"></div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                                            <i class="fas fa-heart fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -208,12 +213,21 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                Position in queue</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="mcposition">loading...</div>
+                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Hunger
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800" id="hungertext"></div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" ID="hunger"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
-                                            <i class="fas fa-users-line fa-2x text-gray-300"></i>
+                                            <i class="fas fa-cutlery fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -229,27 +243,54 @@
                     <div class="row">
                         <div class="col-xl-8 col-lg-7">
                             <div class="card shadow mb-4 border-left-warning border-bottom-warning bg-gradient-warning">
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Main Chat</h6>
                                 </div>
                                  <div class="chatbox bg-gray-900 text-gray-100" hight=100% width=100% id="chatBox"></div>
-                                    
+                                <form id="form" >
+                        <div class="input-group">
+                            <input id="input" type="text" class="form-control bg-light border-0 small" autocomplete="off" placeholder="does not work on 2b2t"><button class="btn btn-success btn-icon-split">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-arrow-right"></i>
+                                        </span>
+                                        <span class="text">Send Message</span>
+                                    </button>
+                        </div>
+                    </form>
+                                
                             </div>
                         </div>
                         <div class="card shadow mb-4">
                                 <!-- Card Header - Dropdown -->
-                                <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Dancing Hammsters</h6>
-
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary" >Whitelist</h6>
                                 </div>
+
                                 <!-- Card Body -->
                                 <div class="card-body">
-
+                                    <p id="whitelist"></p>
+                                    <table id="whitelisttable" class="table table-bordered dataTable countriesTable" id="dataTable" role="grid" aria-describedby="dataTable_info" style="width: 100%;" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr role="row"><th class="sorting" tabindex="0" aria-controls="dataTable" rowspan="1" colspan="1" style="width: 500px;" aria-label="Name: activate to sort column ascending">Username</th></tr>
+                                    </thead>
                                     
-                                    <img hieght="100%" width="100%" src="https://rickspage.io/img/test/hamsters.gif">
-
+                                    <tbody id="whitelisttbody"></tbody>
+                                </table>
+                                     <form id="whitelistform" >
+                        <div class="input-group">
+                            <input id="whitelistinput" type="text" class="form-control bg-light border-0 small" autocomplete="false" placeholder="Add user to whitelist"><button class="btn btn-success btn-icon-split">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <span class="text">Add</span>
+                                    </button><button id="delwhitelist" class="btn btn-danger btn-icon-split">
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-trash"></i>
+                                        </span>
+                                        <span class="text">del last</span>
+                                    </button>
+                        </div>
+                    </form>
                                 </div>
                             </div>
                         <!-- Content Column -->
@@ -279,12 +320,13 @@
                                     <p>
                                       <ul>
                                           <li>List all online users</li>
+                                          <li>Make site password protected</li>
                                           <li>Create friends list</li>
                                           <li>Store and manage DM's</li>
                                           <li>Display all logs in their respective panels</li>
                                           <ul>
                                             <li>bridgeClientPackets</li>
-                                            <li>chat</li>
+                                            <li><s>chat</s></li>
                                             <li>error</li>
                                             <li>proxy</li>
                                             <li>serverPackets</li>
@@ -293,7 +335,7 @@
                                           <ul>
                                             <li>Add first person prismarine viewer</li>
                                             <li>Add third person prismarine viewer</li>
-                                            <li>Add inventory viewer</li>
+                                            <li>Add inventory viewer - packages will not work for our needs. We must create array and pray</li>
                                           </ul>
                                           <li><s>Add webUI to schemas</s></li>
                                       </ul>
@@ -342,9 +384,7 @@
          <script src="/socket.io/socket.io.js"></script>
        <script>
           var socket = io.connect();
-          function buttonClicked(){
-            socket.emit('clicked');
-          }
+          let whitelist = ""
           
           //when we receive buttonUpdate, do this
           socket.on('updateUsername', function(data){
@@ -359,10 +399,27 @@
           socket.on('updateQueuePosition', function(data){
              document.getElementById("mcposition").innerHTML = data;
           });
+          socket.on('updateWhitelist', function(tableData){
+             var whitelist = tableData;
+            var bodyString = '';
+    $.each(whitelist, function(index, names) {
+        bodyString += ('<tr><td>'+names+'</td></tr>');
+    });
+    $('.countriesTable tbody').html(bodyString);
+
+          });
+          socket.on('updateHealth', function(data){
+             document.getElementById("health").style.width = Math.round(data)*5 + '%';
+             document.getElementById("healthtext").innerHTML = Math.round(data) + '/20';
+          });
+          socket.on('updateHunger', function(data){
+             document.getElementById("hunger").style.width = Math.round(data)*5 + '%';
+             document.getElementById("hungertext").innerHTML = Math.round(data) + '/20';
+          });
           socket.on('updateChatLog', function(data){
               // const chatlog ;
              // chatlog.push(data)
-            document.getElementById("chatBox").innerHTML = "Please support and help out.";
+            document.getElementById("chatBox").innerHTML = "Please support the project in some way, I'm new to this. Thank you Enchoseon";
               let list = document.getElementById("chatBox");
             
             data.forEach((item)=>{
@@ -370,9 +427,6 @@
                 li.innerText = item;
                 list.appendChild(li);
             })
-            socket.on('buttonUpdate', function(data){
-                 document.getElementById("buttonCount").innerHTML = 'The button has been clicked ' + data + ' times.';
-             });
             textBoxScroll();
             });
           function textBoxScroll() {
@@ -390,8 +444,23 @@
       input.value = '';
     }
   });
+
+  var whitelistform = document.getElementById('whitelistform');
+  var whitelistinput = document.getElementById('whitelistinput');
+
+  whitelistform.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (whitelistinput.value) {
+      socket.emit('whitelist', whitelistinput.value);
+      whitelistinput.value = '';
+    }
+  });
   
+  document.getElementById("delwhitelist").addEventListener("click", function () {
+    socket.emit("clicked");
+    });
       </script>
+
   </body>
 
 </html>
