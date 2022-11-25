@@ -44,7 +44,7 @@ function startwebUI() {
 	}); 
 	io.on('connection', function(client) { 
 		io.emit('updateUsername', "<img hight='10%' width='10%' src='https://mc-heads.net/avatar/" + site.username + "' /> " + site.username);
-		io.emit('updateController', site.controller);
+		io.emit('updateController', "<img hight='10%' width='10%' src='https://mc-heads.net/avatar/" + site.controller + "' /> " + site.controller);
 		io.emit('updateETA', site.ETA);
 		io.emit('updateQueuePosition', site.queuePlace);
 		io.emit('updateChatLog', chatLog);
@@ -57,7 +57,7 @@ function startwebUI() {
 }
 function updatewebUI() {
 	io.emit('updateUsername', "<img hight='10%' width='10%' src='https://mc-heads.net/avatar/" + site.username + "' /> " + site.username);
-	io.emit('updateController', site.controller);
+	io.emit('updateController', "<img hight='10%' width='10%' src='https://mc-heads.net/avatar/" + site.controller + "' /> " + site.controller);
 	io.emit('updateETA', site.ETA);
 	io.emit('updateQueuePosition', site.queuePlace);
 	io.emit('updateHealth', site.playerHealth);
