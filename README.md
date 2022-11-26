@@ -1,6 +1,8 @@
 <div align="center">
 	<h1>2Based2Wait</h1>
 	<p>Lightweight & (theoretically) extensible 2b2t proxy.</p>
+	<p><a href="https://proxy.rickspage.io/">Try it live!</a></p>
+	<p>Username: admin Password: password
 	<h4>
 		<a href="https://github.com/Enchoseon/2based2wait/wiki">Wiki</a>
 		<span> · </span>
