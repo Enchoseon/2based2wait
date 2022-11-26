@@ -174,7 +174,7 @@ function createLocalServer() {
 	server = mc.createServer({
 		"online-mode": config.proxy.onlineMode,
 		"encryption": true,
-		"host": "localhost",
+		"host": "0.0.0.0",
 		"port": config.proxy.port,
 		"version": config.server.version,
 		"max-players": 1,
