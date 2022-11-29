@@ -31,6 +31,7 @@ let status = { // Stores pertinent information (to-do: set up setters and getter
 // ======================
 webserver.site.webusername = config.webinterface.username
 webserver.site.webpassword = config.webinterface.password
+webserver.site.currentserver = config.server.host
 io.on('connection', function(client) {
         client.on('whitelist', (msg) => {
             config.proxy.whitelist.push(msg)
@@ -41,6 +42,10 @@ io.on('connection', function(client) {
             webserver.updatewebUI();
         });
     });
+	setInterval(() => {
+		webserver.site.uptime++
+		io.emit('updateUptime', webserver.toDaysMinutesSeconds(webserver.site.uptime)); 
+	}, 1000);
 // ======================
 // Generate Documentation
 // ======================
