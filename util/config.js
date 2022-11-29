@@ -229,10 +229,10 @@ function joiToMarkdown(schema, includeAnchors) {
 				output += "**" + key + "**"; // Output the entry's name
 			}
 			output += " <samp>`{type: " + info.type + "}`</samp>"; // Output the entry's type
-			if (info.default && info.default.special !== "deep") { // If provided, output the entry's default value(s)
+			if (typeof info.default !== "undefined" && info.default.special !== "deep") { // If provided, output the entry's default value(s)
 				output += " <samp>`{default: " + JSON.stringify(info.default) + "}`</samp>";
 			}
-			if (info.description) { // If provided, output the entry's description
+			if (typeof info.description !== "undefined") { // If provided, output the entry's description
 				output += " : " + info.description;
 			}
 			output += "\n";
