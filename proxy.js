@@ -252,11 +252,13 @@ function createLocalServer() {
 						deleteOnRestart: true
 					});
 				}
-				// Disconnect if no controller
+				// Disconnect if no controller after config.experimental.disconnectIfNoController.delay seconds
 				if (config.experimental.disconnectIfNoController.active && status.inQueue === "false") {
 					setTimeout(function () {
-						logger.log("proxy", "Restarting proxy because noone was in control " + config.experimental.disconnectIfNoController.delay + " seconds after someone DCed from proxy while it was on the server.", "proxy");
-						reconnect();
+						if (status.controller !== "None") {
+							logger.log("proxy", "Restarting proxy because noone was in control " + config.experimental.disconnectIfNoController.delay + " seconds after someone DCed from proxy while it was on the server.", "proxy");
+							reconnect();
+						}
 					}, config.experimental.disconnectIfNoController.delay * 1000);
 				}
 				// Start Mineflayer
