@@ -2,7 +2,7 @@
 // Imports
 // =======
 
-const autoeat = require("mineflayer-auto-eat");
+const autoeat = require("mineflayer-auto-eat").default;
 const antiafk = require("mineflayer-antiafk");
 
 const { config, status } = require("./config.js");
@@ -20,7 +20,6 @@ function initialize(bot) {
     bot.loadPlugin(autoeat);
     bot.loadPlugin(antiafk);
     // Set plugin options
-    bot.autoEat.options = config.mineflayer.autoEat;
     bot.afk.setOptions(config.mineflayer.antiAfk);
     bot.afk.setOptions({ 
         "killauraEnabled": false,
@@ -42,6 +41,10 @@ function initialize(bot) {
         }
     });
     bot.once("spawn", () => {
+        // =======
+        // Autoeat
+        // =======
+        bot.autoEat.options = config.mineflayer.autoEat; // Load autoeat options
         // =========
         // Kill Aura
         // =========

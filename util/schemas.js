@@ -138,8 +138,18 @@ const configSchema = joi.object({
 				.description("What type of food to prioritize eating (options: 'saturation', 'foodPoints', 'effectiveQuality')"),
 			"startAt": joi.number().integer().min(0).default(19)
 				.description("Hunger level at which to start eating"),
+			"eatingTimeout": joi.number().integer().min(-1).default(6969)
+				.description("Maximum time (in ms) the proxy will attempt to eat an item before giving up"),
 			"bannedFood": joi.array().items(packetSchema).default(["rotten_flesh", "pufferfish", "chorus_fruit", "poisonous_potato", "spider_eye"])
-				.description("Foods that will not be eaten")
+				.description("Foods that will not be eaten"),
+			"ignoreInventoryCheck": joi.boolean().default(false)
+				.description("Whether to disable inventory window click confirmation as a dirty hack to get around ViaBackwards' protocol noncompliance"),
+			"checkOnItemPickup": joi.boolean().default(true)
+				.description("Whether to attempt to eat food that's picked up when below the startAt threshold"),
+			"offhand": joi.boolean().default(false)
+				.description("Whether to use the offhand slot to eat food"),
+			"equipOldItem": joi.boolean().default(true)
+				.description("Whether to reequip the previously held item after eating")
 		}).default()
 			.description("Settings for autoeat"),
 		"antiAfk": joi.object({
