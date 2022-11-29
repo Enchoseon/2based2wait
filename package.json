@@ -19,7 +19,7 @@
     "joi": "^17.6.0",
     "json5": "^2.2.1",
     "minecraft-protocol": "^1.35.0",
-    "mineflayer-antiafk": "github:Etiaro/mineflayer-antiafk",
+    "mineflayer-antiafk": "github:Etiaro/mineflayer-antiafk#ad0fa51",
     "mineflayer-auto-eat": "^3.3.0",
     "ngrok": "^4.3.1",
     "node-fetch": "^2.6.7",
