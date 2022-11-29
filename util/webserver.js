@@ -51,7 +51,7 @@ function startwebUI() {
 		io.emit('updateHealth', site.playerHealth);
 		io.emit('updateHunger', site.playerHunger);
 		io.emit('updateWhitelist', site.whitelist);
-		
+		io.emit('updateCurrentServer', site.currentserver);
 	});
 
 }
@@ -63,6 +63,7 @@ function updatewebUI() {
 	io.emit('updateHealth', site.playerHealth);
 	io.emit('updateHunger', site.playerHunger);
 	io.emit('updateWhitelist', site.whitelist);
+	io.emit('updateCurrentServer', site.currentserver);
 }
 function updateChat (chat){
 	chatLog.push("[" + getTimestamp() + "] " + chat);
@@ -78,6 +79,25 @@ function getTimestamp(includeTime) {
 	return timestamp.replace(/\//g, "-") // Replace forward-slash with hyphen
 					.replace(",", ""); // Remove comma
 }
+function toDaysMinutesSeconds(totalSeconds) {
+  const seconds = Math.floor(totalSeconds % 60);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+  const days = Math.floor(totalSeconds / (3600 * 24));
+
+  const secondsStr = ('0' + seconds).slice(-2);
+  const minutesStr = ('0' + minutes).slice(-2) + ':';
+  const hoursStr = ('0' + hours).slice(-2) + ':';;
+  const daysStr = makeHumanReadable(days, 'Day');
+
+  return `${daysStr}${hoursStr}${minutesStr}${secondsStr}`.replace(/,\s*$/, '');
+}
+
+function makeHumanReadable(num, singular) {
+  return num > 0
+    ? num + (num === 1 ? ` ${singular}, ` : ` ${singular}s, `)
+    : '';
+}
 var site = {
 	ETA: "None", //ETA
 	username: "None", //username for webserver
@@ -88,6 +108,8 @@ var site = {
 	whitelist: [""],
 	webusername: "admin",
 	webpassword: "password",
+	uptime: 0,
+	currentserver: "",
 	webport: 3000
 }
 
@@ -101,5 +123,6 @@ module.exports = {
       throw new Error("socket is not initialized");
     }
     return io;
-  }
+  },
+  toDaysMinutesSeconds
 }
