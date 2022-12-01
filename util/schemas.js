@@ -82,7 +82,7 @@ const configSchema = joi.object({
 		"packetFilters": joi.object({
 			"server": joi.array().items(packetSchema).default(["map", "map_chunk", "player_info", "entity_metadata", "entity_velocity", "entity_move_look", "entity_look", "update_time", "world_particles", "unload_chunk", "teams", "rel_entity_move", "entity_head_rotation", "entity_update_attributes", "block_change"])
 				.description("Packets being sent from 2b2t to not log"),
-			"bridgeClient": joi.array().items(packetSchema).default(["position", "look", "position_look", "arm_animation"])
+			"bridgeClient": joi.array().items(packetSchema).default(["position", "look", "position_look", "arm_animation", "keep_alive"])
 				.description("Packets being sent from the controller to not log")
 		}).default()
 			.description("Settings for which packets we shouldn't log"),
