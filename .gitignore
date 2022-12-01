@@ -1,9 +1,6 @@
 # Modules
 node_modules/
 
-# Lock
-package-lock.json
-
 # Logs
 *.log
 *.mca
