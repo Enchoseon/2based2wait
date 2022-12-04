@@ -5,6 +5,8 @@
 		<a href="https://github.com/Enchoseon/2based2wait/wiki">Wiki</a>
 		<span> · </span>
 		<a href="https://github.com/Enchoseon/2based2wait/issues">Report Bug</a>
+		<span> · </span>
+		<a href="https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md">Configuration Guide</a>
 	</h4>
 	<img src="https://img.shields.io/github/last-commit/Enchoseon/2based2wait?color=2A0944&labelColor=525E75&style=flat" alt="Last Commit">
 	<img src="https://img.shields.io/github/languages/code-size/Enchoseon/2based2wait?color=3FA796&labelColor=525E75&style=flat" alt="Code Size">
@@ -19,21 +21,21 @@
 - [Quick Start](#quick-start)
 - [Features](#features)
 - [Images](#images)
-- [Keep in Mind](#keep-in-mind)
 - [For Developers](#for-developers)
+- [Keep in Mind](#keep-in-mind)
 
 # Quick Start
 
 1. In `config.json`, configure the following values:
     - `account.username`: Your Minecraft account playername.
     - `proxy.whitelist`: Playernames of accounts that are allowed to connect to the proxy.
-2. Run `npm ci`
+2. Run `npm ci --omit=dev`
 3. Run `npm start`
 4. Enter the auth code that appears in the console into microsoft.com/link
 5. Connect to `127.0.0.1` in Minecraft
     - If `127.0.0.1` doesn't work try `0.0.0.0`
 
-*(See [configuration guide](https://github.com/Enchoseon/2based2wait/wiki/Configuration-Guide) to see how to enable features like Ngrok tunneling or Discord webhooks.)*
+*(See [configuration guide](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md) to see how to enable features like Ngrok tunneling or Discord webhooks.)*
 
 # Features
 
