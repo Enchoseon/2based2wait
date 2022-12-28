@@ -9,6 +9,7 @@ node_modules/
 # Configs
 ngrok.yml
 config.json
+*.bak
 
 # VS
 .vs

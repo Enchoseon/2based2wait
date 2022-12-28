@@ -75,6 +75,8 @@ If you have a local copy of 2based2wait with a personal config.json that's being
 
 `git update-index --assume-unchanged config.json`
 
+You should make a copy of your config.json and name it config.json.bak (*.bak files are ignored by .gitignore), as it's easy to accidentally overwrite ignored files.
+
 # Keep in Mind
 
 2based2wait ships with as many options __disabled by default__ as possible; including [auto-reconnect](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor), [ngrok tunneling](https://github.com/Enchoseon/2based2wait/wiki/How-to-Share-Accounts-With-A-Reverse-Proxy) (for sharing accounts), [coordination](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts) (for multiple proxies), Discord webhooks, and much more.
