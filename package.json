@@ -17,7 +17,7 @@
     "@rob9315/mcproxy": "^1.0.0",
     "deepmerge": "^4.2.2",
     "joi": "^17.6.0",
-    "json5": "^2.2.2",
+    "json5": "^2.2.3",
     "minecraft-protocol": "^1.35.0",
     "mineflayer-antiafk": "github:Etiaro/mineflayer-antiafk",
     "mineflayer-auto-eat": "^3.3.0",
