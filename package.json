@@ -9,7 +9,8 @@
     "supervisor": "supervisor -n success proxy.js",
     "supervisorAllGasNoBrakes": "supervisor proxy.js",
     "generate-documentation": "node proxy.js --documentation",
-    "process-archives": "node ./scripts/processArchives.js "
+    "process-archives": "node ./scripts/processArchives.js ",
+    "update-ngrok-binary": "node ./scripts/updateNgrokBinary.js "
   },
   "author": "Enchoseon",
   "license": "GPL-2.0",
