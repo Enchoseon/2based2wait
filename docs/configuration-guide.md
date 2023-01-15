@@ -29,7 +29,7 @@
   - <span id='log-cutoff'></span>**[cutoff](#user-content-log-cutoff)** <samp>`{type: number}`</samp> <samp>`{default: 69000}`</samp> : Maximum size a log file can be (in bytes) before it gets split up
   - <span id='log-packetfilters'></span>**[packetFilters](#user-content-log-packetfilters)** <samp>`{type: object}`</samp> : Settings for which packets we shouldn't log
     - <span id='log-packetfilters-server'></span>**[server](#user-content-log-packetfilters-server)** <samp>`{type: array}`</samp> <samp>`{default: ["map","map_chunk","player_info","entity_metadata","entity_velocity","entity_move_look","entity_look","update_time","world_particles","unload_chunk","teams","rel_entity_move","entity_head_rotation","entity_update_attributes","block_change"]}`</samp> : Packets being sent from 2b2t to not log
-    - <span id='log-packetfilters-bridgeclient'></span>**[bridgeClient](#user-content-log-packetfilters-bridgeclient)** <samp>`{type: array}`</samp> <samp>`{default: ["position","look","position_look","arm_animation"]}`</samp> : Packets being sent from the controller to not log
+    - <span id='log-packetfilters-bridgeclient'></span>**[bridgeClient](#user-content-log-packetfilters-bridgeclient)** <samp>`{type: array}`</samp> <samp>`{default: ["position","look","position_look","arm_animation","keep_alive"]}`</samp> : Packets being sent from the controller to not log
   - <span id='log-compression'></span>**[compression](#user-content-log-compression)** <samp>`{type: object}`</samp> : Settings for log compression. Tweak with caution. The default options maximize memory usage for the fastest speed
     - <span id='log-compression-active'></span>**[active](#user-content-log-compression-active)** <samp>`{type: boolean}`</samp> <samp>`{default: false}`</samp> : **[Warning, Event Thread-Blocking!]** Whether to compress log files with Gzip. Leave this off unless you have a really good reason to enable it
     - <span id='log-compression-level'></span>**[level](#user-content-log-compression-level)** <samp>`{type: number}`</samp> <samp>`{default: 1}`</samp> : How much compression to apply between 1 and 9. Higher values result in better compression ratio at the expense of speed (**[Warning, Event Thread-Blocking!]**)
@@ -45,6 +45,7 @@
 <span id='proxy'></span>**[proxy](#user-content-proxy)** <samp>`{type: object}`</samp> : Settings for how you connect to the proxy
   - <span id='proxy-whitelist'></span>**[whitelist](#user-content-proxy-whitelist)** <samp>`{type: array}`</samp> : Playernames of accounts that are allowed to connect to the proxy
   - <span id='proxy-onlinemode'></span>**[onlineMode](#user-content-proxy-onlinemode)** <samp>`{type: boolean}`</samp> <samp>`{default: true}`</samp> : Whether to enable online-mode on the proxy. This probably should never be touched
+  - <span id='proxy-loopbackaddress'></span>**[loopbackAddress](#user-content-proxy-loopbackaddress)** <samp>`{type: string}`</samp> <samp>`{default: "127.0.0.1"}`</samp> : Loopback address to connect to the proxy. (options: '127.0.0.1', 'localhost', '0.0.0.0')
   - <span id='proxy-port'></span>**[port](#user-content-proxy-port)** <samp>`{type: number}`</samp> <samp>`{default: 25565}`</samp> : Port on the machine to connect to the proxy
 
 <span id='ngrok'></span>**[ngrok](#user-content-ngrok)** <samp>`{type: object}`</samp> : Settings for ngrok tunneling
