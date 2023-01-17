@@ -108,8 +108,8 @@ const configSchema = joi.object({
 			.description("Playernames of accounts that are allowed to connect to the proxy"),
 		"onlineMode": joi.boolean().default(true)
 			.description("Whether to enable online-mode on the proxy. This probably should never be touched"),
-		"loopbackAddress": joi.string().valid("127.0.0.1", "localhost", "0.0.0.0").default("127.0.0.1")
-			.description("Loopback address to connect to the proxy. (options: '127.0.0.1', 'localhost', '0.0.0.0')"),
+		"loopbackAddress": joi.string().valid("127.0.0.1", "localhost", "0.0.0.0", "::1").default("127.0.0.1")
+			.description("Loopback address to connect to the proxy. (options: '127.0.0.1', 'localhost', '0.0.0.0', '::1')"),
 		"port": joi.number().port().default(25565)
 			.description("Port on the machine to connect to the proxy")
 	}).default()

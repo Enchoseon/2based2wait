@@ -45,7 +45,7 @@
 <span id='proxy'></span>**[proxy](#user-content-proxy)** <samp>`{type: object}`</samp> : Settings for how you connect to the proxy
   - <span id='proxy-whitelist'></span>**[whitelist](#user-content-proxy-whitelist)** <samp>`{type: array}`</samp> : Playernames of accounts that are allowed to connect to the proxy
   - <span id='proxy-onlinemode'></span>**[onlineMode](#user-content-proxy-onlinemode)** <samp>`{type: boolean}`</samp> <samp>`{default: true}`</samp> : Whether to enable online-mode on the proxy. This probably should never be touched
-  - <span id='proxy-loopbackaddress'></span>**[loopbackAddress](#user-content-proxy-loopbackaddress)** <samp>`{type: string}`</samp> <samp>`{default: "127.0.0.1"}`</samp> : Loopback address to connect to the proxy. (options: '127.0.0.1', 'localhost', '0.0.0.0')
+  - <span id='proxy-loopbackaddress'></span>**[loopbackAddress](#user-content-proxy-loopbackaddress)** <samp>`{type: string}`</samp> <samp>`{default: "127.0.0.1"}`</samp> : Loopback address to connect to the proxy. (options: '127.0.0.1', 'localhost', '0.0.0.0', '::1')
   - <span id='proxy-port'></span>**[port](#user-content-proxy-port)** <samp>`{type: number}`</samp> <samp>`{default: 25565}`</samp> : Port on the machine to connect to the proxy
 
 <span id='ngrok'></span>**[ngrok](#user-content-ngrok)** <samp>`{type: object}`</samp> : Settings for ngrok tunneling
