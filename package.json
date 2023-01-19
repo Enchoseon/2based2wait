@@ -20,7 +20,7 @@
     "deepmerge": "^4.2.2",
     "joi": "^17.6.0",
     "json5": "^2.2.3",
-    "minecraft-protocol": "^1.38.1",
+    "minecraft-protocol": "^1.39.0",
     "mineflayer-antiafk": "github:Etiaro/mineflayer-antiafk",
     "mineflayer-auto-eat": "^3.3.0",
     "ngrok": "^4.3.1",
