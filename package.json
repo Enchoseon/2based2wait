@@ -17,7 +17,7 @@
   "license": "GPL-2.0",
   "dependencies": {
     "@rob9315/mcproxy": "^1.0.0",
-    "deepmerge": "^4.2.2",
+    "deepmerge": "^4.3.0",
     "joi": "^17.6.0",
     "json5": "^2.2.3",
     "minecraft-protocol": "^1.40.2",
