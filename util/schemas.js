@@ -2,6 +2,7 @@
 // Imports
 // =======
 
+/* eslint-disable no-useless-escape */
 const joi = require("joi");
 
 // ===========
@@ -92,7 +93,7 @@ const configSchema = joi.object({
 		}).concat(zlibOptionsSchema).default()
 			.description("Settings for log compression. Tweak with caution. The default options maximize memory usage for the fastest speed"),
 		"alwaysIncrement": joi.boolean().default(false)
-				.description("Whether to increment the log file every session (can lead to thousands of 1kb log files in production, but is pretty useful when rapidly testing during development)"),
+			.description("Whether to increment the log file every session (can lead to thousands of 1kb log files in production, but is pretty useful when rapidly testing during development)"),
 	}).default(),
 	"server": joi.object({
 		"host": joi.string().hostname().default("connect.2b2t.org")
@@ -257,5 +258,5 @@ const configSchema = joi.object({
 // =======
 
 module.exports = {
-    configSchema
+	configSchema
 };

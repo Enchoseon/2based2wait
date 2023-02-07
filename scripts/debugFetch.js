@@ -16,7 +16,6 @@ const JSON5 = require("json5");
 
 /** System Info */
 const operatingSystem = os.type() + "_" + os.release() + "_" + os.arch(); // Operating system + CPU architecture
-const arch = parseOsCpus(os.cpus()).join("; "); // CPU(s)
 const memory = os.totalmem(); // Total memory
 const nodeVersion = process.version; // Current node version
 
@@ -50,7 +49,7 @@ const logDirs = getDirectories("./log"); // Array of all directories in ./log
 /** Tests*/
 const isConfigValid = isValidJson5("./config.json"); // Whether ./config.json can be parsed
 const passesMocha = passesMochaTests(); // Whether Mocha tests pass on this machine
-const mochaInstalled = isMochaInstalled(); // Whether the optional Mocha dependency is even installed 
+const mochaInstalled = isMochaInstalled(); // Whether the optional Mocha dependency is even installed
 
 /** Errors */
 let errors;
@@ -65,9 +64,8 @@ if (!isConfigValid || (!passesMocha && mochaInstalled)) {
 /** System Info */
 console.log("\x1b[36m%s\x1b[33m", "=== System Info ===");
 console.log("OS:", operatingSystem);
-// console.log("CPU:", arch);
 console.log("Memory:", (memory / Math.pow(1024,3)).toString().slice(0,4) + "gb", "(" + memory + "b)");
-console.log("Node Version:", nodeVersion)
+console.log("Node Version:", nodeVersion);
 
 /** 2Based2Wait Information */
 console.log("\x1b[36m%s\x1b[33m", "=== 2Based2Wait Info ===");
@@ -80,15 +78,15 @@ filesToHash.forEach((path) => {
 console.log("Last Modified File:", lastModified);
 
 /** Logs */
-console.log("\x1b[36m%s\x1b[33m", "=== Log Folders ===")
+console.log("\x1b[36m%s\x1b[33m", "=== Log Folders ===");
 logDirs.forEach((path) => {
 	console.log("- " + path.replace("log/", ""), "(" + fs.readdirSync(path).length + " files/folders)");
 });
 
 /** Tests */
-console.log("\x1b[36m%s\x1b[33m", "=== Tests ===")
+console.log("\x1b[36m%s\x1b[33m", "=== Tests ===");
 console.log("Config.json is Valid JSON5:", isConfigValid.toString());
-console.log("Passes Mocha Tests:", passesMocha.toString())
+console.log("Passes Mocha Tests:", passesMocha.toString());
 console.log("Is Mocha Installed:", mochaInstalled.toString());
 if (!mochaInstalled) {
 	console.log("\x1b[32m", " ^ You can install mocha by running `npm ci`!");
@@ -109,7 +107,10 @@ if (errors) {
 // Functions
 // =========
 
-/** Returns the current git commit hash (https://stackoverflow.com/a/34518749), false if .git couldn't be found */
+/**
+ * Returns the current git commit hash (https://stackoverflow.com/a/34518749)
+ * @returns {string} Current git commit hash. Returns false if ./git/ can't be found
+ */
 function getCurrentCommitHash() {
 	if (!fs.existsSync(".git/")) {
 		return false;
@@ -122,10 +123,11 @@ function getCurrentCommitHash() {
 	}
 }
 
-/** 
- * Returns the git hash of the file at the path, returns false if the file wasn't found 
- * @param {string} path
-*/
+/**
+ * Returns the git hash of the file at the path, returns false if the file wasn't found
+ * @param {string} path Path to a file
+ * @returns {string} Short 6-character hash
+ */
 function getFileHash(path) {
 	if (!fs.existsSync(path)) { // Return false if file wasn't found
 		return false;
@@ -135,7 +137,11 @@ function getFileHash(path) {
 	return hashSum.digest("hex").slice(0, 7);
 }
 
-/** Returns whether the file at path is valid Json5 */
+/**
+ * Returns whether the file at path is valid Json5
+ * @param {string} path Path to a file
+ * @returns {boolean} Whether or not the file is valid Json5
+ */
 function isValidJson5(path) {
 	try {
 		JSON5.parse(fs.readFileSync(path));
@@ -145,7 +151,10 @@ function isValidJson5(path) {
 	return true;
 }
 
-/** Returns whether Mocha test is successful */
+/**
+ * Returns whether Mocha test is successful
+ * @returns {boolean} Whether `npm run test` is successful
+ */
 function passesMochaTests() {
 	try {
 		execSync("npm run test");
@@ -155,7 +164,10 @@ function passesMochaTests() {
 	return true;
 }
 
-/** Returns whether optional Mocha dependency is installed */
+/**
+ * Returns whether optional Mocha dependency is installed
+ * @returns {boolean} Whether Mocha is installed
+ */
 function isMochaInstalled() {
 	try {
 		require("mocha");
@@ -166,22 +178,9 @@ function isMochaInstalled() {
 }
 
 /**
- * Parse os.cpus(), returns array of all unique CPU names
- * @param {object} cpus 
- */
-function parseOsCpus(cpus) {
-	let cpuList = [];
-	cpus.forEach((info) => {
-		if (cpuList.indexOf(info.model) === -1) {
-			cpuList.push(info.model);
-		}
-	});
-	return cpuList;
-}
-
-/**
- * Returns path of last modified file from array of paths
- * @param {array} paths
+ * Returns (path of) most-recently modified file
+ * @param {Array} paths Array of filepaths
+ * @returns {string} Path of the last modified file
  */
 function getLastModifiedFile(paths) {
 	let newest = {
@@ -197,12 +196,14 @@ function getLastModifiedFile(paths) {
 			}
 		}
 	});
-	return newest.path
+	return newest.path;
 }
 
 /**
- * Returns array of directories in given srcpath (https://stackoverflow.com/a/40896897)
- * @param {string} srcpath
+ * Returns array of directories in a given srcpath
+ * @param {string} srcpath Path to a directory
+ * @returns {Array} Array of directories
+ * {@link https://stackoverflow.com/a/40896897}
  */
 function getDirectories(srcpath) {
 	return fs.readdirSync(srcpath)

@@ -32,7 +32,7 @@ function createTunnel() {
 			region: config.ngrok.region,
 			configPath: "./ngrok.yml"
 		}).then(url => {
-			url = url.split(`tcp://`)[1];
+			url = url.split("tcp://")[1];
 			updateStatus("ngrokUrl", url); // Update cli gui and webhook
 			notifier.sendWebhook({
 				title: "New Tunnel:",

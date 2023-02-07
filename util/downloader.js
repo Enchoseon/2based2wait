@@ -14,7 +14,7 @@ const logger = require("./logger.js");
 
 /**
  * Extremely unstable world downloader
- * @param {any} packetData
+ * @param {object} packetData Packetdata from map_chunk
  */
 function mapChunkPacketHandler(packetData) {
 	if (!config.experimental.worldDownloader.active) { // Don't proceed if world downloader isn't enabled
@@ -43,7 +43,8 @@ function mapChunkPacketHandler(packetData) {
 
 /**
  * Create output folder if it doesn't exist
- * @param {string} worldName
+ * @param {string} worldName Name of the world, used for naming the directory
+ * @returns {string} Path to the created folder
  */
 function createOutputDir(worldName) {
 	const outputDir = "./log/worldDownloader/" + config.server.host + "/" + worldName.replace(/:/g, "_") + "/";

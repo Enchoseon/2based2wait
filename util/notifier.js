@@ -19,7 +19,7 @@ let deleteOnRestart = []; // Urls of messages to be deleted when restarting the 
 
 /**
  * Send a toast
- * @param {string} titleText
+ * @param {string} titleText The title of the toast notification
  */
 function sendToast(titleText) {
 	toast.notify({
@@ -35,13 +35,13 @@ function sendToast(titleText) {
 
 /**
  * Send Discord webhook
- * @param {object} options
- * @param {string} options.title
- * @param {string} options.description
- * @param {boolean} options.disableAttribution
- * @param {string} options.category
- * @param {string} options.imageUrl
- * @param {boolean} options.deleteOnRestart
+ * @param {object} options Options object
+ * @param {string} options.title The title of the embed
+ * @param {string} options.description The description of the embed
+ * @param {boolean} options.disableAttribution Whether or not to include explicit attribution to the proxy that sent the message
+ * @param {string} options.category The webhook category to send the embed to
+ * @param {string} options.imageUrl The imageUrl of the embed
+ * @param {boolean} options.deleteOnRestart Whether to delete the message when restarting the proxy (technically only used on status webhook messages)
  */
 function sendWebhook(options) {
 	// Don't proceed if Discord webhooks are disabled in config.json
@@ -62,19 +62,19 @@ function sendWebhook(options) {
 				}
 			}
 		]
-	}
+	};
 	// If someone is controlling the bot add that to the embed
 	if (status.controller !== "None") {
 		params.embeds[0].footer = {
 			"text": "Controller: " + status.controller
-		}
+		};
 	}
 	// Set author fields so that we know where each embed originated. If disabled, the only way to tell the source of a message (without checking logs) would be through embed color.
 	if (!options.disableAttribution) {
 		params.embeds[0].author = {
 			"name": "Account: " + config.account.username,
 			"icon_url": "https://minotar.net/helm/" + config.account.username + "/69.png"
-		}
+		};
 	}
 
 	// Add Discord ping to message content
@@ -87,7 +87,7 @@ function sendWebhook(options) {
 		params.embeds[0].image = {
 			url: options.imageUrl,
 		};
-    }
+	}
 
 	// Send embed (if no destination is provided, defaults to config.discord.webhook.spam)
 	const webhookUrl = (config.discord.webhook[options.category] || config.discord.webhook.spam);

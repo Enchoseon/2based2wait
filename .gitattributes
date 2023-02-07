@@ -1,0 +1,4 @@
+# Normalize line endings
+* text=auto
+# Force Bash files to use LF line endings
+*.sh text eol=lf

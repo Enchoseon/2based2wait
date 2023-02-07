@@ -45,9 +45,9 @@ for (const category in config.log.active) {
 
 /**
  * Filter & log incoming packets from the server or bridgeClient
- * @param {object} packetData
- * @param {object} packetMeta
- * @param {string} source
+ * @param {object} packetData Packet data
+ * @param {object} packetMeta Packet metadeta
+ * @param {string} category Log category
  */
 function packetHandler(packetData, packetMeta, category) {
 	if (config.log.packetFilters[category].indexOf(packetMeta.name) === -1) { // Don't log filtered packets
@@ -57,9 +57,9 @@ function packetHandler(packetData, packetMeta, category) {
 
 /**
  * Write to a log file.
- * @param {string} name
- * @param {object} data
- * @param {object} category
+ * @param {string} name The name of the entry
+ * @param {object} data The data to log
+ * @param {string} category The category to log this under
  */
 function log(name, data, category) {
 	// Don't proceed if logging category is disabled in config.json
@@ -90,7 +90,8 @@ function log(name, data, category) {
 
 /**
  * Create a directory if it doesn't exist (in "./log/${category}/"). Also makes sure that logs from mocha tests don't contaminate normal logs.
- * @param {string} category
+ * @param {string} category The category to write logs to
+ * @returns {string} Path to the created directory
  */
 function createDirectory(category) {
 	// Choose the directory
@@ -109,8 +110,9 @@ function createDirectory(category) {
 
 /**
  * Return a filename for a log category.
- * @param {string} category
- * @param {number} index
+ * @param {string} category The category of the log file
+ * @param {number} index The index of the log file
+ * @returns {string} The created filename
  */
 function createFilename(category, index) {
 	let filename = category + "_" + index + ".log";
@@ -121,10 +123,11 @@ function createFilename(category, index) {
 }
 
 /**
- * Returns a filename of the most recent and valid log to continue using (and false otherwise).
- * @param {string} dir
- * @param {string} category
- * @param {string} files
+ * Returns a filename of the most recent and valid log to continue using.
+ * @param {string} dir Directory of log folder
+ * @param {string} category Category of the log to look for
+ * @param {Array} files All valid files in the directory
+ * @returns {string} Filename of the most recent and valid log to continue writing to (returns false otherwise)
  */
 function findExisting(dir, category, files) {
 	for (let i = files.length - 1; i >= 0; i--) {
@@ -139,7 +142,8 @@ function findExisting(dir, category, files) {
 
 /**
  * Get current timestamp
- * @param {boolean} includeTime
+ * @param {boolean} includeTime Whether to include the Date String
+ * @returns {string} Human-readable timestamp
  */
 function getTimestamp(includeTime) {
 	let timestamp = new Date();
@@ -149,7 +153,7 @@ function getTimestamp(includeTime) {
 		timestamp = timestamp.toLocaleString();
 	}
 	return timestamp.replace(/\//g, "-") // Replace forward-slash with hyphen
-					.replace(",", ""); // Remove comma
+		.replace(",", ""); // Remove comma
 }
 
 // =======

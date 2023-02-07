@@ -16,7 +16,10 @@ let sentNotification = false;
 // =========
 
 /**
- * Difficulty packet handler, checks whether or not we're in queue (explanation: when rerouted by Velocity, the difficulty packet is always sent after the MC|Brand packet.)
+ * Difficulty packet handler, checks whether or not we're in queue
+ * (explanation: when rerouted by Velocity, the difficulty packet is always sent *after* the MC|Brand packet.)
+ * @param {object} packetData `difficulty` packet data object
+ * @param {object} conn McProxy conn object
  */
 function difficultyPacketHandler(packetData, conn) {
 	const inQueue = (conn.bot.game.serverBrand === "2b2t (Velocity)") && (conn.bot.game.dimension === "minecraft:end") && (packetData.difficulty === 1);
@@ -34,6 +37,8 @@ function difficultyPacketHandler(packetData, conn) {
 
 /**
  * Playerlist packet handler, checks position in queue
+ * @param {object} packetData `playerlist_header` packet data object
+ * @param {object} server Mineflayer server object
  */
 function playerlistHeaderPacketHandler(packetData, server) {
 	// If no longer in queue, stop here
@@ -44,7 +49,7 @@ function playerlistHeaderPacketHandler(packetData, server) {
 	}
 	// Parse header packets
 	const header = JSON.parse(packetData.header).extra;
-	if (header && header.length === 6) {				
+	if (header && header.length === 6) {
 		const position = header[4].extra[0].text.replace(/\n/, "");
 		const eta = header[5].extra[0].text.replace(/\n/, "");
 		// Update position

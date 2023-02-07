@@ -50,8 +50,8 @@ if (process.argv.indexOf("--documentation") !== -1) {
 // =========
 
 /**
- * Process and validate Config.json
- * @returns 
+ * Process and validate the config.json
+ * @returns {config} Validated config object
  */
 function processConfig() {
 	let config;
@@ -101,7 +101,7 @@ function processConfig() {
 			if (i !== validationErrors.details.length) {
 				console.log("\x1b[36m", "");
 			}
-		};
+		}
 		throw new Error("Couldn't validate config.json"); // Kill the process here
 	}
 	// ... If no errors were found, return the validated config
@@ -110,8 +110,9 @@ function processConfig() {
 
 /**
  * Update status object. Returns whether the input being received is different from what's already stored in the object.
- * @param {string} type
- * @param {string} input
+ * @param {string} type The name of the key being updated
+ * @param {string} input The new value of status[type]
+ * @returns {boolean} Whether the value was updated (in other words, returns false if the value is the same as the input value)
  */
 function updateStatus(type, input) {
 	if (status[type] !== input.toString()) {
@@ -183,8 +184,9 @@ function updateGui() {
 
 /**
  * Get current timestamp
+ * @returns {string} Human-readable timestamp
  */
-function getTimestamp(includeTime) {
+function getTimestamp() {
 	let timestamp = new Date();
 	timestamp = timestamp.toLocaleString();
 	return timestamp.replace(/\//g, "-") // Replace forward-slash with hyphen
@@ -197,8 +199,9 @@ function getTimestamp(includeTime) {
 
 /**
  * Generate markdown documentation from Joi schema.
- * @param {object} schema
- * @param {boolean} includeAnchors
+ * @param {object} schema JOI schema to generate the documentation from
+ * @param {boolean} includeAnchors Whether to include page anchors (page anchors don't work in GitHub Wikis)
+ * @returns {string} Documentation from the schema in markdown
  */
 function joiToMarkdown(schema, includeAnchors) {
 	let output = "";
@@ -207,7 +210,7 @@ function joiToMarkdown(schema, includeAnchors) {
 	// Get value from path (https://stackoverflow.com/a/70356013)
 	const get = (record, path) => path.reduce((record, item) => record[item], record);
 	// Traverse configSchema
-	for (let [key, value, path, parent] of traverse(schema.keys)) {
+	for (let [key, path] of traverse(schema.keys)) {
 		const level = path.length;
 		const flags = get(schema.keys, path).flags;
 		if (flags && key !== "empty" && key !== "0") { // Don't proceed if the object doesn't have any flags or is empty
@@ -216,10 +219,10 @@ function joiToMarkdown(schema, includeAnchors) {
 				"default": flags.default,
 				"description": flags.description
 			};
-			if (level !== 1) { // Indent nested entries
-				output += indent(level) + "- "
+			if (level !== 1) { // Indent nested entries (creates nested bullet points)
+				output += " ".repeat(level - 1) + "- ";
 			} else { // Add a newlines in-between top-level entries to stop GitHub's markdown interpreter from merging everything into one giant list
-				output += "\n"
+				output += "\n";
 			}
 			if (includeAnchors) {
 				const anchor = path.join("-").replace(/-keys-/g, "-").toLowerCase(); // Create a unique and URL-friendly anchor for the entry
@@ -240,29 +243,20 @@ function joiToMarkdown(schema, includeAnchors) {
 	}
 	return output;
 	/**
-	 * Traverse through an object (https://stackoverflow.com/a/45628445)
-	 * @param {object} o
-	 * @param {object} path
+	 * Traverse through an object
+	 * @param {object} o Object to traverse through
+	 * @param {Array} path Path to current position in traversal
+	 * @yields {Array} key, value, path, and parent
+	 * {@link https://stackoverflow.com/a/45628445}
 	 */
 	function* traverse(o, path = []) {
 		for (let i in o) {
 			const itemPath = path.concat(i);
-			yield [i, o[i], itemPath, o];
+			yield [i, itemPath];
 			if (o[i] !== null && typeof (o[i]) == "object") {
 				yield* traverse(o[i], itemPath);
 			}
 		}
-	}
-	/**
-	 * Return indent for creating nested markdown list
-	 * @param {number} level
-	 */
-	function indent(level) {
-		let output = "";
-		for (let i = 1; i < level; i++) {
-			output += " ";
-		}
-		return output;
 	}
 }
 

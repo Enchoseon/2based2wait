@@ -50,8 +50,8 @@ class Delimited extends Transform {
 
 /**
  * Convert a packet.gz archive into .mca files
- * @param {string} inputDirectory
- * @param {number} stoppingDate
+ * @param {string} inputDirectory Path to directory to search for *.packet.gz archives
+ * @param {number} stoppingDate Timestamp to stop converting packets (will process all *packet.gz archives otherwise)
  */
 async function packetsToAnvil(inputDirectory, stoppingDate) {
 	// Get all files in the directory to convert
@@ -64,10 +64,13 @@ async function packetsToAnvil(inputDirectory, stoppingDate) {
 		await streamFile(inputDirectory + "/" + files[0].name);
 		files.shift();
 	}
-	// Stream an archive file
+	/**
+	 * Stream an archive file
+	 * @param {string} inputFile Path to *packet.gz archive to stream
+	 */
 	async function streamFile(inputFile) {
 		const fileStream = fs.createReadStream(inputFile);
-		const transform = new Delimited(/\u0D9E/gu);
+		const transform = new Delimited(/\u0D9E/gu); // https://youtu.be/UNhphyF74sA
 		transform.on("data", (chunk) => handleChunk(chunk));
 		transform.on("end", () => {
 			console.log("Complete.");
@@ -75,7 +78,11 @@ async function packetsToAnvil(inputDirectory, stoppingDate) {
 		});
 		fileStream.pipe(zlib.createGunzip()).pipe(transform);
 	}
-	// Handle each line
+	/**
+	 * Handle a chunk of data from streamFile
+	 * @param {string} line Stringified object containing chunk info (timestamp, x, z, groundUp, bitMap, chunkData, and blockEntities)
+	 * @returns {null} When chunk is finished processing
+	 */
 	async function handleChunk(line) {
 		const parsed = JSON.parse(line);
 		const packetData = {
@@ -86,7 +93,7 @@ async function packetsToAnvil(inputDirectory, stoppingDate) {
 			"bitMap": parsed[4],
 			"chunkData": Buffer.from(parsed[5]),
 			"blockEntities": parsed[6]
-		}
+		};
 		// Check if we've passed the stopping date
 		if (stoppingDate > 0 && stoppingDate < packetData.timestamp.getTime()) {
 			console.log("\t", "Reached Stopping Date On Packet Dated:", packetData.timestamp.toUTCString());
@@ -120,7 +127,7 @@ if (process.argv.length >= 3) {
 	if (fs.existsSync(inputDirectory)) {
 		packetsToAnvil(inputDirectory, stoppingDate);
 	} else {
-		throw new Error(path + "could not be found. Are you sure you have the correct path?");
+		throw new Error(inputDirectory + "could not be found. Are you sure you have the correct path?");
 	}
 }
 

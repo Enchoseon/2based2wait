@@ -11,7 +11,8 @@
     "generate-documentation": "node proxy.js --documentation",
     "process-archives": "node ./scripts/processArchives.js",
     "update-ngrok-binary": "node ./scripts/updateNgrokBinary.js",
-    "debug-info": "node ./scripts/debugFetch.js"
+    "debug-info": "node ./scripts/debugFetch.js",
+    "lint": "eslint --ext .js"
   },
   "author": "Enchoseon",
   "license": "GPL-2.0",
@@ -30,6 +31,8 @@
     "prismarine-provider-anvil": "^2.7.0"
   },
   "devDependencies": {
+    "eslint": "^8.33.0",
+    "eslint-plugin-jsdoc": "^39.8.0",
     "mocha": "^10.2.0"
   },
   "repository": {
