@@ -28,7 +28,8 @@
     "node-fetch": "^2.6.9",
     "node-notifier": "^10.0.1",
     "prismarine-chat": "^1.8.0",
-    "prismarine-provider-anvil": "^2.7.0"
+    "prismarine-provider-anvil": "^2.7.0",
+    "minecraft-data": "^3.0.0"
   },
   "devDependencies": {
     "eslint": "^8.33.0",
