@@ -2,7 +2,7 @@
 // Imports
 // =======
 
-const autoeat = require("mineflayer-auto-eat").default;
+//const autoeat = require("mineflayer-auto-eat").default;
 const antiafk = require("mineflayer-antiafk");
 
 const { config, status } = require("./config.js");
@@ -21,7 +21,7 @@ function initialize(bot) {
 		return;
 	}
 	// Load plugins
-	bot.loadPlugin(autoeat);
+	//bot.loadPlugin(autoeat);
 	bot.loadPlugin(antiafk);
 	// Set plugin options
 	bot.afk.setOptions(config.mineflayer.antiAfk);
