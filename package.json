@@ -24,7 +24,7 @@
     "minecraft-data": "^3.26.0",
     "minecraft-protocol": "^1.40.3",
     "mineflayer-antiafk": "github:Etiaro/mineflayer-antiafk",
-    "mineflayer-auto-eat": "^3.3.0",
+    "mineflayer-auto-eat": "^3.3.1",
     "ngrok": "^4.3.1",
     "node-fetch": "^2.6.9",
     "node-notifier": "^10.0.1",
