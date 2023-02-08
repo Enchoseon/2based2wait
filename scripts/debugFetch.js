@@ -103,9 +103,8 @@ console.log((!passesMocha && mochaInstalled) ? "- The Mocha tests failed on your
  * @returns {string} Current git commit hash. Returns false if ./git/ can't be found
  */
 function getCurrentCommitHash() {
-	if (!fs.existsSync(".git/")) {
-		return false;
-	}
+	if (!fs.existsSync(".git/")) return false;
+
 	let hash = fs.readFileSync(".git/HEAD").toString().trim();
 	return hash.indexOf(":") === -1 ? hash.slice(0, 7) : fs.readFileSync(".git/" + hash.substring(5)).toString().trim().slice(0, 7);
 }
@@ -116,9 +115,7 @@ function getCurrentCommitHash() {
  * @returns {string} Short 6-character hash
  */
 function getFileHash(path) {
-	if (!fs.existsSync(path)) { // Return false if file wasn't found
-		return false;
-	}
+	if (!fs.existsSync(path)) return false; // Return false if file wasn't found
 	const hashSum = crypto.createHash("sha1");
 	hashSum.update(`blob ${fs.statSync(path).size + "\0" + fs.readFileSync(path)}`);
 	return hashSum.digest("hex").slice(0, 7);

@@ -17,9 +17,7 @@ const logger = require("./logger.js");
  * @param {object} packetData Packetdata from map_chunk
  */
 function mapChunkPacketHandler(packetData) {
-	if (!config.experimental.worldDownloader.active) { // Don't proceed if world downloader isn't enabled
-		return;
-	}
+	if (!config.experimental.worldDownloader.active) return; // Don't proceed if world downloader isn't enabled
 	const serialized = JSON.stringify([ // Serialize the data we want to save
 		Math.floor(Date.now() / 1000),
 		packetData.x,

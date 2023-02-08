@@ -19,9 +19,7 @@ let logFiles = {};
 
 // Create the directories and plan which logfiles to write to
 for (const category in config.log.active) {
-	if (!config.log.active[category]) { // Don't proceed if logging category is disabled in config.json
-		return;
-	}
+	if (!config.log.active[category]) return; // Don't proceed if logging category is disabled in config.json
 	const dir = createDirectory(category); // Create directory for category if it doesn't exist
 	const files = fs.readdirSync(dir, { // Get all files in the directory with the correct extension (either .log.gz or .log)
 		"withFileTypes": true
@@ -33,9 +31,7 @@ for (const category in config.log.active) {
 		}
 	});
 	let file = findExisting(dir, category, files); // Pick a filename (either a valid existing one or a new one)
-	if (!file || config.log.alwaysIncrement) {
-		file = createFilename(category, files.length + 1);
-	}
+	if (!file || config.log.alwaysIncrement) file = createFilename(category, files.length + 1);
 	logFiles[category] = dir + file; // Push file path to logFiles
 }
 
@@ -63,9 +59,7 @@ function packetHandler(packetData, packetMeta, category) {
  */
 function log(name, data, category) {
 	// Don't proceed if logging category is disabled in config.json
-	if (!config.log.active[category]) {
-		return;
-	}
+	if (!config.log.active[category]) return;
 	// Create file name
 	createDirectory(category);
 	let logFile = logFiles[category];
@@ -95,10 +89,7 @@ function log(name, data, category) {
  */
 function createDirectory(category) {
 	// Choose the directory
-	let dir = `./log/${category}/`;
-	if (process.env.CI) { // (Change to a test directory if being ran by mocha.)
-		dir = `./test/log/${category}/`;
-	}
+	const dir = `./${process.env.CI ? "test/" : ""}${category}`;
 	// Create directory if it doesn't exist
 	if (!fs.existsSync(dir)) {
 		fs.mkdirSync(dir, {
@@ -116,9 +107,7 @@ function createDirectory(category) {
  */
 function createFilename(category, index) {
 	let filename = `${category}_${index}.log"`;
-	if (config.log.compression.active) {
-		filename += ".gz";
-	}
+	if (config.log.compression.active) filename += ".gz";
 	return filename;
 }
 

@@ -17,9 +17,7 @@ const { config, status } = require("./config.js");
  */
 function initialize(bot) {
 	// Don't proceed if Mineflayer isn't active
-	if (!config.mineflayer.active) {
-		return;
-	}
+	if (!config.mineflayer.active) return;
 	// Load plugins
 	bot.loadPlugin(autoeat);
 	bot.loadPlugin(antiafk);

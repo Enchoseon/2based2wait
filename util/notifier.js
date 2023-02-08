@@ -45,9 +45,7 @@ function sendToast(titleText) {
  */
 function sendWebhook(options) {
 	// Don't proceed if Discord webhooks are disabled in config.json
-	if (!config.discord.active) {
-		return;
-	}
+	if (!config.discord.active) return;
 
 	// Create embed
 	let params = {
