@@ -29,8 +29,8 @@
 1. In `config.json`, configure the following values:
     - `account.username`: Your Minecraft account playername.
     - `proxy.whitelist`: Playernames of accounts that are allowed to connect to the proxy.
-2. Run `npm ci --omit=dev`
-3. Run `npm start`
+2. Run `pnpm i`
+3. Run `pnpm start`
 4. Enter the auth code that appears in the console into microsoft.com/link
 5. Connect to `127.0.0.1` in Minecraft
     - If `127.0.0.1` doesn't work try `0.0.0.0`
