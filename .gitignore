@@ -2,6 +2,7 @@
 node_modules/
 
 # Logs
+log/
 *.log
 *.mca
 *.gz
