@@ -2,7 +2,7 @@
 // Imports
 // =======
 
-const autoeat = require("mineflayer-auto-eat").default;
+const autoeat = require("mineflayer-auto-eat").plugin;
 const antiafk = require("mineflayer-antiafk");
 
 const { config, status } = require("./config.js");

@@ -56,7 +56,7 @@ if (process.argv.indexOf("--documentation") !== -1) {
 function processConfig() {
 	let config;
 	try { // Read config.json
-		if (typeof global.it !== "function") {
+		if (!process.env.CI) {
 			config = JSON5.parse(fs.readFileSync("config.json"));
 		} else { // If we're running a unit test read the test config instead
 			config = JSON5.parse(fs.readFileSync("./test/test-config.json"));

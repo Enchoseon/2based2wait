@@ -96,7 +96,7 @@ function log(name, data, category) {
 function createDirectory(category) {
 	// Choose the directory
 	let dir = "./log/" + category + "/";
-	if (typeof global.it === "function") { // (Change to a test directory if being ran by mocha.)
+	if (process.env.CI) { // (Change to a test directory if being ran by mocha.)
 		dir = "./test/log/" + category + "/";
 	}
 	// Create directory if it doesn't exist

@@ -89,7 +89,7 @@ console.log("Config.json is Valid JSON5:", isConfigValid.toString());
 console.log("Passes Mocha Tests:", passesMocha.toString());
 console.log("Is Mocha Installed:", mochaInstalled.toString());
 if (!mochaInstalled) {
-	console.log("\x1b[32m", " ^ You can install mocha by running `npm ci`!");
+	console.log("\x1b[32m", " ^ You can install mocha by running `pnpm i`!");
 }
 
 /** User-Friendly Debugging */
@@ -153,11 +153,11 @@ function isValidJson5(path) {
 
 /**
  * Returns whether Mocha test is successful
- * @returns {boolean} Whether `npm run test` is successful
+ * @returns {boolean} Whether `pnpm run test` is successful
  */
 function passesMochaTests() {
 	try {
-		execSync("npm run test");
+		execSync("CI=true pnpm run test");
 	} catch (error) { // The test fails
 		return false;
 	}
