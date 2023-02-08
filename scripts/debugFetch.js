@@ -60,7 +60,7 @@ const errors = !isConfigValid || (!passesMocha && mochaInstalled);
 /** System Info */
 console.log("\x1b[36m%s\x1b[33m", "=== System Info ===");
 console.log(`OS: ${operatingSystem}`);
-console.log(`Memory: ${memory / Math.pow(1024,4).toString().slice(0,4)} GB (${memory} Bytes)`);
+console.log(`Memory: ${(memory / Math.pow(1024,3)).toString().slice(0,4)} GB (${memory} Bytes)`);
 console.log(`Node Version: ${nodeVersion}`);
 
 /** 2Based2Wait Information */
