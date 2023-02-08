@@ -116,7 +116,7 @@ function updateStatus(type, input) {
 		if (config.coordination.active && type === "livechatRelay") { // Update coordinator status if livechatRelay changes
 			updateCoordinatorStatus();
 		}
-		updateGui();
+		if (!config.noCliGui) updateGui();
 		return true;
 	}
 	return false;
@@ -146,9 +146,6 @@ function updateCoordinatorStatus() {
  * Display a basic CLI GUI
  */
 function updateGui() {
-	if (config.noCliGui) {
-		return;
-	}
 	// Cli GUI
 	console.clear();
 	console.log("\x1b[36m", `
