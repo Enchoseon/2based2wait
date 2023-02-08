@@ -44,7 +44,7 @@ const filesToHash = [ // Paths of files to hash
 const lastModified = getLastModifiedFile(filesToHash);
 
 /** Logs */
-const logDirs = getDirectories("./log"); // Array of all directories in ./log
+const logDirs = fs.existsSync("./log") ? getDirectories("./log") : []; // Array of all directories in ./log
 
 /** Tests*/
 const isConfigValid = isValidJson5("./config.json"); // Whether ./config.json can be parsed
