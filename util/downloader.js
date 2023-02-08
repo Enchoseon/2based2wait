@@ -47,7 +47,7 @@ function mapChunkPacketHandler(packetData) {
  * @returns {string} Path to the created folder
  */
 function createOutputDir(worldName) {
-	const outputDir = "./log/worldDownloader/" + config.server.host + "/" + worldName.replace(/:/g, "_") + "/";
+	const outputDir = `./log/worldDownloader/${config.server.host}/${worldName.replace(/:/g, "_")}/`;
 	if (!fs.existsSync(outputDir)) {
 		fs.mkdirSync(outputDir, {
 			"recursive": true

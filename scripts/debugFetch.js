@@ -7,7 +7,6 @@ const path = require("path");
 const os = require("os");
 const crypto = require("crypto");
 const { execSync } = require("child_process");
-
 const JSON5 = require("json5");
 
 // ===============
@@ -15,7 +14,7 @@ const JSON5 = require("json5");
 // ===============
 
 /** System Info */
-const operatingSystem = os.type() + "_" + os.release() + "_" + os.arch(); // Operating system + CPU architecture
+const operatingSystem = `${os.type()}_${os.release()}_${os.arch()}`; // Operating system + CPU architecture
 const memory = os.totalmem(); // Total memory
 const nodeVersion = process.version; // Current node version
 
@@ -63,31 +62,31 @@ if (!isConfigValid || (!passesMocha && mochaInstalled)) {
 
 /** System Info */
 console.log("\x1b[36m%s\x1b[33m", "=== System Info ===");
-console.log("OS:", operatingSystem);
-console.log("Memory:", (memory / Math.pow(1024,3)).toString().slice(0,4) + "gb", "(" + memory + "b)");
-console.log("Node Version:", nodeVersion);
+console.log(`OS: ${operatingSystem}`);
+console.log(`Memory: ${memory / Math.pow(1024,4).toString().slice(0,4)} GB (${memory} Bytes)`);
+console.log(`Node Version: ${nodeVersion}`);
 
 /** 2Based2Wait Information */
 console.log("\x1b[36m%s\x1b[33m", "=== 2Based2Wait Info ===");
-console.log("Current Commit Hash:", currentCommitHash || "Couldn't find .git");
-console.log("Package.json Version:", packageJsonVersion);
+console.log(`Current Commit Hash: ${currentCommitHash}`|| "Couldn't find .git");
+console.log(`Package.json Version: ${packageJsonVersion}`);
 console.log("File Hashes:");
 filesToHash.forEach((path) => {
-	console.log("- " + path + ":", getFileHash(path) || "File wasn't found");
+	console.log(`-${path}:${getFileHash(path)}` || "File wasn't found");
 });
-console.log("Last Modified File:", lastModified);
+console.log(`Last Modified File: ${lastModified}`);
 
 /** Logs */
 console.log("\x1b[36m%s\x1b[33m", "=== Log Folders ===");
 logDirs.forEach((path) => {
-	console.log("- " + path.replace("log/", ""), "(" + fs.readdirSync(path).length + " files/folders)");
+	console.log(`- ${path.replace("log/", "")}(${fs.readdirSync(path).length} files/folders)`);
 });
 
 /** Tests */
 console.log("\x1b[36m%s\x1b[33m", "=== Tests ===");
-console.log("Config.json is Valid JSON5:", isConfigValid.toString());
-console.log("Passes Mocha Tests:", passesMocha.toString());
-console.log("Is Mocha Installed:", mochaInstalled.toString());
+console.log(`Config.json is Valid JSON5: ${isConfigValid.toString()}`);
+console.log(`Passes Mocha Tests: ${passesMocha.toString()}`);
+console.log(`Is Mocha Installed: ${mochaInstalled.toString()}`);
 if (!mochaInstalled) {
 	console.log("\x1b[32m", " ^ You can install mocha by running `pnpm i`!");
 }
@@ -119,7 +118,7 @@ function getCurrentCommitHash() {
 	if (hash.indexOf(":") === -1) {
 		return hash.slice(0, 7);
 	} else {
-		return fs.readFileSync(".git/" + hash.substring(5)).toString().trim().slice(0, 7);
+		return fs.readFileSync(`.git/${hash.substring(5).toString().trim().slice(0, 7)}`);
 	}
 }
 
@@ -133,7 +132,7 @@ function getFileHash(path) {
 		return false;
 	}
 	const hashSum = crypto.createHash("sha1");
-	hashSum.update("blob " + fs.statSync(path).size + "\0" + fs.readFileSync(path));
+	hashSum.update(`blob ${fs.statSync(path).size + "\0" + fs.readFileSync(path)}`);
 	return hashSum.digest("hex").slice(0, 7);
 }
 

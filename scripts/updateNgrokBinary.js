@@ -10,7 +10,7 @@ const downloadNgrok = require("ngrok/download");
 // =============
 
 const arch = os.platform() + os.arch();
-console.log("Downloading latest Ngrok binary for your architecture (" + arch + ")...");
+console.log(`Downloading latest Ngrok binary for your architecture ("${arch}")...`);
 downloadNgrok(callback, { ignoreCache: true });
 
 // =========

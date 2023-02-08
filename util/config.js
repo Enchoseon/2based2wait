@@ -63,7 +63,7 @@ function processConfig() {
 		}
 	} catch (error) { // JSON5 Parsing Error
 		console.error(error);
-		throw new Error("Couldn't read config.json, likely due to user error near or at Line" + error.lineNumber + ", Column" + error.columnNumber); // Kill the process here
+		throw new Error(`Couldn't read config.json, likely due to user error near or at line ${error.lineNumber} column ${error.columnNumber}`); // Kill the process here
 	}
 	// If coordination is active...
 	if (config.coordination.active) {
@@ -91,13 +91,13 @@ function processConfig() {
 		if (validationErrors.details.length === 1) {
 			console.log("\x1b[36m", "Stopped proxy, encountered an error in config.json (you must fix it): \n");
 		} else {
-			console.log("\x1b[36m", "Stopped proxy, encountered " + validationErrors.details.length + " errors in config.json (you must fix them): \n");
+			console.log(`\x1b[36mStopped proxy, encountered ${validationErrors.details.length} errors in config.json (you must fix them):\n`);
 		}
 		for (let i = 0; i < validationErrors.details.length; i++) { // Print helpful color-coded errors to console
 			const error = validationErrors.details[i];
-			console.log("\x1b[33m", "ERROR #" + i + ": " + error.message);
-			console.log("\x1b[32m", "- Invalid Value: " + error.context.value);
-			console.log("\x1b[32m", "- Should Be Type: " + error.type);
+			console.log(`\x1b[33mERROR #${i}: ${error.message}`);
+			console.log(`\x1b[32m- Invalid Value: ${error.context.value}`);
+			console.log(`\x1b[32m- Should Be Type: ${error.type}`);
 			if (i !== validationErrors.details.length) {
 				console.log("\x1b[36m", "");
 			}
@@ -164,21 +164,21 @@ function updateGui() {
 88888 888888 8   8 88888 8888 88888 88888 8888888 8   8 8   8
 	`);
 	console.log("\x1b[30m", "");
-	console.log("\x1b[37m", "Last Update: [" + getTimestamp() + "]");
-	console.log("\x1b[37m", "Account: " + config.account.username);
-	console.log("\x1b[37m", "Current Controller: " + status.controller);
-	console.log("\x1b[33m", "Current Queue Position: " + status.position);
-	console.log("\x1b[33m", "ETA: " + status.eta);
-	console.log("\x1b[33m", "Restart: " + status.restart);
-	console.log("\x1b[35m", "In Queue Server: " + status.inQueue.toUpperCase());
+	console.log(`\x1b[37mLast Update: [${getTimestamp()}]`);
+	console.log(`\x1b[37mAccount: ${config.account.username}`);
+	console.log(`\x1b[37mCurrent Controller: ${status.controller}`);
+	console.log(`\x1b[33mCurrent Queue Position: ${status.position}`);
+	console.log(`\x1b[33mETA: ${status.eta}`);
+	console.log(`\x1b[33mRestart: ${status.restart}`);
+	console.log(`\x1b[35mIn Queue Server: ${status.inQueue.toUpperCase()}`);
 	if (config.mineflayer.active) {
-		console.log("\x1b[35m", "Mineflayer Running: " + status.mineflayer.toUpperCase());
+		console.log(`\x1b[35mMineflayer Running: ${status.mineflayer.toUpperCase()}`);
 	}
 	if (config.coordination.active) {
-		console.log("\x1b[32m", "Livechat Relay: " + status.livechatRelay.toUpperCase());
+		console.log(`\x1b[32mLivechat Relay: ${status.livechatRelay.toUpperCase()}`);
 	}
 	if (config.ngrok.active) {
-		console.log("\x1b[32m", "Ngrok URL: " + status.ngrokUrl);
+		console.log(`\x1b[32mNgrok URL: ${status.ngrokUrl}`);
 	}
 }
 
@@ -226,17 +226,17 @@ function joiToMarkdown(schema, includeAnchors) {
 			}
 			if (includeAnchors) {
 				const anchor = path.join("-").replace(/-keys-/g, "-").toLowerCase(); // Create a unique and URL-friendly anchor for the entry
-				output += "<span id='" + anchor + "'></span>"; // Add the anchor to an invisible pair of <span> tags
-				output += "**[" + key + "](#user-content-" + anchor + ")**"; // Output the entry's name
+				output += `<span id='${anchor}'></span>`; // Add the anchor to an invisible pair of <span> tags
+				output += `**[${key}](#user-content-${anchor})**`; // Output the entry's name
 			} else {
-				output += "**" + key + "**"; // Output the entry's name
+				output += `**${key}**`; // Output the entry's name
 			}
-			output += " <samp>`{type: " + info.type + "}`</samp>"; // Output the entry's type
+			output += ` <samp>\`{type: ${info.type}}\`</samp>`; // Output the entry's type
 			if (typeof info.default !== "undefined" && info.default.special !== "deep") { // If provided, output the entry's default value(s)
-				output += " <samp>`{default: " + JSON.stringify(info.default) + "}`</samp>";
+				output += ` <samp>\`{default: ${JSON.stringify(info.default)}}\`</samp>`;
 			}
 			if (typeof info.description !== "undefined") { // If provided, output the entry's description
-				output += " : " + info.description;
+				output += ` : ${info.description}`;
 			}
 			output += "\n";
 		}

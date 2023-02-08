@@ -70,7 +70,7 @@ function log(name, data, category) {
 	createDirectory(category);
 	let logFile = logFiles[category];
 	// Create log message
-	const logMessage = "[" + getTimestamp() + "] [" + name + "] " + JSON.stringify(data) + "\n";
+	const logMessage = `[${getTimestamp()}] [${name}] ${JSON.stringify(data)}\n`;
 	// Write to log (either gzipped or raw)
 	let stream = fs.createWriteStream(logFile, {
 		flags: "a"
@@ -95,9 +95,9 @@ function log(name, data, category) {
  */
 function createDirectory(category) {
 	// Choose the directory
-	let dir = "./log/" + category + "/";
+	let dir = `./log/${category}/`;
 	if (process.env.CI) { // (Change to a test directory if being ran by mocha.)
-		dir = "./test/log/" + category + "/";
+		dir = `./test/log/${category}/`;
 	}
 	// Create directory if it doesn't exist
 	if (!fs.existsSync(dir)) {
@@ -115,7 +115,7 @@ function createDirectory(category) {
  * @returns {string} The created filename
  */
 function createFilename(category, index) {
-	let filename = category + "_" + index + ".log";
+	let filename = `${category}_${index}.log"`;
 	if (config.log.compression.active) {
 		filename += ".gz";
 	}
