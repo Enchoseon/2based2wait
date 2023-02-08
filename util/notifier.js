@@ -76,9 +76,7 @@ function sendWebhook(options) {
 	}
 
 	// Add Discord ping to message content
-	if (options.ping) {
-		params.content = ` <@${config.discord.id}>`;
-	}
+	if (options.ping) params.content = `<@${config.discord.id}>`;
 
 	// Add image to embed
 	if (options.imageUrl) {
