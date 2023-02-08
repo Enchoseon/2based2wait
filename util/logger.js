@@ -24,11 +24,7 @@ for (const category in config.log.active) {
 	const files = fs.readdirSync(dir, { // Get all files in the directory with the correct extension (either .log.gz or .log)
 		"withFileTypes": true
 	}).filter(f => {
-		if (config.log.compression.active) {
-			return f.name.endsWith(".log.gz");
-		} else {
-			return f.name.endsWith(".log");
-		}
+		return f.name.endsWith(`.log${config.log.compression.active ? ".gz" : ""}`);
 	});
 	let file = findExisting(dir, category, files); // Pick a filename (either a valid existing one or a new one)
 	if (!file || config.log.alwaysIncrement) file = createFilename(category, files.length + 1);
