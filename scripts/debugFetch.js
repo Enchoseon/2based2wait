@@ -21,7 +21,7 @@ const nodeVersion = process.version; // Current node version
 
 /** 2Based2Wait Information */
 const currentCommitHash = getCurrentCommitHash(); // Current git commit hash
-const packageJsonVersion = process.env.pnpm_package_version; // Current version in package.json
+const packageJsonVersion = process.env.npm_package_version; // Current version in package.json
 const filesToHash = [ // Paths of files to hash
 	"./proxy.js",
 	"./package.json",
