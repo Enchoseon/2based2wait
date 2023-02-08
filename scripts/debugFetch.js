@@ -107,7 +107,7 @@ function getCurrentCommitHash() {
 		return false;
 	}
 	let hash = fs.readFileSync(".git/HEAD").toString().trim();
-	return hash.indexOf(":") === -1 ? hash.slice(0, 7) : fs.readFileSync(`.git/${hash.substring(5).toString().trim().slice(0, 7)}`);
+	return hash.indexOf(":") === -1 ? hash.slice(0, 7) : fs.readFileSync(".git/" + hash.substring(5)).toString().trim().slice(0, 7);
 }
 
 /**
