@@ -51,10 +51,7 @@ const passesMocha = passesMochaTests(); // Whether Mocha tests pass on this mach
 const mochaInstalled = isMochaInstalled(); // Whether the optional Mocha dependency is even installed
 
 /** Errors */
-let errors;
-if (!isConfigValid || (!passesMocha && mochaInstalled)) {
-	errors = true;
-}
+const errors = !isConfigValid || (!passesMocha && mochaInstalled);
 
 // ==================
 // Output Information
@@ -92,15 +89,10 @@ if (!mochaInstalled) {
 }
 
 /** User-Friendly Debugging */
-if (errors) {
-	console.log("\x1b[36m%s\x1b[32m", "\n=== Summary: Errors Found ===");
-	if (!isConfigValid) {
-		console.log("- Your config.json file is not valid Json5, probably due to syntax errors. Use a text editor or IDE with syntax highlighting to fix these mistakes faster.");
-	}
-	if (!passesMocha && mochaInstalled) {
-		console.log("- The Mocha tests failed on your machine. If you didn't do anything to cause this (e.g. delete the test files, set up a super-strict firewall/container, etc.), then it probably means that there is a fatal bug that warrants investigation.");
-	}
-}
+console.log(errors ? "\x1b[36m%s\x1b[32m\n=== Summary: Errors Found ===" : "");
+console.log(!isConfigValid ? "- Your config.json file is not valid Json5, probably due to syntax errors. Use a text editor or IDE with syntax highlighting to fix these mistakes faster." : "");
+console.log((!passesMocha && mochaInstalled) ? "- The Mocha tests failed on your machine. If you didn't do anything to cause this (e.g. delete the test files, set up a super-strict firewall/container, etc.), then it probably means that there is a fatal bug that warrants investigation." : "");
+
 
 // =========
 // Functions
@@ -115,11 +107,7 @@ function getCurrentCommitHash() {
 		return false;
 	}
 	let hash = fs.readFileSync(".git/HEAD").toString().trim();
-	if (hash.indexOf(":") === -1) {
-		return hash.slice(0, 7);
-	} else {
-		return fs.readFileSync(`.git/${hash.substring(5).toString().trim().slice(0, 7)}`);
-	}
+	return hash.indexOf(":") === -1 ? hash.slice(0, 7) : fs.readFileSync(`.git/${hash.substring(5).toString().trim().slice(0, 7)}`);
 }
 
 /**

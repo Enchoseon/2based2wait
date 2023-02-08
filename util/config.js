@@ -56,11 +56,7 @@ if (process.argv.indexOf("--documentation") !== -1) {
 function processConfig() {
 	let config;
 	try { // Read config.json
-		if (!process.env.CI) {
-			config = JSON5.parse(fs.readFileSync("config.json"));
-		} else { // If we're running a unit test read the test config instead
-			config = JSON5.parse(fs.readFileSync("./test/test-config.json"));
-		}
+		config = JSON5.parse(fs.readFileSync(`${process.env.CI ?  "./test/test-" : "" }config.json`));
 	} catch (error) { // JSON5 Parsing Error
 		console.error(error);
 		throw new Error(`Couldn't read config.json, likely due to user error near or at line ${error.lineNumber} column ${error.columnNumber}`); // Kill the process here
@@ -171,15 +167,9 @@ function updateGui() {
 	console.log(`\x1b[33mETA: ${status.eta}`);
 	console.log(`\x1b[33mRestart: ${status.restart}`);
 	console.log(`\x1b[35mIn Queue Server: ${status.inQueue.toUpperCase()}`);
-	if (config.mineflayer.active) {
-		console.log(`\x1b[35mMineflayer Running: ${status.mineflayer.toUpperCase()}`);
-	}
-	if (config.coordination.active) {
-		console.log(`\x1b[32mLivechat Relay: ${status.livechatRelay.toUpperCase()}`);
-	}
-	if (config.ngrok.active) {
-		console.log(`\x1b[32mNgrok URL: ${status.ngrokUrl}`);
-	}
+	console.log(config.mineflayer.active ? `\x1b[35mMineflayer Running: ${status.mineflayer.toUpperCase()}` : "");
+	console.log(config.coordination.active ? `\x1b[32mLivechat Relay: ${status.livechatRelay.toUpperCase()}` : "");
+	console.log(config.ngrok.active ? `\x1b[32mNgrok URL: ${status.ngrokUrl}` : "");
 }
 
 /**
@@ -219,11 +209,7 @@ function joiToMarkdown(schema, includeAnchors) {
 				"default": flags.default,
 				"description": flags.description
 			};
-			if (level !== 1) { // Indent nested entries (creates nested bullet points)
-				output += " ".repeat(level - 1) + "- ";
-			} else { // Add a newlines in-between top-level entries to stop GitHub's markdown interpreter from merging everything into one giant list
-				output += "\n";
-			}
+			output += level !== 1 ? " ".repeat(level - 1) + "- " : "\n";  // Add a newlines in-between top-level entries to stop GitHub's markdown interpreter from merging everything into one giant list
 			if (includeAnchors) {
 				const anchor = path.join("-").replace(/-keys-/g, "-").toLowerCase(); // Create a unique and URL-friendly anchor for the entry
 				output += `<span id='${anchor}'></span>`; // Add the anchor to an invisible pair of <span> tags
