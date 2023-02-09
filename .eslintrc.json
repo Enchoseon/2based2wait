@@ -39,7 +39,11 @@
             "error"
         ],
         "multiline-ternary": [
+            "error",
             "always-multiline"
+        ],
+        "no-nested-ternary": [
+            "error"
         ]
     }
 }
