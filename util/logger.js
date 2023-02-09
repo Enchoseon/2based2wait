@@ -85,7 +85,7 @@ function log(name, data, category) {
  */
 function createDirectory(category) {
 	// Choose the directory
-	const dir = `./${process.env.CI ? "test/" : ""}${category}`;
+	const dir = `./log/${process.env.CI ? "test/" : ""}${category}/`;
 	// Create directory if it doesn't exist
 	if (!fs.existsSync(dir)) {
 		fs.mkdirSync(dir, {
