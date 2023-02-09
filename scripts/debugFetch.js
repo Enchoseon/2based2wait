@@ -141,7 +141,7 @@ function isValidJson5(path) {
  */
 function passesMochaTests() {
 	try {
-		execSync("pnpm run test");
+		execSync("CI=true pnpm run test");
 	} catch (error) { // The test fails
 		return false;
 	}
