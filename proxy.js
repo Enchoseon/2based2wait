@@ -61,7 +61,8 @@ function packetHandler(packetData, packetMeta) {
 			queue.playerlistHeaderPacketHandler(packetData, server);
 			break;
 		case "map_chunk":
-			downloader.mapChunkPacketHandler(packetData);
+			if (!config.experimental.worldDownloader.active) break;
+			downloader.mapChunkPacketHandler(packetData); // Don't proceed if world downloader isn't enabled
 			break;
 		default:
 			break;

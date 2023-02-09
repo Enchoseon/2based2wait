@@ -84,7 +84,7 @@ function processConfig() {
 	});
 	const validationErrors = validationResult.error;
 	if (validationErrors) { // If error found, print error to console and kill process...
-		if (validationErrors.details.length === 1) {
+		if (validationErrors.details.length == 1) {
 			console.log("\x1b[36m", "Stopped proxy, encountered an error in config.json (you must fix it): \n");
 		} else {
 			console.log(`\x1b[36mStopped proxy, encountered ${validationErrors.details.length} errors in config.json (you must fix them):\n`);
@@ -156,7 +156,7 @@ function updateGui() {
 8     8    8 8   8     8 8    88  8 8     8  8  8 8   8 8   8
 88888 888888 8   8 88888 8888 88888 88888 8888888 8   8 8   8
 	`);
-	console.log("\x1b[30m", "");
+	console.log("\n");
 	console.log(`\x1b[37mLast Update: [${getTimestamp()}]`);
 	console.log(`\x1b[37mAccount: ${config.account.username}`);
 	console.log(`\x1b[37mCurrent Controller: ${status.controller}`);
@@ -179,6 +179,9 @@ function getTimestamp() {
 	return timestamp.replace(/\//g, "-") // Replace forward-slash with hyphen
 		.replace(",", ""); // Remove comma
 }
+
+/*  TODO: Move this into a separate .js file, hopefully also make a GitHub
+	workflow with it to update docs on a new push  */
 
 // ===============
 // Joi To Markdown
