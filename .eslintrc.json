@@ -37,6 +37,9 @@
         ],
         "no-unneeded-ternary": [
             "error"
+        ],
+        "multiline-ternary": [
+            "always-multiline"
         ]
     }
 }
