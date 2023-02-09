@@ -45,9 +45,7 @@ function sendToast(titleText) {
  */
 function sendWebhook(options) {
 	// Don't proceed if Discord webhooks are disabled in config.json
-	if (!config.discord.active) {
-		return;
-	}
+	if (!config.discord.active) return;
 
 	// Create embed
 	let params = {
@@ -66,21 +64,19 @@ function sendWebhook(options) {
 	// If someone is controlling the bot add that to the embed
 	if (status.controller !== "None") {
 		params.embeds[0].footer = {
-			"text": "Controller: " + status.controller
+			"text": `Controller: ${status.controller}`
 		};
 	}
 	// Set author fields so that we know where each embed originated. If disabled, the only way to tell the source of a message (without checking logs) would be through embed color.
 	if (!options.disableAttribution) {
 		params.embeds[0].author = {
-			"name": "Account: " + config.account.username,
-			"icon_url": "https://minotar.net/helm/" + config.account.username + "/69.png"
+			"name": `Account: ${config.account.username}`,
+			"icon_url": "https://minotar.net/helm/${config.account.username}/69.png" // nice - 2023-02-08 unclamped
 		};
 	}
 
 	// Add Discord ping to message content
-	if (options.ping) {
-		params.content = " <@" + config.discord.id + ">";
-	}
+	if (options.ping) params.content = `<@${config.discord.id}>`;
 
 	// Add image to embed
 	if (options.imageUrl) {
@@ -100,7 +96,7 @@ function sendWebhook(options) {
 	}).then(response => {
 		if (options.deleteOnRestart) {
 			response.text().then(json => {
-				deleteOnRestart.push(webhookUrl + "/messages/" + JSON.parse(json).id); // URL to send DELETE request to when restarting the proxy
+				deleteOnRestart.push(`${webhookUrl}/messages/${JSON.parse(json).id}`); // URL to send DELETE request to when restarting the proxy
 			});
 		}
 	});

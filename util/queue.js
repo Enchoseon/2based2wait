@@ -27,7 +27,7 @@ function difficultyPacketHandler(packetData, conn) {
 		notifier.sendToast("In Server!");
 		notifier.sendWebhook({
 			title: "In Server!",
-			description: "Current IP: `" + status.ngrokUrl + "`",
+			description: `Current IP: \`${status.ngrokUrl}\``,
 			ping: true,
 			category: "status",
 			deleteOnRestart: true
@@ -55,18 +55,18 @@ function playerlistHeaderPacketHandler(packetData, server) {
 		// Update position
 		if (updateStatus("position", position)) {
 			// Update local server motd
-			server.motd = "Position: " + status.position + " - ETA: " + status.eta;
+			server.motd = `Position: ${status.position} - ETA: ${status.eta}`;
 			if (status.position <= config.queueThreshold) { // Position notifications on Discord (status webhook)
-				notifier.sendToast("2B2T Queue Position: " + status.position);
+				notifier.sendToast(`2B2T Queue Position: ${status.position}`);
 				notifier.sendWebhook({
-					title: "2B2T Queue Position: " + status.position,
-					description: "ETA: " + status.eta,
+					title: `2B2T Queue Position: ${status.position}`,
+					description: `ETA: ${status.eta}`,
 					category: "spam"
 				});
 				if (!sentNotification && config.notify.whenBelowQueueThreshold) {
 					notifier.sendWebhook({
-						title: "Position " + status.position + " in queue!",
-						description: "Current IP: `" + status.ngrokUrl + "`",
+						title: `Position ${status.position} in queue`,
+						description: `Current IP: \`${status.ngrokUrl}\``,
 						ping: true,
 						category: "status",
 						deleteOnRestart: true
@@ -75,8 +75,8 @@ function playerlistHeaderPacketHandler(packetData, server) {
 				sentNotification = true;
 			} else { // Position notifications on Discord (spam webhook)
 				notifier.sendWebhook({
-					title: "2B2T Queue Position: " + status.position,
-					description: "ETA: " + status.eta,
+					title: `2B2T Queue Position: ${status.position}`,
+					description: `ETA: ${status.eta}`,
 					category: "spam"
 				});
 			}

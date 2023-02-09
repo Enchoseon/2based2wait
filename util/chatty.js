@@ -26,9 +26,9 @@ function chatPacketHandler(packetData) {
 	if (msg && msg.startsWith("[SERVER] Server restarting in ")) {
 		let restart = msg.replace("[SERVER] Server restarting in ", "").replace(" ...", "");
 		if (updateStatus("restart", restart)) {
-			notifier.sendToast("Server Restart In: " + status.restart);
+			notifier.sendToast(`Server Restart In: ${status.restart}`);
 			notifier.sendWebhook({
-				title: "Server Restart In: " + status.restart,
+				title: `Server Restart In: ${status.restart}`,
 				ping: true,
 				category: "spam"
 			});

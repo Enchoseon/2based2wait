@@ -17,9 +17,6 @@ const logger = require("./logger.js");
  * @param {object} packetData Packetdata from map_chunk
  */
 function mapChunkPacketHandler(packetData) {
-	if (!config.experimental.worldDownloader.active) { // Don't proceed if world downloader isn't enabled
-		return;
-	}
 	const serialized = JSON.stringify([ // Serialize the data we want to save
 		Math.floor(Date.now() / 1000),
 		packetData.x,
@@ -47,7 +44,7 @@ function mapChunkPacketHandler(packetData) {
  * @returns {string} Path to the created folder
  */
 function createOutputDir(worldName) {
-	const outputDir = "./log/worldDownloader/" + config.server.host + "/" + worldName.replace(/:/g, "_") + "/";
+	const outputDir = `./log/worldDownloader/${config.server.host}/${worldName.replace(/:/g, "_")}/`;
 	if (!fs.existsSync(outputDir)) {
 		fs.mkdirSync(outputDir, {
 			"recursive": true

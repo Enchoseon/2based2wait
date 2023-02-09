@@ -44,7 +44,7 @@ describe("2Bored2Wait Testing", () => {
 			this.timeout(13000);
 			require("./../proxy.js"); // Start proxy
 			const username = await waitForLogin();
-			console.log("Received Login:", username);
+			console.log(`Received Login: ${username}`);
 			assert.equal(username, "UnitTester");
 		});
 	});

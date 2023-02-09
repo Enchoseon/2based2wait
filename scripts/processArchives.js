@@ -60,8 +60,8 @@ async function packetsToAnvil(inputDirectory, stoppingDate) {
 	}).filter(f => f.name.endsWith(".packets.gz")); // (Check the extension to make sure)
 	// Process each file in sequential order
 	while (files.length > 0) {
-		console.log("\t", "Now Reading:", files[0].name);
-		await streamFile(inputDirectory + "/" + files[0].name);
+		console.log(`\tNow Reading: ${files[0].name}`);
+		await streamFile(`${inputDirectory}/${files[0].name}`);
 		files.shift();
 	}
 	/**
@@ -96,13 +96,13 @@ async function packetsToAnvil(inputDirectory, stoppingDate) {
 		};
 		// Check if we've passed the stopping date
 		if (stoppingDate > 0 && stoppingDate < packetData.timestamp.getTime()) {
-			console.log("\t", "Reached Stopping Date On Packet Dated:", packetData.timestamp.toUTCString());
+			console.log(`\tReached Stopping Date On Packet Dated: ${packetData.timestamp.toUTCString()}`);
 			console.log("Complete.");
 			process.kill(0);
 			return;
 		}
 		// Convert to prismarine-chunk format
-		console.log("\t\t", "Converting Chunk:", packetData.x, packetData.z, "\n\t\t\t", "Recorded At:", packetData.timestamp.toUTCString());
+		console.log(`\t\tConverting Chunk: ${packetData.x}${packetData.z}\n\t\t\tRecorded At: ${packetData.timestamp.toUTCString()}`);
 		const chunk = new Chunk();
 		chunk.load(packetData.chunkData, packetData.bitMap, { // Load chunks
 			"minecraft:end": 1,
@@ -123,11 +123,11 @@ if (process.argv.length >= 3) {
 	// Get arguments
 	const inputDirectory = process.argv[2];
 	const stoppingDate = Date.parse(process.argv[3]);
-	console.log("Processing Archive:", inputDirectory, "Stopping Date:", stoppingDate || "None");
+	console.log(`Processing Archive: ${inputDirectory} Stopping Date: ${stoppingDate}` || "None");
 	if (fs.existsSync(inputDirectory)) {
 		packetsToAnvil(inputDirectory, stoppingDate);
 	} else {
-		throw new Error(inputDirectory + "could not be found. Are you sure you have the correct path?");
+		throw new Error(`${inputDirectory} could not be found. Are you sure you have the correct path?`);
 	}
 }
 

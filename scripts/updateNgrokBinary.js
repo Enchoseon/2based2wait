@@ -10,7 +10,7 @@ const downloadNgrok = require("ngrok/download");
 // =============
 
 const arch = os.platform() + os.arch();
-console.log("Downloading latest Ngrok binary for your architecture (" + arch + ")...");
+console.log(`Downloading latest Ngrok binary for your architecture ("${arch}")...`);
 downloadNgrok(callback, { ignoreCache: true });
 
 // =========
@@ -22,9 +22,5 @@ downloadNgrok(callback, { ignoreCache: true });
  * @param {string} msg Error message from downloadNgrok. Empty if there were no errors;
  */
 function callback(msg) {
-	if (msg) {
-		console.error(msg);
-	} else {
-		console.log("Successfully updated Ngrok binary!");
-	}
+	msg ? console.error(msg) : console.log("Successfully updated Ngrok binary!");
 }

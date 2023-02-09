@@ -17,9 +17,7 @@ const { config, status } = require("./config.js");
  */
 function initialize(bot) {
 	// Don't proceed if Mineflayer isn't active
-	if (!config.mineflayer.active) {
-		return;
-	}
+	if (!config.mineflayer.active) return;
 	// Load plugins
 	bot.loadPlugin(autoeat);
 	bot.loadPlugin(antiafk);
@@ -36,11 +34,7 @@ function initialize(bot) {
 		// ===============
 		if (config.server.host === "connect.2b2t.org") { // (only on 2b2t)
 			const autoQueueMain = setInterval(function () {
-				if (status.inQueue === "true") {
-					bot.chat("/queue main");
-				} else {
-					clearInterval(autoQueueMain);
-				}
+				status.inQueue ? bot.chat("/queue main") : clearInterval(autoQueueMain);
 			}, config.mineflayer.autoQueueMainInterval * 1000);
 		}
 	});
@@ -68,11 +62,7 @@ function initialize(bot) {
 		// =====
 		bot.on("breath", () => {
 			if (status.mineflayer === "true" && status.inQueue === "false") {
-				if (bot.oxygenLevel < 20) {
-					bot.setControlState("jump", true);
-				} else {
-					bot.setControlState("jump", false);
-				}
+				bot.setControlState("jump", bot.oxygenLevel < 20);
 			}
 		});
 	});

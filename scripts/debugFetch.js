@@ -7,7 +7,6 @@ const path = require("path");
 const os = require("os");
 const crypto = require("crypto");
 const { execSync } = require("child_process");
-
 const JSON5 = require("json5");
 
 // ===============
@@ -15,7 +14,7 @@ const JSON5 = require("json5");
 // ===============
 
 /** System Info */
-const operatingSystem = os.type() + "_" + os.release() + "_" + os.arch(); // Operating system + CPU architecture
+const operatingSystem = `${os.type()}_${os.release()}_${os.arch()}`; // Operating system + CPU architecture
 const memory = os.totalmem(); // Total memory
 const nodeVersion = process.version; // Current node version
 
@@ -52,10 +51,7 @@ const passesMocha = passesMochaTests(); // Whether Mocha tests pass on this mach
 const mochaInstalled = isMochaInstalled(); // Whether the optional Mocha dependency is even installed
 
 /** Errors */
-let errors;
-if (!isConfigValid || (!passesMocha && mochaInstalled)) {
-	errors = true;
-}
+const errors = !isConfigValid || (!passesMocha && mochaInstalled);
 
 // ==================
 // Output Information
@@ -63,45 +59,40 @@ if (!isConfigValid || (!passesMocha && mochaInstalled)) {
 
 /** System Info */
 console.log("\x1b[36m%s\x1b[33m", "=== System Info ===");
-console.log("OS:", operatingSystem);
-console.log("Memory:", (memory / Math.pow(1024,3)).toString().slice(0,4) + "gb", "(" + memory + "b)");
-console.log("Node Version:", nodeVersion);
+console.log(`OS: ${operatingSystem}`);
+console.log(`Memory: ${(memory / Math.pow(1024,3)).toString().slice(0,4)} GB (${memory} Bytes)`);
+console.log(`Node Version: ${nodeVersion}`);
 
 /** 2Based2Wait Information */
 console.log("\x1b[36m%s\x1b[33m", "=== 2Based2Wait Info ===");
-console.log("Current Commit Hash:", currentCommitHash || "Couldn't find .git");
-console.log("Package.json Version:", packageJsonVersion);
+console.log(`Current Commit Hash: ${currentCommitHash}`|| "Couldn't find .git");
+console.log(`Package.json Version: ${packageJsonVersion}`);
 console.log("File Hashes:");
 filesToHash.forEach((path) => {
-	console.log("- " + path + ":", getFileHash(path) || "File wasn't found");
+	console.log(`-${path}:${getFileHash(path)}` || "File wasn't found");
 });
-console.log("Last Modified File:", lastModified);
+console.log(`Last Modified File: ${lastModified}`);
 
 /** Logs */
 console.log("\x1b[36m%s\x1b[33m", "=== Log Folders ===");
 logDirs.forEach((path) => {
-	console.log("- " + path.replace("log/", ""), "(" + fs.readdirSync(path).length + " files/folders)");
+	console.log(`- ${path.replace("log/", "")}(${fs.readdirSync(path).length} files/folders)`);
 });
 
 /** Tests */
 console.log("\x1b[36m%s\x1b[33m", "=== Tests ===");
-console.log("Config.json is Valid JSON5:", isConfigValid.toString());
-console.log("Passes Mocha Tests:", passesMocha.toString());
-console.log("Is Mocha Installed:", mochaInstalled.toString());
+console.log(`Config.json is Valid JSON5: ${isConfigValid.toString()}`);
+console.log(`Passes Mocha Tests: ${passesMocha.toString()}`);
+console.log(`Is Mocha Installed: ${mochaInstalled.toString()}`);
 if (!mochaInstalled) {
 	console.log("\x1b[32m", " ^ You can install mocha by running `pnpm i`!");
 }
 
 /** User-Friendly Debugging */
-if (errors) {
-	console.log("\x1b[36m%s\x1b[32m", "\n=== Summary: Errors Found ===");
-	if (!isConfigValid) {
-		console.log("- Your config.json file is not valid Json5, probably due to syntax errors. Use a text editor or IDE with syntax highlighting to fix these mistakes faster.");
-	}
-	if (!passesMocha && mochaInstalled) {
-		console.log("- The Mocha tests failed on your machine. If you didn't do anything to cause this (e.g. delete the test files, set up a super-strict firewall/container, etc.), then it probably means that there is a fatal bug that warrants investigation.");
-	}
-}
+console.log(errors ? "\x1b[36m%s\x1b[32m\n=== Summary: Errors Found ===" : "");
+console.log(!isConfigValid ? "- Your config.json file is not valid Json5, probably due to syntax errors. Use a text editor or IDE with syntax highlighting to fix these mistakes faster." : "");
+console.log((!passesMocha && mochaInstalled) ? "- The Mocha tests failed on your machine. If you didn't do anything to cause this (e.g. delete the test files, set up a super-strict firewall/container, etc.), then it probably means that there is a fatal bug that warrants investigation." : "");
+
 
 // =========
 // Functions
@@ -112,15 +103,10 @@ if (errors) {
  * @returns {string} Current git commit hash. Returns false if ./git/ can't be found
  */
 function getCurrentCommitHash() {
-	if (!fs.existsSync(".git/")) {
-		return false;
-	}
+	if (!fs.existsSync(".git/")) return false;
+
 	let hash = fs.readFileSync(".git/HEAD").toString().trim();
-	if (hash.indexOf(":") === -1) {
-		return hash.slice(0, 7);
-	} else {
-		return fs.readFileSync(".git/" + hash.substring(5)).toString().trim().slice(0, 7);
-	}
+	return hash.indexOf(":") === -1 ? hash.slice(0, 7) : fs.readFileSync(".git/" + hash.substring(5)).toString().trim().slice(0, 7);
 }
 
 /**
@@ -129,11 +115,9 @@ function getCurrentCommitHash() {
  * @returns {string} Short 6-character hash
  */
 function getFileHash(path) {
-	if (!fs.existsSync(path)) { // Return false if file wasn't found
-		return false;
-	}
+	if (!fs.existsSync(path)) return false; // Return false if file wasn't found
 	const hashSum = crypto.createHash("sha1");
-	hashSum.update("blob " + fs.statSync(path).size + "\0" + fs.readFileSync(path));
+	hashSum.update(`blob ${fs.statSync(path).size + "\0" + fs.readFileSync(path)}`);
 	return hashSum.digest("hex").slice(0, 7);
 }
 
