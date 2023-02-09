@@ -87,13 +87,13 @@ function processConfig() {
 		if (validationErrors.details.length == 1) {
 			console.log("\x1b[36m", "Stopped proxy, encountered an error in config.json (you must fix it): \n");
 		} else {
-			console.log(`\x1b[36mStopped proxy, encountered ${validationErrors.details.length} errors in config.json (you must fix them):\n`);
+			console.log("\x1b[36m", `Stopped proxy, encountered ${validationErrors.details.length} errors in config.json (you must fix them):\n`);
 		}
 		for (let i = 0; i < validationErrors.details.length; i++) { // Print helpful color-coded errors to console
 			const error = validationErrors.details[i];
-			console.log(`\x1b[33mERROR #${i}: ${error.message}`);
-			console.log(`\x1b[32m- Invalid Value: ${error.context.value}`);
-			console.log(`\x1b[32m- Should Be Type: ${error.type}`);
+			console.log("\x1b[33m", `ERROR #${i}: ${error.message}`);
+			console.log("\x1b[32m", `- Invalid Value: ${error.context.value}`);
+			console.log("\x1b[32m", `- Should Be Type: ${error.type}`);
 			if (i !== validationErrors.details.length) {
 				console.log("\x1b[36m", "");
 			}
@@ -157,13 +157,13 @@ function updateGui() {
 88888 888888 8   8 88888 8888 88888 88888 8888888 8   8 8   8
 	`);
 	console.log("\n");
-	console.log(`\x1b[37mLast Update: [${getTimestamp()}]`);
-	console.log(`\x1b[37mAccount: ${config.account.username}`);
-	console.log(`\x1b[37mCurrent Controller: ${status.controller}`);
-	console.log(`\x1b[33mCurrent Queue Position: ${status.position}`);
-	console.log(`\x1b[33mETA: ${status.eta}`);
-	console.log(`\x1b[33mRestart: ${status.restart}`);
-	console.log(`\x1b[35mIn Queue Server: ${status.inQueue.toUpperCase()}`);
+	console.log("\x1b[37m", `Last Update: [${getTimestamp()}]`);
+	console.log("\x1b[37m", `Account: ${config.account.username}`);
+	console.log("\x1b[37m", `Current Controller: ${status.controller}`);
+	console.log("\x1b[33m", `Current Queue Position: ${status.position}`);
+	console.log("\x1b[33m", `ETA: ${status.eta}`);
+	console.log("\x1b[33m", `Restart: ${status.restart}`);
+	console.log("\x1b[33m", `In Queue Server: ${status.inQueue.toUpperCase()}`);
 	console.log(config.mineflayer.active ? `\x1b[35mMineflayer Running: ${status.mineflayer.toUpperCase()}` : "");
 	console.log(config.coordination.active ? `\x1b[32mLivechat Relay: ${status.livechatRelay.toUpperCase()}` : "");
 	console.log(config.ngrok.active ? `\x1b[32mNgrok URL: ${status.ngrokUrl}` : "");
