@@ -102,7 +102,7 @@ function createDirectory(category) {
  * @returns {string} The created filename
  */
 function createFilename(category, index) {
-	let filename = `${category}_${index}.log"`;
+	let filename = `${category}_${index}.log`;
 	if (config.log.compression.active) filename += ".gz";
 	return filename;
 }
