@@ -62,7 +62,7 @@ function initialize(bot) {
 		// =====
 		bot.on("breath", () => {
 			if (status.mineflayer === "true" && status.inQueue === "false") {
-				bot.setControlState("jump", bot.oxygenLevel < 20 ? true : false);
+				bot.setControlState("jump", bot.oxygenLevel < 20);
 			}
 		});
 	});
