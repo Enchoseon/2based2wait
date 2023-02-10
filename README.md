@@ -25,10 +25,12 @@
 
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
+- [Updating](#updating)
 - [Features](#features)
 - [Images](#images)
 - [For developers](#for-developers)
-- [Keep in mind](#keep-in-mind)
+- [Tips and Tricks](#Tips-and-Tricks)
+- [RTFM](#RTFM)
 
 ## Prerequisites
 - [Git](https://git-scm.com/)
@@ -101,6 +103,8 @@ There are many other things you can do to customize your 2bored2wait install. Yo
 - [ngrok tunnels](https://github.com/Enchoseon/2based2wait/wiki/How-to-Share-Accounts-With-A-Reverse-Proxy) if you want to share the proxy with other people
 - [Enabling coordination](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts) to be able to proxy multiple accounts at once
 - [And much more](https://github.com/Enchoseon/2based2wait/wiki)
+
+## RTFM
 
 <div align="center">
   <p><strong>And as always, <a href="https://en.wikipedia.org/wiki/RTFM">RTFM</a>, <em>especially</em> before asking questions.</strong></p>
