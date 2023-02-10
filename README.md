@@ -25,6 +25,8 @@
 - [Keep in Mind](#keep-in-mind)
 
 # Quick Start
+- This project utilizes pnpm (performant npm) as its package manager for improved performance. If you don't have pnpm installed, you can use npm to install it with the following command. :
+ `npm install -g pnpm `
 
 1. In `config.json`, configure the following values:
     - `account.username`: Your Minecraft account playername.
