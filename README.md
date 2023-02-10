@@ -3,15 +3,18 @@
 	<p>Lightweight & (theoretically) extensible 2b2t proxy.</p>
 </div>
 
+
 <div align="center">
-  <a href="https://github.com/Enchoseon/2based2wait/wiki">Wiki</a>
-  <span> · </span>
-  <a href="https://github.com/Enchoseon/2based2wait/issues/new">Report a bug</a>
-  <span> · </span>
-  <a href="https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md">Configuration guide</a>
-  <span> · </span>
-  <a href="https://github.com/Enchoseon/2based2wait/discussions">Discussions</a>
-  <br>
+	<strong>
+	<a href="https://github.com/Enchoseon/2based2wait/wiki">Wiki</a>
+	<span> · </span>
+	<a href="https://github.com/Enchoseon/2based2wait/issues/new">Report a bug</a>
+	<span> · </span>
+	<a href="https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md">Configuration guide</a>
+	<span> · </span>
+	<a href="https://github.com/Enchoseon/2based2wait/discussions">Discussions</a>
+	</strong>
+	<br><br>
 	<img src="https://img.shields.io/github/last-commit/Enchoseon/2based2wait?color=2A0944&labelColor=525E75&style=flat" alt="Last Commit">
 	<img src="https://img.shields.io/github/languages/code-size/Enchoseon/2based2wait?color=3FA796&labelColor=525E75&style=flat" alt="Code Size">
 	<img src="https://img.shields.io/github/package-json/v/Enchoseon/2based2wait?color=FEC260&labelColor=525E75&style=flat" alt="Current Version">
