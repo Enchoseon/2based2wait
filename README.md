@@ -44,7 +44,7 @@
 3. Modify settings: 
     - Copy and paste the `default-config.json`, and remove the `default-` from the file name
     - Modify the settings according to the [configuration guide](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md). For a minimal configuration, only set the [`acccount.username`](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-account-username) and [`proxy.whitelist`](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-proxy-whitelist) values
-3. Run the proxy: `pnpm start`
+4. Run the proxy: `pnpm start`
 
 ## Updating
 
