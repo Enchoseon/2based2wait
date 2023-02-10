@@ -1,5 +1,5 @@
 <div align="center">
-	<h2>2Based2Wait</h1>
+	<h2>2Based2Wait</h2>
 	<p>Lightweight & (theoretically) extensible 2b2t proxy.</p>
 </div>
 
