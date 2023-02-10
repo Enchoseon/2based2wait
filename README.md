@@ -1,45 +1,55 @@
+<h1 align="center">
+	2Based2Wait
+  <br>
+	Lightweight & (theoretically) extensible 2b2t proxy.
+</h1>
+
 <div align="center">
-	<h1>2Based2Wait</h1>
-	<p>Lightweight & (theoretically) extensible 2b2t proxy.</p>
-	<h4>
-		<a href="https://github.com/Enchoseon/2based2wait/wiki">Wiki</a>
-		<span> · </span>
-		<a href="https://github.com/Enchoseon/2based2wait/issues">Report Bug</a>
-		<span> · </span>
-		<a href="https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md">Configuration Guide</a>
-	</h4>
+  <a href="https://github.com/Enchoseon/2based2wait/wiki">Wiki</a>
+  <span> · </span>
+  <a href="https://github.com/Enchoseon/2based2wait/issues/new">Report a bug</a>
+  <span> · </span>
+  <a href="https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md">Configuration guide</a>
+  <span> · </span>
+  <a href="https://github.com/Enchoseon/2based2wait/discussions">Discussions</a>
+  <br>
 	<img src="https://img.shields.io/github/last-commit/Enchoseon/2based2wait?color=2A0944&labelColor=525E75&style=flat" alt="Last Commit">
 	<img src="https://img.shields.io/github/languages/code-size/Enchoseon/2based2wait?color=3FA796&labelColor=525E75&style=flat" alt="Code Size">
 	<img src="https://img.shields.io/github/package-json/v/Enchoseon/2based2wait?color=FEC260&labelColor=525E75&style=flat" alt="Current Version">
 	<img src="https://img.shields.io/github/license/Enchoseon/2based2wait?color=A10035&labelColor=525E75&style=flat" alt="License">
 </div>
 
-<br />
+<br>
 
-# Table of Contents
+## Table of Contents
 
-- [Quick Start](#quick-start)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
 - [Features](#features)
 - [Images](#images)
-- [For Developers](#for-developers)
-- [Keep in Mind](#keep-in-mind)
+- [For developers](#for-developers)
+- [Keep in mind](#keep-in-mind)
 
-# Quick Start
-- This project utilizes pnpm (performant npm) as its package manager for improved performance. If you don't have pnpm installed, you can use npm to install it with the following command. :
- `npm install -g pnpm `
+## Prerequisites
+- [Git](https://git-scm.com/)
+- [NodeJS](https://nodejs.org/)
+- [pnpm](https://pnpm.io/): `npm i -g pnpm`
 
-1. In `config.json`, configure the following values:
-    - `account.username`: Your Minecraft account playername.
-    - `proxy.whitelist`: Playernames of accounts that are allowed to connect to the proxy.
-2. Run `pnpm i --prod`
-3. Run `pnpm start`
-4. Enter the auth code that appears in the console into microsoft.com/link
-5. Connect to `127.0.0.1` in Minecraft
-    - If `127.0.0.1` doesn't work try `0.0.0.0`
+## Installation
 
-*(See [configuration guide](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md) to see how to enable features like Ngrok tunneling or Discord webhooks.)*
+1. Clone the repository: `git clone https://github.com/Enchoseon/2bored2wait` and `cd 2bored2wait`
+2. Install dependencies: `pnpm i --prod`
+3. Modify settings: 
+    - Copy and paste the `default-config.json`, and remove the `default-` from the file name
+    - Modify the settings according to the [configuration guide](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md). For a minimal configuration, only set the [`acccount.username`](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-account-username) and [`proxy.whitelist`](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-proxy-whitelist) values
+3. Run the proxy: `pnpm start`
 
-# Features
+## Updating
+
+1. Pull changes: `git pull`
+2. Reinstall dependencies in case any have changed: `pnpm i`
+
+## Features
 
 - Extremely low RAM and CPU usage
 - Robust auto-reconnection
@@ -63,7 +73,7 @@
   - Your machine's IP is never shared with players connecting to your proxy
   - Your players' IPs are never shared with your machine
 
-# Images
+## Images
 
 <div align="center">
   <img src="docs/images/cliGui.png" title="What else would you need?" alt="Cli Gui" width="92.5%"><br><em>No-Frills Cli Gui</em><br>
@@ -71,19 +81,28 @@
   <img src="docs/images/grep.png" title="grep -rih 'Popbob Sex' *" alt="Grep" width="92.5%"><br><em>Extensive Logs</em><br>
 </div>
 
-# For Developers
+## For Developers
+
+### Install dev dependencies
+Dev dependencies can be installed with `pnpm i`. You should only do this in case you want to contribute to the project's source
+
+### config.json warning
 
 If you have a local copy of 2based2wait with a personal config.json that's being tracked by git despite the .gitignore rule, run the following command:
 
 `git update-index --assume-unchanged config.json`
 
-You should make a copy of your config.json and name it config.json.bak (*.bak files are ignored by .gitignore), as it's easy to accidentally overwrite ignored files.
+You should make a copy of your config.json and name it config.json.bak (*.bak files are ignored by .gitignore), as it's easy to accidentally overwrite ignored files and accidentally share sensible information, such as your [Discord webhooks](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-discord-webhook), or your [ngrok authentication token](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-ngrok-authtoken).
 
-# Keep in Mind
+## Tips and Tricks
 
-2based2wait ships with as many options __disabled by default__ as possible; including [auto-reconnect](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor), [ngrok tunneling](https://github.com/Enchoseon/2based2wait/wiki/How-to-Share-Accounts-With-A-Reverse-Proxy) (for sharing accounts), [coordination](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts) (for multiple proxies), Discord webhooks, and much more.
+There are many other things you can do to customize your 2bored2wait install. You can:
+- [Enable automatic reconnections](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor) to the server in case of any interruptions
+- [ngrok tunnels](https://github.com/Enchoseon/2based2wait/wiki/How-to-Share-Accounts-With-A-Reverse-Proxy) if you want to share the proxy with other people
+- [Enabling coordination](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts) to be able to proxy multiple accounts at once
+- [And much more](https://github.com/Enchoseon/2based2wait/wiki)
 
 <div align="center">
+  <p><strong>And as always, <a href="https://en.wikipedia.org/wiki/RTFM">RTFM</a>, <em>especially</em> before asking questions.</strong></p>
   <img src="docs/images/RTFM.png" alt="Read the Fun Manual">
-  <p><strong>If you want to utilize all the proxy's features you'll need to <a href="https://en.wikipedia.org/wiki/RTFM">RTFM</a>, <em>especially</em> the <a href="https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md">configuration guide</a>.</strong></p>
 </div>
