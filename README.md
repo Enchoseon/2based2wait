@@ -88,14 +88,6 @@
 ### Install dev dependencies
 Dev dependencies can be installed with `pnpm i`. You should only do this in case you want to contribute to the project's source
 
-### config.json warning
-
-If you have a local copy of 2based2wait with a personal config.json that's being tracked by git despite the .gitignore rule, run the following command:
-
-`git update-index --assume-unchanged config.json`
-
-You should make a copy of your config.json and name it config.json.bak (*.bak files are ignored by .gitignore), as it's easy to accidentally overwrite ignored files and accidentally share sensible information, such as your [Discord webhooks](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-discord-webhook), or your [ngrok authentication token](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-ngrok-authtoken).
-
 ## Tips and Tricks
 
 There are many other things you can do to customize your 2bored2wait install. You can:
