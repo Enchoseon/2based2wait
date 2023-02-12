@@ -23,7 +23,6 @@
 - [Features](#features)
 - [Images](#images)
 - [For Developers](#for-developers)
-- [RTFM](#rtfm)
 
 ## Installation
 
@@ -42,6 +41,20 @@
 	- Use the [configuration guide](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md) to configure your proxy
 		- At the minimum you _must_ configure [`acccount.username`](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-account-username) and [`proxy.whitelist`](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-proxy-whitelist)
 4. Start the proxy: `pnpm start`
+
+### RTFM
+
+We'll never phone home or enable something you didn't. In other words, you are responsible for enabling and configuring features such as:
+- [Reconnecting to the server](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor)
+- [Ngrok tunnelling to share the proxy with others](https://github.com/Enchoseon/2based2wait/wiki/How-to-Share-Accounts-With-A-Reverse-Proxy)
+- [Coordinating multiple accounts at once](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts)
+- [And much more](https://github.com/Enchoseon/2based2wait/wiki)
+
+<div align="center">
+	<img src="docs/images/RTFM.png" alt="Read the Fun Manual">
+	<p><em>"Read it and you'll understand everything", RMS</em></p>
+</div>
+
 
 ## Features
 
@@ -81,16 +94,3 @@
 ## For Developers
 
 Dev dependencies can be installed with `pnpm i`. You must do this if you want to contribute to the project's source.
-
-## RTFM
-
-We'll never phone home or enable something you didn't. In other words, you are responsible for enabling and configuring features such as:
-- [Reconnecting to the server](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor)
-- [Ngrok tunnelling to share the proxy with others](https://github.com/Enchoseon/2based2wait/wiki/How-to-Share-Accounts-With-A-Reverse-Proxy)
-- [Coordinating multiple accounts at once](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts)
-- [And much more](https://github.com/Enchoseon/2based2wait/wiki)
-
-<div align="center">
-	<img src="docs/images/RTFM.png" alt="Read the Fun Manual">
-	<p><strong>And as always, <a href="https://en.wikipedia.org/wiki/RTFM">RTFM</a>—<em>especially</em> the <a href="https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md">configuration guide</a>—<em>before</em> asking questions!</strong></p>
-</div>
