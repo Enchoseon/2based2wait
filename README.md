@@ -34,7 +34,7 @@
 
 ### Quick Start
 
-1. Clone the repository: `git clone https://github.com/Enchoseon/2based2wait` and `cd 2based2wait`
+1. Clone the latest release: `git clone https://github.com/Enchoseon/2based2wait --branch v1.0.4 --depth 1 && cd 2based2wait`
 2. Install dependencies: `pnpm install --prod`
 3. Configure your proxy: 
 	- Duplicate the `default-config.json` template file and rename it to `config.json`
