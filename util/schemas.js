@@ -2,7 +2,6 @@
 // Imports
 // =======
 
-/* eslint-disable no-useless-escape */
 const joi = require("joi");
 
 // ===========
@@ -93,7 +92,7 @@ const configSchema = joi.object({
 		}).concat(zlibOptionsSchema).default()
 			.description("Settings for log compression. Tweak with caution. The default options maximize memory usage for the fastest speed"),
 		"alwaysIncrement": joi.boolean().default(false)
-			.description("Whether to increment the log file every session (can lead to thousands of 1kb log files in production, but is pretty useful when rapidly testing during development)"),
+				.description("Whether to increment the log file every session (can lead to thousands of 1kb log files in production, but is pretty useful when rapidly testing during development)"),
 	}).default(),
 	"server": joi.object({
 		"host": joi.string().hostname().default("connect.2b2t.org")
@@ -109,8 +108,6 @@ const configSchema = joi.object({
 			.description("Playernames of accounts that are allowed to connect to the proxy"),
 		"onlineMode": joi.boolean().default(true)
 			.description("Whether to enable online-mode on the proxy. This probably should never be touched"),
-		"loopbackAddress": joi.string().valid("127.0.0.1", "localhost", "0.0.0.0", "::1").default("127.0.0.1")
-			.description("Loopback address to connect to the proxy. (options: '127.0.0.1', 'localhost', '0.0.0.0', '::1')"),
 		"port": joi.number().port().default(25565)
 			.description("Port on the machine to connect to the proxy")
 	}).default()
@@ -244,6 +241,19 @@ const configSchema = joi.object({
 		.description("Settings for what the proxy will send notifications about"),
 	"noCliGui": joi.boolean().default(false)
 		.description("Whether to disable the cli gui"),
+	"webinterface": joi.object({
+		"enabled": joi.boolean().default(false)
+			.description("Address of the server to connect to"),
+		"port": joi.number().port().default(3000)
+			.description("Port of the server to connect to"),
+		"pwprotected": joi.boolean().default(true)
+			.description("Port of the server to connect to"),
+		"username": joi.string().default("admin")
+			.description("Webserver username."),
+		"password": joi.string().default("password")
+			.description("Webserver password."),
+	}).default()
+		.description("Settings for how the proxy connects to the server"),
 	"coordination": joi.object({
 		"active": joi.boolean().default(false)
 			.description("Whether to use a [master config file and coordinator](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts)"),
@@ -258,5 +268,5 @@ const configSchema = joi.object({
 // =======
 
 module.exports = {
-	configSchema
+    configSchema
 };

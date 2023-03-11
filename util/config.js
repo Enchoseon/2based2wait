@@ -50,16 +50,20 @@ if (process.argv.indexOf("--documentation") !== -1) {
 // =========
 
 /**
- * Process and validate the config.json
- * @returns {config} Validated config object
+ * Process and validate Config.json
+ * @returns 
  */
 function processConfig() {
 	let config;
 	try { // Read config.json
-		config = JSON5.parse(fs.readFileSync(`${process.env.CI ?  "./test/test-" : "" }config.json`));
+		if (typeof global.it !== "function") {
+			config = JSON5.parse(fs.readFileSync("config.json"));
+		} else { // If we're running a unit test read the test config instead
+			config = JSON5.parse(fs.readFileSync("./test/test-config.json"));
+		}
 	} catch (error) { // JSON5 Parsing Error
 		console.error(error);
-		throw new Error(`Couldn't read config.json, likely due to user error near or at line ${error.lineNumber} column ${error.columnNumber}`); // Kill the process here
+		throw new Error("Couldn't read config.json, likely due to user error near or at Line" + error.lineNumber + ", Column" + error.columnNumber); // Kill the process here
 	}
 	// If coordination is active...
 	if (config.coordination.active) {
@@ -77,6 +81,7 @@ function processConfig() {
 			config = merge(masterConfig, config);
 		}
 	}
+	
 	// Validate the config with Joi
 	const validationResult = configSchema.validate(config, { // Validate schema
 		"abortEarly": false, // (find all errors)
@@ -84,20 +89,20 @@ function processConfig() {
 	});
 	const validationErrors = validationResult.error;
 	if (validationErrors) { // If error found, print error to console and kill process...
-		if (validationErrors.details.length == 1) {
+		if (validationErrors.details.length === 1) {
 			console.log("\x1b[36m", "Stopped proxy, encountered an error in config.json (you must fix it): \n");
 		} else {
-			console.log("\x1b[36m", `Stopped proxy, encountered ${validationErrors.details.length} errors in config.json (you must fix them):\n`);
+			console.log("\x1b[36m", "Stopped proxy, encountered " + validationErrors.details.length + " errors in config.json (you must fix them): \n");
 		}
 		for (let i = 0; i < validationErrors.details.length; i++) { // Print helpful color-coded errors to console
 			const error = validationErrors.details[i];
-			console.log("\x1b[33m", `ERROR #${i}: ${error.message}`);
-			console.log("\x1b[32m", `- Invalid Value: ${error.context.value}`);
-			console.log("\x1b[32m", `- Should Be Type: ${error.type}`);
+			console.log("\x1b[33m", "ERROR #" + i + ": " + error.message);
+			console.log("\x1b[32m", "- Invalid Value: " + error.context.value);
+			console.log("\x1b[32m", "- Should Be Type: " + error.type);
 			if (i !== validationErrors.details.length) {
 				console.log("\x1b[36m", "");
 			}
-		}
+		};
 		throw new Error("Couldn't validate config.json"); // Kill the process here
 	}
 	// ... If no errors were found, return the validated config
@@ -106,9 +111,8 @@ function processConfig() {
 
 /**
  * Update status object. Returns whether the input being received is different from what's already stored in the object.
- * @param {string} type The name of the key being updated
- * @param {string} input The new value of status[type]
- * @returns {boolean} Whether the value was updated (in other words, returns false if the value is the same as the input value)
+ * @param {string} type
+ * @param {string} input
  */
 function updateStatus(type, input) {
 	if (status[type] !== input.toString()) {
@@ -116,7 +120,7 @@ function updateStatus(type, input) {
 		if (config.coordination.active && type === "livechatRelay") { // Update coordinator status if livechatRelay changes
 			updateCoordinatorStatus();
 		}
-		if (!config.noCliGui) updateGui();
+		updateGui();
 		return true;
 	}
 	return false;
@@ -146,6 +150,9 @@ function updateCoordinatorStatus() {
  * Display a basic CLI GUI
  */
 function updateGui() {
+	if (config.noCliGui) {
+		return;
+	}
 	// Cli GUI
 	console.clear();
 	console.log("\x1b[36m", `
@@ -156,32 +163,34 @@ function updateGui() {
 8     8    8 8   8     8 8    88  8 8     8  8  8 8   8 8   8
 88888 888888 8   8 88888 8888 88888 88888 8888888 8   8 8   8
 	`);
-	console.log("\n");
-	console.log("\x1b[37m", `Last Update: [${getTimestamp()}]`);
-	console.log("\x1b[37m", `Account: ${config.account.username}`);
-	console.log("\x1b[37m", `Current Controller: ${status.controller}`);
-	console.log("\x1b[33m", `Current Queue Position: ${status.position}`);
-	console.log("\x1b[33m", `ETA: ${status.eta}`);
-	console.log("\x1b[33m", `Restart: ${status.restart}`);
-	console.log("\x1b[33m", `In Queue Server: ${status.inQueue.toUpperCase()}`);
-	console.log(config.mineflayer.active ? `\x1b[35mMineflayer Running: ${status.mineflayer.toUpperCase()}` : "");
-	console.log(config.coordination.active ? `\x1b[32mLivechat Relay: ${status.livechatRelay.toUpperCase()}` : "");
-	console.log(config.ngrok.active ? `\x1b[32mNgrok URL: ${status.ngrokUrl}` : "");
+	console.log("\x1b[30m", "");
+	console.log("\x1b[37m", "Last Update: [" + getTimestamp() + "]");
+	console.log("\x1b[37m", "Account: " + config.account.username);
+	console.log("\x1b[37m", "Current Controller: " + status.controller);
+	console.log("\x1b[33m", "Current Queue Position: " + status.position);
+	console.log("\x1b[33m", "ETA: " + status.eta);
+	console.log("\x1b[33m", "Restart: " + status.restart);
+	console.log("\x1b[35m", "In Queue Server: " + status.inQueue.toUpperCase());
+	if (config.mineflayer.active) {
+		console.log("\x1b[35m", "Mineflayer Running: " + status.mineflayer.toUpperCase());
+	}
+	if (config.coordination.active) {
+		console.log("\x1b[32m", "Livechat Relay: " + status.livechatRelay.toUpperCase());
+	}
+	if (config.ngrok.active) {
+		console.log("\x1b[32m", "Ngrok URL: " + status.ngrokUrl);
+	}
 }
 
 /**
  * Get current timestamp
- * @returns {string} Human-readable timestamp
  */
-function getTimestamp() {
+function getTimestamp(includeTime) {
 	let timestamp = new Date();
 	timestamp = timestamp.toLocaleString();
 	return timestamp.replace(/\//g, "-") // Replace forward-slash with hyphen
 		.replace(",", ""); // Remove comma
 }
-
-/*  TODO: Move this into a separate .js file, hopefully also make a GitHub
-	workflow with it to update docs on a new push  */
 
 // ===============
 // Joi To Markdown
@@ -189,9 +198,8 @@ function getTimestamp() {
 
 /**
  * Generate markdown documentation from Joi schema.
- * @param {object} schema JOI schema to generate the documentation from
- * @param {boolean} includeAnchors Whether to include page anchors (page anchors don't work in GitHub Wikis)
- * @returns {string} Documentation from the schema in markdown
+ * @param {object} schema
+ * @param {boolean} includeAnchors
  */
 function joiToMarkdown(schema, includeAnchors) {
 	let output = "";
@@ -200,7 +208,7 @@ function joiToMarkdown(schema, includeAnchors) {
 	// Get value from path (https://stackoverflow.com/a/70356013)
 	const get = (record, path) => path.reduce((record, item) => record[item], record);
 	// Traverse configSchema
-	for (let [key, path] of traverse(schema.keys)) {
+	for (let [key, value, path, parent] of traverse(schema.keys)) {
 		const level = path.length;
 		const flags = get(schema.keys, path).flags;
 		if (flags && key !== "empty" && key !== "0") { // Don't proceed if the object doesn't have any flags or is empty
@@ -209,40 +217,53 @@ function joiToMarkdown(schema, includeAnchors) {
 				"default": flags.default,
 				"description": flags.description
 			};
-			output += level !== 1 ? " ".repeat(level - 1) + "- " : "\n";  // Add a newlines in-between top-level entries to stop GitHub's markdown interpreter from merging everything into one giant list
+			if (level !== 1) { // Indent nested entries
+				output += indent(level) + "- "
+			} else { // Add a newlines in-between top-level entries to stop GitHub's markdown interpreter from merging everything into one giant list
+				output += "\n"
+			}
 			if (includeAnchors) {
 				const anchor = path.join("-").replace(/-keys-/g, "-").toLowerCase(); // Create a unique and URL-friendly anchor for the entry
-				output += `<span id='${anchor}'></span>`; // Add the anchor to an invisible pair of <span> tags
-				output += `**[${key}](#user-content-${anchor})**`; // Output the entry's name
+				output += "<span id='" + anchor + "'></span>"; // Add the anchor to an invisible pair of <span> tags
+				output += "**[" + key + "](#user-content-" + anchor + ")**"; // Output the entry's name
 			} else {
-				output += `**${key}**`; // Output the entry's name
+				output += "**" + key + "**"; // Output the entry's name
 			}
-			output += ` <samp>\`{type: ${info.type}}\`</samp>`; // Output the entry's type
+			output += " <samp>`{type: " + info.type + "}`</samp>"; // Output the entry's type
 			if (typeof info.default !== "undefined" && info.default.special !== "deep") { // If provided, output the entry's default value(s)
-				output += ` <samp>\`{default: ${JSON.stringify(info.default)}}\`</samp>`;
+				output += " <samp>`{default: " + JSON.stringify(info.default) + "}`</samp>";
 			}
 			if (typeof info.description !== "undefined") { // If provided, output the entry's description
-				output += ` : ${info.description}`;
+				output += " : " + info.description;
 			}
 			output += "\n";
 		}
 	}
 	return output;
 	/**
-	 * Traverse through an object
-	 * @param {object} o Object to traverse through
-	 * @param {Array} path Path to current position in traversal
-	 * @yields {Array} key, value, path, and parent
-	 * {@link https://stackoverflow.com/a/45628445}
+	 * Traverse through an object (https://stackoverflow.com/a/45628445)
+	 * @param {object} o
+	 * @param {object} path
 	 */
 	function* traverse(o, path = []) {
 		for (let i in o) {
 			const itemPath = path.concat(i);
-			yield [i, itemPath];
+			yield [i, o[i], itemPath, o];
 			if (o[i] !== null && typeof (o[i]) == "object") {
 				yield* traverse(o[i], itemPath);
 			}
 		}
+	}
+	/**
+	 * Return indent for creating nested markdown list
+	 * @param {number} level
+	 */
+	function indent(level) {
+		let output = "";
+		for (let i = 1; i < level; i++) {
+			output += " ";
+		}
+		return output;
 	}
 }
 

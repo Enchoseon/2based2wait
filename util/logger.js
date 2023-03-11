@@ -19,15 +19,23 @@ let logFiles = {};
 
 // Create the directories and plan which logfiles to write to
 for (const category in config.log.active) {
-	if (!config.log.active[category]) return; // Don't proceed if logging category is disabled in config.json
+	if (!config.log.active[category]) { // Don't proceed if logging category is disabled in config.json
+		return;
+	}
 	const dir = createDirectory(category); // Create directory for category if it doesn't exist
 	const files = fs.readdirSync(dir, { // Get all files in the directory with the correct extension (either .log.gz or .log)
 		"withFileTypes": true
 	}).filter(f => {
-		return f.name.endsWith(`.log${config.log.compression.active ? ".gz" : ""}`);
+		if (config.log.compression.active) {
+			return f.name.endsWith(".log.gz");
+		} else {
+			return f.name.endsWith(".log");
+		}
 	});
 	let file = findExisting(dir, category, files); // Pick a filename (either a valid existing one or a new one)
-	if (!file || config.log.alwaysIncrement) file = createFilename(category, files.length + 1);
+	if (!file || config.log.alwaysIncrement) {
+		file = createFilename(category, files.length + 1);
+	}
 	logFiles[category] = dir + file; // Push file path to logFiles
 }
 
@@ -37,9 +45,9 @@ for (const category in config.log.active) {
 
 /**
  * Filter & log incoming packets from the server or bridgeClient
- * @param {object} packetData Packet data
- * @param {object} packetMeta Packet metadeta
- * @param {string} category Log category
+ * @param {object} packetData
+ * @param {object} packetMeta
+ * @param {string} source
  */
 function packetHandler(packetData, packetMeta, category) {
 	if (config.log.packetFilters[category].indexOf(packetMeta.name) === -1) { // Don't log filtered packets
@@ -49,18 +57,20 @@ function packetHandler(packetData, packetMeta, category) {
 
 /**
  * Write to a log file.
- * @param {string} name The name of the entry
- * @param {object} data The data to log
- * @param {string} category The category to log this under
+ * @param {string} name
+ * @param {object} data
+ * @param {object} category
  */
 function log(name, data, category) {
 	// Don't proceed if logging category is disabled in config.json
-	if (!config.log.active[category]) return;
+	if (!config.log.active[category]) {
+		return;
+	}
 	// Create file name
 	createDirectory(category);
 	let logFile = logFiles[category];
 	// Create log message
-	const logMessage = `[${getTimestamp()}] [${name}] ${JSON.stringify(data)}\n`;
+	const logMessage = "[" + getTimestamp() + "] [" + name + "] " + JSON.stringify(data) + "\n";
 	// Write to log (either gzipped or raw)
 	let stream = fs.createWriteStream(logFile, {
 		flags: "a"
@@ -80,12 +90,14 @@ function log(name, data, category) {
 
 /**
  * Create a directory if it doesn't exist (in "./log/${category}/"). Also makes sure that logs from mocha tests don't contaminate normal logs.
- * @param {string} category The category to write logs to
- * @returns {string} Path to the created directory
+ * @param {string} category
  */
 function createDirectory(category) {
 	// Choose the directory
-	const dir = `./log/${process.env.CI ? "test/" : ""}${category}/`;
+	let dir = "./log/" + category + "/";
+	if (typeof global.it === "function") { // (Change to a test directory if being ran by mocha.)
+		dir = "./test/log/" + category + "/";
+	}
 	// Create directory if it doesn't exist
 	if (!fs.existsSync(dir)) {
 		fs.mkdirSync(dir, {
@@ -97,22 +109,22 @@ function createDirectory(category) {
 
 /**
  * Return a filename for a log category.
- * @param {string} category The category of the log file
- * @param {number} index The index of the log file
- * @returns {string} The created filename
+ * @param {string} category
+ * @param {number} index
  */
 function createFilename(category, index) {
-	let filename = `${category}_${index}.log`;
-	if (config.log.compression.active) filename += ".gz";
+	let filename = category + "_" + index + ".log";
+	if (config.log.compression.active) {
+		filename += ".gz";
+	}
 	return filename;
 }
 
 /**
- * Returns a filename of the most recent and valid log to continue using.
- * @param {string} dir Directory of log folder
- * @param {string} category Category of the log to look for
- * @param {Array} files All valid files in the directory
- * @returns {string} Filename of the most recent and valid log to continue writing to (returns false otherwise)
+ * Returns a filename of the most recent and valid log to continue using (and false otherwise).
+ * @param {string} dir
+ * @param {string} category
+ * @param {string} files
  */
 function findExisting(dir, category, files) {
 	for (let i = files.length - 1; i >= 0; i--) {
@@ -127,8 +139,7 @@ function findExisting(dir, category, files) {
 
 /**
  * Get current timestamp
- * @param {boolean} includeTime Whether to include the Date String
- * @returns {string} Human-readable timestamp
+ * @param {boolean} includeTime
  */
 function getTimestamp(includeTime) {
 	let timestamp = new Date();
@@ -138,7 +149,7 @@ function getTimestamp(includeTime) {
 		timestamp = timestamp.toLocaleString();
 	}
 	return timestamp.replace(/\//g, "-") // Replace forward-slash with hyphen
-		.replace(",", ""); // Remove comma
+					.replace(",", ""); // Remove comma
 }
 
 // =======
