@@ -61,5 +61,13 @@
 	"coordination": {
 		"active": false,
 		"path":  "./../"
+	},
+	"noCliGui": flase,
+	"webinterface": {
+		"enabled": true,
+		"port": 3009,
+		"pwprotected": true,
+		"username": "admin",
+		"password": "bob"
 	}
 }
