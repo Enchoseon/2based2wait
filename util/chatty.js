@@ -1,14 +1,12 @@
 // =======
 // Imports
 // =======
-
 const fs = require("fs");
 
 const { config, status, updateStatus } = require("./config.js");
-const { updateWebChat } = require("./webserver.js");
 const logger = require("./logger.js");
 const notifier = require("./notifier.js");
-
+const { updateWebChat } = require("./webserver.js");
 const ChatMessage = require("prismarine-chat")(config.server.version);
 
 // =========
@@ -17,7 +15,7 @@ const ChatMessage = require("prismarine-chat")(config.server.version);
 
 /**
  * Handle incoming chat packets
- * @param {object} packetData
+ * @param {object} packetData Packet data object
  */
 function chatPacketHandler(packetData) {
 	// Parse chat messages
@@ -28,9 +26,9 @@ function chatPacketHandler(packetData) {
 	if (msg && msg.startsWith("[SERVER] Server restarting in ")) {
 		let restart = msg.replace("[SERVER] Server restarting in ", "").replace(" ...", "");
 		if (updateStatus("restart", restart)) {
-			notifier.sendToast("Server Restart In: " + status.restart);
+			notifier.sendToast(`Server Restart In: ${status.restart}`);
 			notifier.sendWebhook({
-				title: "Server Restart In: " + status.restart,
+				title: `Server Restart In: ${status.restart}`,
 				ping: true,
 				category: "spam"
 			});
@@ -69,7 +67,7 @@ function chatPacketHandler(packetData) {
 
 /**
  * Update livechat webhook
- * @param {string} msg
+ * @param {string} msg Chat message to relay to webhook
  */
 function updateLivechatWebhook(msg) {
 	if (msg.trim().length > 0) {
@@ -81,10 +79,15 @@ function updateLivechatWebhook(msg) {
 	}
 }
 
-/** Escape Discord markdown and emojis (https://stackoverflow.com/a/39543625) */
+/**
+ * Escape Discord markdown (and emojis)
+ * @param {string} text Unescaped string
+ * @returns {string} Escaped string
+ * {@link https://stackoverflow.com/a/39543625}
+ */
 function escapeMarkdown(text) {
-	const unescaped = text.replace(/\\(\*|_|:|`|~|\\)/g, '$1'); // Unescape backslashed characters
-	const escaped = unescaped.replace(/(\*|_|:|`|~|\\)/g, '\\$1'); // Escape *, _, :, `, ~, \
+	const unescaped = text.replace(/\\(\*|_|:|`|~|\\)/g, "$1"); // Unescape backslashed characters
+	const escaped = unescaped.replace(/(\*|_|:|`|~|\\)/g, "\\$1"); // Escape *, _, :, `, ~, \
 	return escaped;
 }
 

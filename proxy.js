@@ -17,6 +17,7 @@ const queue = require("./util/queue.js");
 const downloader = require("./util/downloader.js");
 const webserver = require("./util/webserver.js");
 
+
 // ===========
 // Global Vars
 // ===========
@@ -43,8 +44,8 @@ start();
 
 /**
  * Handle incoming packets
- * @param {object} packetData
- * @param {object} packetMeta
+ * @param {object} packetData Packet object data
+ * @param {object} packetMeta Packet metadata
  */
 function packetHandler(packetData, packetMeta) {
 	// Log packets
@@ -62,7 +63,8 @@ function packetHandler(packetData, packetMeta) {
 			queue.playerlistHeaderPacketHandler(packetData, server);
 			break;
 		case "map_chunk":
-			downloader.mapChunkPacketHandler(packetData);
+			if (!config.experimental.worldDownloader.active) break;
+			downloader.mapChunkPacketHandler(packetData); // Don't proceed if world downloader isn't enabled
 			break;
 		default:
 			break;
@@ -103,6 +105,9 @@ function start() {
 // Client (Connect to Server)
 // ==========================
 
+/**
+ * Create the client, initialize Mineflayer, and connect to the server
+ */
 function createClient() {
 	console.log("Creating client (connecting to server)");
 	logger.log("proxy", "Creating client.", "proxy");
@@ -141,7 +146,7 @@ function createClient() {
 				category: "spam"
 			});
 			if (typeof server !== "undefined" && typeof server.clients[0] !== "undefined") { // Make sure client exists
-				server.clients[0].end("Someone is already connected to the server using this proxy's account.") // Disconnect client from the proxy with a helpful message
+				server.clients[0].end("Someone is already connected to the server using this proxy's account."); // Disconnect client from the proxy with a helpful message
 			}
 		}
 		reconnect();
@@ -167,7 +172,10 @@ function createClient() {
 // Local Server
 // ============
 
-/** Create the local server. (Handles players connecting & bridging packets between client and local server) **/
+/**
+ * Create the local server.
+ * Handles players connecting & bridges packets between from players to the bridgeClient
+ */
 function createLocalServer() {
 	console.log("Creating local server");
 	logger.log("proxy", "Creating local server.", "proxy");
@@ -175,7 +183,7 @@ function createLocalServer() {
 	server = mc.createServer({
 		"online-mode": config.proxy.onlineMode,
 		"encryption": true,
-		"host": "0.0.0.0",
+		"host": config.proxy.loopbackAddress,
 		"port": config.proxy.port,
 		"version": config.server.version,
 		"max-players": 1,
@@ -202,7 +210,7 @@ function createLocalServer() {
 			logSpam(bridgeClient.username + " (" + bridgeClient.uuid + ")" + " was denied connection to the proxy despite being whitelisted because " + status.controller + " was already in control.");
 			return;
 		}
-		
+
 		// Finally, kick the player if the proxy is restarting
 		if (status.restart === ("Reconnecting in " + config.reconnectInterval + " seconds...")) {
 			if (config.ngrok.active) {
@@ -217,7 +225,6 @@ function createLocalServer() {
 		// Log successful connection attempt
 		logSpam(bridgeClient.username + " (" + bridgeClient.uuid + ")" + " has connected to the proxy.");
 		updateStatus("controller", bridgeClient.username);
-
 		if (config.notify.whenControlling) { // optional: send message to status webhook
 			notifier.sendWebhook({
 				title: bridgeClient.username + " is using the proxy.",
@@ -242,14 +249,11 @@ function createLocalServer() {
 		function createBridge() {
 			console.log("Creating packet bridge");
 			logger.log("proxy", "Creating packet bridge.", "proxy");
-			webserver.updateWebStatus('updateController', status.controller);
 			// Start Mineflayer when disconnected
 			bridgeClient.on("end", () => {
 				// Log disconnect
 				logSpam(bridgeClient.username + " (" + bridgeClient.uuid + ")" + " has disconnected from the local server.");
 				updateStatus("controller", "None");
-				webserver.updateWebStatus('updateController', status.controller);
-				console.log(`${bridgeClient.username} has connected.`)
 				if (config.notify.whenControlling) { // optional: send message to status webhook
 					notifier.sendWebhook({
 						title: bridgeClient.username + " is no longer using the proxy.",
@@ -312,7 +316,10 @@ function createLocalServer() {
 			conn.link(bridgeClient);
 		}
 
-		/** Send message to logger and spam webhook **/
+		/**
+		 * Send message to logger and spam webhook
+		 * @param {string} logMsg Message to log
+		 */
 		function logSpam(logMsg) {
 			logger.log("bridgeclient", logMsg, "proxy");
 			notifier.sendWebhook({
@@ -327,8 +334,10 @@ function createLocalServer() {
 // Unclean Disconnect Monitor
 // ==========================
 
-// If no packets are received for config.uncleanDisconnectInterval seconds, assume we were disconnected uncleanly.
 let uncleanDisconnectMonitor;
+/**
+ * If no packets are received for config.uncleanDisconnectInterval seconds, assume we were disconnected uncleanly and reconnect.
+ */
 function refreshMonitor() {
 	if (!uncleanDisconnectMonitor) { // Create timer on the first packet
 		uncleanDisconnectMonitor = setTimeout(function () {
@@ -352,7 +361,7 @@ function reconnect() {
 		conn.disconnect(); // Disconnect proxy from the server
 	}
 	if (typeof server !== "undefined" && typeof server.clients[0] !== "undefined") { // Make sure client exists
-		server.clients[0].end("Proxy restarting...") // Disconnect client from the proxy
+		server.clients[0].end("Proxy restarting..."); // Disconnect client from the proxy
 	}
 	notifier.sendWebhook({
 		title: "Reconnecting...",
@@ -388,7 +397,12 @@ function stopMineflayer() {
 	}
 }
 
-/** Send packets from Point A to Point B */
+/**
+ * Send packets from Point A to Point B
+ * @param {object} packetData Packet object data
+ * @param {object} packetMeta Packet metadata
+ * @param {object} dest McProxy client to write data to
+ */
 function bridge(packetData, packetMeta, dest) {
 	if (packetMeta.name !== "keep_alive" && packetMeta.name !== "update_time") { // Keep-alive packets are filtered bc the client already handles them. Sending double would kick us.
 		dest.writeRaw(packetData);
