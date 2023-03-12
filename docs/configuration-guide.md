@@ -117,6 +117,10 @@
   - <span id='notify-whencontrolling'></span>**[whenControlling](#user-content-notify-whencontrolling)** <samp>`{type: boolean}`</samp> <samp>`{default: false}`</samp> : Whether to send a status webhook message when a controller connects and disconnects from the proxy
 
 <span id='nocligui'></span>**[noCliGui](#user-content-nocligui)** <samp>`{type: boolean}`</samp> <samp>`{default: false}`</samp> : Whether to disable the cli gui
+  
+  <span id='WebInterface'></span>**[Web Interface](#user-content-nocligui)** <samp>`{type: boolean}`</samp> <samp>`{default: true}`</samp> : Enable or disable web dashboard
+  
+  <span id='pwprotected'></span>**[pw protect](#user-content-nocligui)** <samp>`{type: boolean}`</samp> <samp>`{default: true}`</samp> : Weather or not password protection for the web interface is active
 
 <span id='coordination'></span>**[coordination](#user-content-coordination)** <samp>`{type: object}`</samp> : Settings for coordinating multiple proxies
   - <span id='coordination-active'></span>**[active](#user-content-coordination-active)** <samp>`{type: boolean}`</samp> <samp>`{default: false}`</samp> : Whether to use a [master config file and coordinator](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts)
