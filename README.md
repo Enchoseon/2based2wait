@@ -1,96 +1,82 @@
-<div align="center">
-	<h2>2Based2Wait</h2>
-	<p>Lightweight & (theoretically) extensible 2b2t proxy.</p>
-	<strong>
-	<a href="https://github.com/Enchoseon/2based2wait/wiki">Wiki</a>
-	<span> · </span>
-	<a href="https://github.com/Enchoseon/2based2wait/issues/new">Report a Bug</a>
-	<span> · </span>
-	<a href="https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md">Configuration Guide</a>
-	<span> · </span>
-	<a href="https://github.com/Enchoseon/2based2wait/discussions">Discussions</a>
-	</strong>
-	<br><br>
-	<img src="https://img.shields.io/github/last-commit/Enchoseon/2based2wait?color=2A0944&labelColor=525E75&style=flat" alt="Last Commit">
-	<img src="https://img.shields.io/github/languages/code-size/Enchoseon/2based2wait?color=3FA796&labelColor=525E75&style=flat" alt="Code Size">
-	<img src="https://img.shields.io/github/package-json/v/Enchoseon/2based2wait?color=FEC260&labelColor=525E75&style=flat" alt="Current Version">
-	<img src="https://img.shields.io/github/license/Enchoseon/2based2wait?color=A10035&labelColor=525E75&style=flat" alt="License">
-</div>
+# Table of Contents
 
-## Table of Contents
-
-- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Bendito's Notes](#benitos-notes)
 - [Features](#features)
 - [Images](#images)
+- [Keep in Mind](#keep-in-mind)
 - [For Developers](#for-developers)
 
-## Installation
+# Quick Start
 
-### Prerequisites
+1. In `config.json`, configure the following values:
+    - `account.username`: Your Minecraft account playername.
+    - `proxy.whitelist`: Playernames of accounts that are allowed to connect to the proxy.
+2. Run `npm install`
+3. Run `npm start`
+4. Enter the auth code that appears in the console into microsoft.com/link
+5. Connect to `127.0.0.1` in Minecraft
+    - If `127.0.0.1` doesn't work try `0.0.0.0`
 
-- [Git](https://git-scm.com/)
-- [NodeJS](https://nodejs.org/)
-- [pnpm](https://pnpm.io/): `npm install -g pnpm`
+*(See [configuration guide](https://github.com/Enchoseon/2based2wait/wiki/Configuration-Guide) to see how to enable features like Ngrok tunneling or Discord webhooks.)*
+# Bendito's Notes
+I've been working on adding a web interface to go along with the project. Not a whole lot has been changed just added and improved a few things. The pictures are outdated and I haven't fully tested the toggle buttons. I’ll get it done later.   
 
-### Quick Start
+Change log:
+- 
+- Added web interface
+- Added auto armor and auto totem
+- Removed anti drown (interferes with pathfinder)
+- Added whisper commands to mineflayer bot (Only works with whitelisted player)
+- Other stuff I forget
 
-1. Clone the latest release: `git clone https://github.com/Enchoseon/2based2wait --branch v1.0.4 --depth 1 && cd 2based2wait`
-2. Install dependencies: `pnpm install --prod`
-3. Configure your proxy: 
-	- Duplicate the `default-config.json` template file and rename it to `config.json`
-	- Use the [configuration guide](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md) to configure your proxy
-		- At the minimum you _must_ configure [`acccount.username`](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-account-username) and [`proxy.whitelist`](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-proxy-whitelist)
-4. Start the proxy: `pnpm start`
+I want to incorporate all features currently present and maybe merge this fork with the main project. All help is appreciated.
 
-### RTFM
-
-We'll never phone home or enable something you didn't. In other words, you are responsible for enabling and configuring features such as:
-- [Reconnecting to the server](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor)
-- [Ngrok tunnelling to share the proxy with others](https://github.com/Enchoseon/2based2wait/wiki/How-to-Share-Accounts-With-A-Reverse-Proxy)
-- [Coordinating multiple accounts at once](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts)
-- [And much more](https://github.com/Enchoseon/2based2wait/wiki)
-
-<div align="center">
-	<img src="docs/images/RTFM.png" alt="Read the Fun Manual">
-	<p><em>"Read it and you'll understand everything", RMS</em></p>
-</div>
-
-
-## Features
+# Features
 
 - Extremely low RAM and CPU usage
 - Robust auto-reconnection
-	- Battle-tested to be online 24/7/365
+  - Battle-tested to be online 24/7/365
 - High configurability
-	- Easily configure small-to-medium-sized networks
+  - Easily configure small-to-medium-sized networks
 - Convenient Discord webhooks for:
-	- Livechat
-	- Queue position
-	- Tunnels & connections
+  - Livechat
+  - Queue position
+  - Tunnels & connections
 - Toast notifications
 - Auto `/queue main`
 - Mineflayer support and extensibility *(see: `./utils/mineflayer.js`)*
-	- Already comes with:
-		- Kill aura
-		- Auto eat
-		- Anti afk
-		- Anti drowning
+  - Already comes with:
+    - Kill aura
+    - Auto eat
+    - Anti afk
+    - Auto armor
+    - Auto totem
 - Extensive logging
 - Share proxies with plug-and-play Ngrok tunnels
-	- Your machine's IP is never shared with players connecting to your proxy
-	- Your players' IPs are never shared with your machine
+  - Your machine's IP is never shared with players connecting to your proxy
+  - Your players' IPs are never shared with your machine
 
-## Images
+# Images
 
 <div align="center">
-	<img src="docs/images/cliGui.png" title="What else would you need?" alt="Cli Gui" width="92.5%">
-	<p><em>No-Frills Cli Gui</em></p>
-	<img src="docs/images/webhooks.png" title="EZ elasticsearch integration :sunglasses:" alt="Webhooks" width="92.5%">
-	<p><em>Convenient Discord Webhooks</em></p>
-	<img src="docs/images/grep.png" title="grep -rih 'Popbob Sex' *" alt="Grep" width="92.5%">
-	<p><em>Extensive Logs</em></p>
+  <img src="docs/images/webui-1.png" title="good stuff?" alt="Cli Gui" width="92.5%"><br><emIts a work in progress</em><br>
+  <img src="docs/images/cliGui.png" title="What else would you need?" alt="Cli Gui" width="92.5%"><br><em>No-Frills Cli Gui</em><br>
+  <img src="docs/images/webhooks.png" title="EZ elasticsearch integration :sunglasses:" alt="Webhooks" width="92.5%"><br><em>Convenient Discord Webhooks</em><br>
+  <img src="docs/images/grep.png" title="grep -rih 'Popbob Sex' *" alt="Grep" width="92.5%"><br><em>Extensive Logs</em><br>
 </div>
 
-## For Developers
+# For Developers
 
-Dev dependencies can be installed with `pnpm i`. You must do this if you want to contribute to the project's source.
+If you have a local copy of 2based2wait with a personal config.json that's being tracked by git despite the .gitignore rule, run the following command:
+
+`git update-index --assume-unchanged config.json`
+
+# Keep in Mind
+
+2based2wait ships with as many options __disabled by default__ as possible; including [auto-reconnect](https://github.com/Enchoseon/2based2wait/wiki/How-to-Auto-Reconnect-with-Supervisor), [ngrok tunneling](https://github.com/Enchoseon/2based2wait/wiki/How-to-Share-Accounts-With-A-Reverse-Proxy) (for sharing accounts), [coordination](https://github.com/Enchoseon/2based2wait/wiki/How-to-Proxy-Multiple-Accounts) (for multiple proxies), Discord webhooks, and much more.
+
+<div align="center">
+  <img src="docs/images/RTFM.png" alt="Read the Fun Manual">
+  <p><strong>If you want to utilize all the proxy's features you'll need to <a href="https://en.wikipedia.org/wiki/RTFM">RTFM</a>, <em>especially</em> the <a href="https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md">configuration guide</a>.</strong></p>
+</div>
