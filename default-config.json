@@ -50,7 +50,7 @@
 			"bannedFood": [ "rotten_flesh", "pufferfish", "chorus_fruit", "poisonous_potato", "spider_eye" ]
 		},
 		"antiAfk": {
-			"actions": [ "rotate", "swingArm" ],
+			"actions": ["rotate", "walk", "jump", "jumpWalk", "swingArm"],
 			"fishing": false,
 			"chatting": false,
 			"chatMessages": [ "!pt", "!queue" ],
@@ -65,9 +65,9 @@
 	"noCliGui": flase,
 	"webinterface": {
 		"enabled": true,
-		"port": 3009,
+		"port": 3000,
 		"pwprotected": true,
 		"username": "admin",
-		"password": "bob"
+		"password": "password"
 	}
 }
