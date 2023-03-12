@@ -60,7 +60,7 @@ I want to incorporate all features currently present and maybe merge this fork w
 <div align="center">
   <img src="docs/images/Screenshot 2023-03-11 at 10.38.33 PM.png" title="What else would you need?" alt="Cli Gui" width="92.5%"><br><em>No-Frills Cli Gui</em><br>
   <img src="docs/images/Screenshot 2023-03-11 at 10.30.50 PM.png" title="EZ elasticsearch integration :sunglasses:" alt="Webhooks" width="92.5%"><br><em>Convenient Discord Webhooks</em><br>
-  <img src="docs/images/grep.png" title="grep -rih 'Popbob Sex' *" alt="Grep" width="92.5%"><br><em>Extensive Logs</em><br>
+  <img src="docs/images/Screenshot 2023-03-11 at 11.00.10 PM.png" title="grep -rih 'Popbob Sex' *" alt="Grep" width="92.5%"><br><em>Extensive Logs</em><br>
 </div>
 # For Developers
 
