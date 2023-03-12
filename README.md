@@ -1,26 +1,26 @@
-# Table of Contents
-
-- [Quick Start](#quick-start)
-- [Bendito's Notes](#benitos-notes)
-- [Features](#features)
-- [Images](#images)
-- [Keep in Mind](#keep-in-mind)
-- [For Developers](#for-developers)
+<div align="center">
+	<h2>2Based2Wait</h2>
+	<p>Lightweight & (theoretically) extensible 2b2t proxy.</p>
+	<img src="https://img.shields.io/github/last-commit/donbendito/2based2wait?color=2A0944&labelColor=525E75&style=flat" alt="Last Commit">
+	<img src="https://img.shields.io/github/languages/code-size/donbendito/2based2wait?color=3FA796&labelColor=525E75&style=flat" alt="Code Size">
+	<img src="https://img.shields.io/github/package-json/v/donbendito/2based2wait?color=FEC260&labelColor=525E75&style=flat" alt="Current Version">
+	<img src="https://img.shields.io/github/license/donbendito/2based2wait?color=A10035&labelColor=525E75&style=flat" alt="License">
+</div>
 
 # Quick Start
 
-1. In `config.json`, configure the following values:
-    - `account.username`: Your Minecraft account playername.
-    - `proxy.whitelist`: Playernames of accounts that are allowed to connect to the proxy.
-2. Run `npm install`
-3. Run `npm start`
+1. In `default-config.json`, configure the following values:
+    - `YOUR USERNAME`: The name of the Minecraft account that will be functioning as a proxy.
+    - `YOUR WHITELISTED PLAYERNAMES`: Playernames of accounts that are allowed to connect to the proxy.
+2. Run `pnpm install`
+3. Run `pnpm start`
 4. Enter the auth code that appears in the console into microsoft.com/link
-5. Connect to `127.0.0.1` in Minecraft
-    - If `127.0.0.1` doesn't work try `0.0.0.0`
+5. Connect to `localhost:25565` in Minecraft or whatever you set your port to.
+6. Connect to `localhost:3000` in your web browser or whatever you set your port to.
 
 *(See [configuration guide](https://github.com/Enchoseon/2based2wait/wiki/Configuration-Guide) to see how to enable features like Ngrok tunneling or Discord webhooks.)*
 # Bendito's Notes
-I've been working on adding a web interface to go along with the project. Not a whole lot has been changed just added and improved a few things. The pictures are outdated and I haven't fully tested the toggle buttons. I’ll get it done later.   
+I've been working on adding a web interface to go along with the project. Not a whole lot has been changed just added and improved a few things.
 
 Change log:
 - 
@@ -28,13 +28,11 @@ Change log:
 - Added auto armor and auto totem
 - Removed anti drown (interferes with pathfinder)
 - Added whisper commands to mineflayer bot (Only works with whitelisted player)
-- Other stuff I forget
 
 I want to incorporate all features currently present and maybe merge this fork with the main project. All help is appreciated.
 
 # Features
 
-- Extremely low RAM and CPU usage
 - Robust auto-reconnection
   - Battle-tested to be online 24/7/365
 - High configurability
