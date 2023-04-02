@@ -49,9 +49,9 @@ function playerlistHeaderPacketHandler(packetData, server) {
 	}
 	// Parse header packets
 	const header = JSON.parse(packetData.header).extra;
-	if (header && header.length === 6) {
-		const position = header[4].extra[0].text.replace(/\n/, "");
-		const eta = header[5].extra[0].text.replace(/\n/, "");
+	if (header && header.length === 4) {
+		const position = header[2].extra[0].text.replace(/\n/, "");
+		const eta = header[3].extra[0].text.replace(/\n/, "");
 		// Update position
 		if (updateStatus("position", position)) {
 			// Update local server motd
