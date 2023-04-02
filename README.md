@@ -1,6 +1,6 @@
 <div align="center">
 	<h2>2Based2Wait</h2>
-	<p>Lightweight & (theoretically) extensible 2b2t proxy.</p>
+	<p>Lightweight & extensible 2b2t proxy.</p>
 	<strong>
 	<a href="https://github.com/Enchoseon/2based2wait/wiki">Wiki</a>
 	<span> · </span>
