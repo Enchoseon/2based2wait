@@ -7,7 +7,3 @@ updates:
     ignore:
     - dependency-name: "node-fetch"
       versions: "3.x"
-on:
-  workflow_dispatch:
-  schedule:
-  - cron: "0 2 * * 1-5"
