@@ -6,6 +6,7 @@ const autoeat = require("mineflayer-auto-eat").plugin;
 const antiafk = require("mineflayer-antiafk");
 
 const { config, status } = require("./config.js");
+const logger = require("./logger.js");
 
 // ===
 // Bot
@@ -65,6 +66,38 @@ function initialize(bot) {
 				bot.setControlState("jump", bot.oxygenLevel < 20);
 			}
 		});
+		// ======
+		// Logger
+		// ======
+		// Events to listen to
+		if (config.log.active.mineflayer) {
+			bot.on("entitySpawn", (entity) => entityLogger(entity, "entered render distance"));
+			bot.on("entityGone", (entity) => entityLogger(entity, "left render distance"));
+			bot.on("playerJoined", (player) => playerLogger(player, "joined server"));
+			bot.on("playerLeft", (player) => playerLogger(player, "left server"));
+		}
+		// Log all players that were already here in our render distance when we joined
+		Object.values(bot.entities).filter(e => e.type === 'player' && e.username !== bot.username).forEach((entity) => {
+			entityLogger(entity, "was already in render distance when we joined")
+		});
+		/**
+		 * Log entities
+		 * @param {object} entity Mineflayer entity objec
+		 * @param {object} action One-word description of the event being logged
+		 */
+		function entityLogger(entity, action) {
+			// Only log player entities
+			if (entity.type !== "player") return;
+			logger.log(action, `${entity.username} (${entity.uuid})`, "mineflayer");
+		}
+		/**
+		 * Log player events
+		 * @param {object} player Mineflayer Player object
+		 * @param {object} action One-word description of the event being logged
+		 */
+		function playerLogger(player, action) {
+			logger.log(action, `${player.username} (${player.uuid})`, "mineflayer");
+		}
 	});
 }
 

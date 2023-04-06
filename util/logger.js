@@ -19,7 +19,6 @@ let logFiles = {};
 
 // Create the directories and plan which logfiles to write to
 for (const category in config.log.active) {
-	if (!config.log.active[category]) return; // Don't proceed if logging category is disabled in config.json
 	const dir = createDirectory(category); // Create directory for category if it doesn't exist
 	const files = fs.readdirSync(dir, { // Get all files in the directory with the correct extension (either .log.gz or .log)
 		"withFileTypes": true

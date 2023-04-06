@@ -76,6 +76,8 @@ const configSchema = joi.object({
 				.description("Whether to log packets being sent from the controller to the proxy"),
 			"serverPackets": joi.boolean().default(true)
 				.description("Whether to log packets being sent from 2b2t to the proxy"),
+			"mineflayer": joi.boolean().default(false)
+				.description("Whether to log high-level Mineflayer events, if the Mineflayer bot is active (e.g. player join/leave, items, etc.)")
 		}).default()
 			.description("Settings for which logging categories should be enabled"),
 		"cutoff": joi.number().integer().positive().default(69000) // Not setting a minimum for this seems dangerous...
