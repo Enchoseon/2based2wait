@@ -100,7 +100,7 @@ const configSchema = joi.object({
 	"server": joi.object({
 		"host": joi.string().hostname().default("connect.2b2t.org")
 			.description("Address of the server to connect to"),
-		"version": joi.string().default("1.12.2") // to-do: regex idea: must start with a number and contain only numbers & decimals?
+		"version": joi.string().pattern(/^[0-9.]+$/).default("1.12.2") 
 			.description("Version of Minecraft the server is on "),
 		"port": joi.number().port().default(25565)
 			.description("Port of the server to connect to")
