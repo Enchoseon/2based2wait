@@ -113,7 +113,7 @@ const configSchema = joi.object({
 			.description("Whether to enable online-mode on the proxy. This probably should never be touched"),
 		"loopbackAddress": joi.string().valid("127.0.0.1", "localhost", "0.0.0.0", "::1").default("127.0.0.1")
 			.description("Loopback address to connect to the proxy. (options: '127.0.0.1', 'localhost', '0.0.0.0', '::1')"),
-		"port": joi.number().port().default(25565)
+		"port": joi.number().integer().min(1).max(65535).port().default(25565) //The highest TCP port number is 65535.
 			.description("Port on the machine to connect to the proxy")
 	}).default()
 		.description("Settings for how you connect to the proxy"),
