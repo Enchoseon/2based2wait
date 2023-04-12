@@ -100,7 +100,7 @@ const configSchema = joi.object({
 	"server": joi.object({
 		"host": joi.string().hostname().default("connect.2b2t.org")
 			.description("Address of the server to connect to"),
-		"version": joi.string().pattern(/^[0-9.]+$/).default("1.12.2") 
+		"version": joi.string().regex(/^(1\.(8|8\.(|1|2|3|4|5|6|7|8|9)|9|9\.(|1|2|3|4)|10|10\.(1|2)|11|11\.(1|2)|12|12\.(1|2)|13|13\.(1|2)|14|14\.(1|2|3|4)|15|15\.(1|2)|16|16\.(1|2|3|4|5)|17|17\.(1)|18|18\.(1|2)|19|\.(1|2|3|4)))$/).default("1.12.2") 
 			.description("Version of Minecraft the server is on "),
 		"port": joi.number().port().default(25565)
 			.description("Port of the server to connect to")
@@ -113,7 +113,7 @@ const configSchema = joi.object({
 			.description("Whether to enable online-mode on the proxy. This probably should never be touched"),
 		"loopbackAddress": joi.string().valid("127.0.0.1", "localhost", "0.0.0.0", "::1").default("127.0.0.1")
 			.description("Loopback address to connect to the proxy. (options: '127.0.0.1', 'localhost', '0.0.0.0', '::1')"),
-		"port": joi.number().integer().min(1).max(65535).port().default(25565) //The highest TCP port number is 65535.
+		"port": joi.number().port().default(25565)
 			.description("Port on the machine to connect to the proxy")
 	}).default()
 		.description("Settings for how you connect to the proxy"),
