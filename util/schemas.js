@@ -4,6 +4,7 @@
 
 /* eslint-disable no-useless-escape */
 const joi = require("joi");
+const testedVersions = require("mineflayer").testedVersions;
 
 // ===========
 // Sub-Schemas
@@ -17,6 +18,9 @@ const packetSchema = joi.string().pattern(/^[a-z_]*$/).lowercase();
 
 // Schema used to validate Discord webhooks (to-do: update this to only recognize webhooks)
 const webhookSchema = joi.string().empty("").default("");
+
+// Schema used to validate Minecraft versions tested by Mineflayer (see: https://github.com/PrismarineJS/mineflayer/blob/master/lib/version.js)
+const versionSchema = joi.string().valid(...testedVersions).default("1.12.2");
 
 // Schema used to validate a handful of the most important Zlib options, based off of information available on https://zlib.net/manual.html
 const zlibOptionsSchema = joi.object({
@@ -100,7 +104,7 @@ const configSchema = joi.object({
 	"server": joi.object({
 		"host": joi.string().hostname().default("connect.2b2t.org")
 			.description("Address of the server to connect to"),
-		"version": joi.string().regex(/^(1\.(8|8\.(|1|2|3|4|5|6|7|8|9)|9|9\.(|1|2|3|4)|10|10\.(1|2)|11|11\.(1|2)|12|12\.(1|2)|13|13\.(1|2)|14|14\.(1|2|3|4)|15|15\.(1|2)|16|16\.(1|2|3|4|5)|17|17\.(1)|18|18\.(1|2)|19|\.(1|2|3|4)))$/).default("1.12.2") 
+		"version": versionSchema
 			.description("Version of Minecraft the server is on "),
 		"port": joi.number().port().default(25565)
 			.description("Port of the server to connect to")
@@ -190,7 +194,7 @@ const configSchema = joi.object({
 				.description("Whether to cancel the response entirely. Otherwise, the packet described in fakeResponse will be sent."),
 			"fakeResponse": joi.object({ // From: https://wiki.vg/Server_List_Ping#Status_Response (default values simulate a normal server)
 				"version": joi.object({
-					"name": joi.string().default("1.12.2")
+					"name": versionSchema
 						.description("Spoofed server version"),
 					"protocol": joi.number().integer().default(340) // From: https://wiki.vg/Protocol_version_numbers
 						.description("Spoofed [protocol number](https://wiki.vg/Protocol_version_numbers)")
