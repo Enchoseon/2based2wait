@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "eslint": "^8.33.0",
-    "eslint-plugin-jsdoc": "^39.8.0",
+    "eslint-plugin-jsdoc": "^41.1.2",
     "mocha": "^10.2.0"
   },
   "repository": {
