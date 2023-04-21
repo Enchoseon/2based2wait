@@ -93,4 +93,6 @@ We'll never phone home or enable something you didn't. In other words, you are r
 
 ## For Developers
 
-Dev dependencies can be installed with `pnpm i`. You must do this if you want to contribute to the project's source.
+If you want to contribute to the project's source you must install developer dependencies (`pnpm i`) and use an editor with ESLint support.
+
+You can run tests locally with `pnpm testLocal`. (`pnpm test` will test your actual `config.json` rather than `./test/test-config.json`)
