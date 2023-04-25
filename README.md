@@ -39,7 +39,7 @@
 3. Configure your proxy: 
 	- Duplicate the `default-config.json` template file and rename it to `config.json`
 	- Use the [configuration guide](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md) to configure your proxy
-		- At the minimum you _must_ configure [`acccount.username`](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-account-username) and [`proxy.whitelist`](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-proxy-whitelist)
+		- At the minimum you _must_ configure [`account.username`](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-account-username) and [`proxy.whitelist`](https://github.com/Enchoseon/2based2wait/blob/main/docs/configuration-guide.md#user-content-proxy-whitelist)
 4. Start the proxy: `pnpm start`
 
 ### RTFM
