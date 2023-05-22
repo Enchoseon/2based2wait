@@ -24,6 +24,7 @@
     "json5": "^2.2.3",
     "minecraft-data": "^3.26.0",
     "minecraft-protocol": "^1.40.3",
+    "mineflayer": "^4.8.1",
     "mineflayer-antiafk": "github:Etiaro/mineflayer-antiafk",
     "mineflayer-auto-eat": "^3.3.0",
     "ngrok": "^4.3.1",

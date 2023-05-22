@@ -19,9 +19,12 @@ dependencies:
   minecraft-protocol:
     specifier: ^1.40.3
     version: 1.40.3
+  mineflayer:
+    specifier: ^4.8.1
+    version: 4.8.1
   mineflayer-antiafk:
     specifier: github:Etiaro/mineflayer-antiafk
-    version: github.com/Etiaro/mineflayer-antiafk/1ddcc1154c94d6ea85f9e8417dd429a9ce72d21b
+    version: github.com/Etiaro/mineflayer-antiafk/0cff6e6b90e149b0eb14ee113b2db4eff3379757
   mineflayer-auto-eat:
     specifier: ^3.3.0
     version: 3.3.1
@@ -150,7 +153,7 @@ packages:
     dependencies:
       minecraft-data: 3.26.0
       minecraft-protocol: 1.40.3
-      mineflayer: 4.8.0
+      mineflayer: 4.8.1
       prismarine-item: 1.12.1
       smart-buffer: 4.2.0
     transitivePeerDependencies:
@@ -1145,10 +1148,6 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  /minecraft-data@2.221.0:
-    resolution: {integrity: sha512-0AhqzbIKb6WqPSF6qBevaPryeWOz545hLxt6q+gfJF8YIQX/YfkyX/nXWhl+pSIS2rTBcQ0RJkRCtTeRzQwHDA==}
-    dev: false
-
   /minecraft-data@3.26.0:
     resolution: {integrity: sha512-9DGMM4qI7DdOFTMbtr3Wa/W+XXq11//Lhz+O0YRce9LHyYUDw34tvJcETHR0PNuE7p84J7kV02VLAOV+B1094Q==}
     dev: false
@@ -1184,18 +1183,16 @@ packages:
       - supports-color
     dev: false
 
-  /mineflayer-auto-eat@2.3.3:
-    resolution: {integrity: sha512-fy0Jjd9dcnjkcucPcs2uN13wYF4KChEby11pO6Iq3SyRDqjHuKa7U/DKbo5MZaTmucBMRPE1+ETl3kWEI/FCjg==}
-    dependencies:
-      minecraft-data: 2.221.0
-    dev: false
-
   /mineflayer-auto-eat@3.3.1:
     resolution: {integrity: sha512-SoPdRYp8VubAOYyvBEo/tJefzkgTii1UK301UwuFRP3kkIhC1tRi5XNgWibT2vhM7JULxi8AQq+NuXJ1UL/5yQ==}
     dev: false
 
-  /mineflayer@4.8.0:
-    resolution: {integrity: sha512-0LHYXAwGgRbMWUnQ2R7dDEN5u6ktgfZFsQ6C584wZArvmK/5YhGnDRV330zkOtL8KJAsnR2nwX8RvtFOD3Y1Qw==}
+  /mineflayer-auto-eat@3.3.6:
+    resolution: {integrity: sha512-CgtIboWu5xB7bWmPTtU66TgfPoKdyOmtgFBEQZ1RoEwednX/cVBTZmMTMpG8PLOPPbfb4wBi1Qd7A0qmkd0SFA==}
+    dev: false
+
+  /mineflayer@4.8.1:
+    resolution: {integrity: sha512-xqt5gdBvYHO1UV2slBm1QFFI2dHyfoMAxwSgxIGOuobIrZ05pY56XV6GW+NWQK0gqS4+MA5n0VakXPWZ5trzBQ==}
     engines: {node: '>=14'}
     dependencies:
       minecraft-data: 3.26.0
@@ -1963,11 +1960,11 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  github.com/Etiaro/mineflayer-antiafk/1ddcc1154c94d6ea85f9e8417dd429a9ce72d21b:
-    resolution: {tarball: https://codeload.github.com/Etiaro/mineflayer-antiafk/tar.gz/1ddcc1154c94d6ea85f9e8417dd429a9ce72d21b}
+  github.com/Etiaro/mineflayer-antiafk/0cff6e6b90e149b0eb14ee113b2db4eff3379757:
+    resolution: {tarball: https://codeload.github.com/Etiaro/mineflayer-antiafk/tar.gz/0cff6e6b90e149b0eb14ee113b2db4eff3379757}
     name: mineflayer-antiafk
     version: 1.1.1
     dependencies:
-      mineflayer-auto-eat: 2.3.3
+      mineflayer-auto-eat: 3.3.6
       vec3: 0.1.7
     dev: false
