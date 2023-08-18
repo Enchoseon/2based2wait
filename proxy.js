@@ -4,7 +4,7 @@
 // Imports
 // =======
 
-const mcproxy = require("@rob9315/mcproxy");
+const mcproxy = require("@icetank/mcproxy");
 const mc = require("minecraft-protocol");
 
 const { config, status, updateStatus, updateCoordinatorStatus } = require("./util/config.js");
