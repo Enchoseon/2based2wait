@@ -22,12 +22,6 @@ function initialize(bot) {
 	// Load plugins
 	bot.loadPlugin(autoeat);
 	bot.loadPlugin(antiafk);
-	// Set plugin options
-	bot.afk.setOptions(config.mineflayer.antiAfk);
-	bot.afk.setOptions({
-		"killauraEnabled": false,
-		"autoEatEnabled": false
-	});
 	// Create bot
 	bot.once("login", () => {
 		// ===============
@@ -40,6 +34,15 @@ function initialize(bot) {
 		}
 	});
 	bot.once("spawn", () => {
+		// =======
+		// Antiafk
+		// =======
+		// Set plugin options
+		bot.afk.setOptions(config.mineflayer.antiAfk);
+		bot.afk.setOptions({
+			"killauraEnabled": false,
+			"autoEatEnabled": false
+		});
 		// =======
 		// Autoeat
 		// =======
