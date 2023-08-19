@@ -111,6 +111,8 @@ const configSchema = joi.object({
 	}).default()
 		.description("Settings for how the proxy connects to the server"),
 	"proxy": joi.object({
+		"active": joi.boolean().default(true)
+			.description("Whether to allow players to control the account by connecting through a tunnel"),
 		"whitelist": joi.array().items(usernameSchema)
 			.description("Playernames of accounts that are allowed to connect to the proxy"),
 		"onlineMode": joi.boolean().default(true)

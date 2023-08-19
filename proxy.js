@@ -85,14 +85,19 @@ function start() {
 		updateCoordinatorStatus();
 	}
 
-	// Create local server
-	createLocalServer();
+	// Create local server for proxy connections
+	if (config.proxy.active) {
+		createLocalServer();
+	}
 
 	// Create client (connects to server)
 	if (!config.waitForControllerBeforeConnect) { // ... but if waitForControllerBeforeConnect is true, delay the creation of the client until someone connects to the local server
 		createClient();
 	} else {
 		console.log("Waiting for a controller...");
+		if (!config.proxy.active) {
+			console.log("WARNING: config.waitForControllerBeforeConnect is true but config.proxy.active is false, meaning there will never be a controller!");
+		}
 		if (config.ngrok.active) { // Create ngrok tunnel
 			ngrok.createTunnel(); // Note: May overwrite MSA instructions in console(?)
 		}
