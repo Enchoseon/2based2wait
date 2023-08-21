@@ -61,6 +61,17 @@ function initialize(bot) {
 				}
 			}
 		}, config.mineflayer.killAura.interval * 1000);
+		// ==========
+		// Auto Totem
+		// ==========
+		setInterval(() => {
+			if (status.mineflayer === "true" && status.inQueue === "false") {
+				const totem = bot.inventory.findInventoryItem("totem_of_undying", null);
+				if (totem) {
+					bot.equip(totem, "off-hand");
+				}
+			}
+		}, config.mineflayer.autoTotem.interval * 1000);
 		// =====
 		// Jesus
 		// =====

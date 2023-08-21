@@ -175,7 +175,12 @@ const configSchema = joi.object({
 			"chatInterval": joi.number().integer().positive().default(690420) // Not setting a minimum for this seems dangerous...
 				.description("Time (in milliseconds) between each chat message")
 		}).default()
-			.description("Settings for antiafk")
+			.description("Settings for antiafk"),
+		"autoTotem": joi.object({
+			"interval": joi.number().integer().positive().min(1).default(50)
+				.description("Time (in milliseconds) between each totem equip attempt")
+		}).default()
+			.description("Settings for autototem"),
 	}).default()
 		.description("Settings for the mineflayer bot"),
 	"experimental": joi.object({

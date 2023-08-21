@@ -76,6 +76,8 @@
     - <span id='mineflayer-antiafk-chatting'></span>**[chatting](#user-content-mineflayer-antiafk-chatting)** <samp>`{type: boolean}`</samp> <samp>`{default: false}`</samp> : Whether the proxy will chat
     - <span id='mineflayer-antiafk-chatmessages'></span>**[chatMessages](#user-content-mineflayer-antiafk-chatmessages)** <samp>`{type: array}`</samp> <samp>`{default: ["!pt","!queue"]}`</samp> : Chat messages that the proxy will send if chatting is enabled
     - <span id='mineflayer-antiafk-chatinterval'></span>**[chatInterval](#user-content-mineflayer-antiafk-chatinterval)** <samp>`{type: number}`</samp> <samp>`{default: 690420}`</samp> : Time (in milliseconds) between each chat message
+  - <span id='mineflayer-autototem'></span>**[autoTotem](#user-content-mineflayer-autototem)** <samp>`{type: object}`</samp> : Settings for autototem
+    - <span id='mineflayer-autototem-interval'></span>**[interval](#user-content-mineflayer-autototem-interval)** <samp>`{type: number}`</samp> <samp>`{default: 50}`</samp> : Time (in milliseconds) between each totem equip attempt
 
 <span id='experimental'></span>**[experimental](#user-content-experimental)** <samp>`{type: object}`</samp> : Settings for experimental features that may be more unstable in resource usage and/or server and version parity
   - <span id='experimental-spoofplayerinfo'></span>**[spoofPlayerInfo](#user-content-experimental-spoofplayerinfo)** <samp>`{type: object}`</samp>
