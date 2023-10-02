@@ -22,7 +22,7 @@ let sentNotification = false;
  * @param {object} conn McProxy conn object
  */
 function difficultyPacketHandler(packetData, conn) {
-	const inQueue = (conn.bot.game.serverBrand === "2b2t (Velocity)") && (conn.bot.game.dimension === "minecraft:end") && (packetData.difficulty === 1);
+	const inQueue = (conn.bot.game.serverBrand === "2b2t (Velocity)") && (conn.bot.game.dimension === "the_end") && (packetData.difficulty === 1);
 	if (updateStatus("inQueue", inQueue) && inQueue === false && config.notify.whenJoining) { // Send notification when joining server
 		notifier.sendToast("In Server!");
 		notifier.sendWebhook({
