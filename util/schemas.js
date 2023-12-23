@@ -242,6 +242,10 @@ const configSchema = joi.object({
 			"active": joi.boolean().default(true)
 				.description("Whether to set UV_THREADPOOL_SIZE to use all possible CPU logic cores")
 		}).default(),
+		"syncGamestate": joi.object({
+			"active": joi.boolean().default(true)
+				.description("Send fake packets to attempt to sync gamestate")
+		}).default(),
 	}).default()
 		.description("Settings for experimental features that may be more unstable in resource usage and/or server and version parity"),
 	"waitForControllerBeforeConnect": joi.boolean().default(false)

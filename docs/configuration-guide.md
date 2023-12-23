@@ -112,6 +112,8 @@
       - <span id='experimental-worlddownloader-compression-windowbits'></span>**[windowBits](#user-content-experimental-worlddownloader-compression-windowbits)** <samp>`{type: number}`</samp> <samp>`{default: 15}`</samp> : How much memory to allocate to the history buffer between 8 and 15. Higher values result in better compression ratio at the expense of memory usage
   - <span id='experimental-maxthreadpool'></span>**[maxThreadpool](#user-content-experimental-maxthreadpool)** <samp>`{type: object}`</samp>
     - <span id='experimental-maxthreadpool-active'></span>**[active](#user-content-experimental-maxthreadpool-active)** <samp>`{type: boolean}`</samp> <samp>`{default: true}`</samp> : Whether to set UV_THREADPOOL_SIZE to use all possible CPU logic cores
+  - <span id='experimental-syncgamestate'></span>**[syncGamestate](#user-content-experimental-syncgamestate)** <samp>`{type: object}`</samp>
+    - <span id='experimental-syncgamestate-active'></span>**[active](#user-content-experimental-syncgamestate-active)** <samp>`{type: boolean}`</samp> <samp>`{default: true}`</samp> : Send fake packets to attempt to sync gamestate
 
 <span id='waitforcontrollerbeforeconnect'></span>**[waitForControllerBeforeConnect](#user-content-waitforcontrollerbeforeconnect)** <samp>`{type: boolean}`</samp> <samp>`{default: false}`</samp> : Whether the proxy will wait for someone to take control before it connects to the server
 
