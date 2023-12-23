@@ -50,23 +50,11 @@ function packetHandler(packetData, packetMeta) {
 	logger.packetHandler(packetData, packetMeta, "server");
 
 	// Assorted packet handlers
-	switch (packetMeta.name) {
-		case "chat": // Forward chat packets to chatty.js for livechat relay and reading server restart messages
-			chatty.chatPacketHandler(packetData);
-			break;
-		case "difficulty": // Difficulty packet handler, checks whether or not we're in queue (explanation: when rerouted by Velocity, the difficulty packet is always sent after the MC|Brand packet.)
-			queue.difficultyPacketHandler(packetData, conn);
-			break;
-		case "playerlist_header": // Playerlist packet handler, checks position in queue
-			queue.playerlistHeaderPacketHandler(packetData, server);
-			break;
-		case "map_chunk":
-			if (!config.experimental.worldDownloader.active) break;
-			downloader.mapChunkPacketHandler(packetData); // Don't proceed if world downloader isn't enabled
-			break;
-		default:
-			break;
-	}
+	chatty.chatPacketHandler(packetMeta.name, packetData);
+	queue.difficultyPacketHandler(packetMeta.name, packetData, conn);
+	queue.playerlistHeaderPacketHandler(packetMeta.name, packetData, server);
+	if (!config.experimental.worldDownloader.active)
+		downloader.mapChunkPacketHandler(packetMeta.name, packetData); 
 
 	// Reset uncleanDisconnectMonitor timer
 	refreshMonitor();

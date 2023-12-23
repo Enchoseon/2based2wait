@@ -15,9 +15,12 @@ const ChatMessage = require("prismarine-chat")(config.server.version);
 
 /**
  * Handle incoming chat packets
+ * @param {string} packetName Packet type
  * @param {object} packetData Packet data object
  */
-function chatPacketHandler(packetData) {
+function chatPacketHandler(packetName, packetData) {
+	if (packetName != "chat")
+		return;
 	// Parse chat messages
 	const msgObj = JSON.parse(packetData.message);
 	const msg = ChatMessage.fromNotch(msgObj).toString();
