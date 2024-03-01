@@ -55,7 +55,7 @@ describe("2Bored2Wait Testing", () => {
 // ==============
 
 /**
- * Send packets that'll test a couple aspects of the proxy. This is not version agnostic and only works for 1.12.2.
+ * Send packets that'll test a couple aspects of the proxy. This is not version agnostic is based on packets I got connecting through 1.19.4
  * @returns {Promise} Promise object representing success of server login code
  */
 function waitForLogin() {
@@ -80,12 +80,16 @@ function waitForLogin() {
 				"levelType": "default",
 				"reducedDebugInfo": false
 			});
-			client.write("custom_payload", {
-				"channel": "MC|Brand",
-				"data": Buffer.from("2b2t (Velocity)", "utf8")
-			});
+			// client.write("custom_payload", {
+			// 	"channel": "minecraft:brand",
+			// 	"data": { 
+			// 		"type": "Buffer",
+			// 		"data": [15,50,98,50,116,32,40,86,101,108,111,99,105,116,121,41]
+			// 	}
+			// });
 			client.write("difficulty", {
-				"difficulty": 1
+				"difficulty": 1,
+				"difficultyLocked": false
 			});
 			// ============
 			// Chat Message
