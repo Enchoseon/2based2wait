@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@icetank/mcproxy':
-    specifier: github:IceTank/mcproxy#1-19
-    version: github.com/IceTank/mcproxy/6841d91dd7ac5c96552d89a960a5ba1258d017ff
+    specifier: ^1.0.6
+    version: 1.0.6
   deepmerge:
     specifier: ^4.3.1
     version: 4.3.1
@@ -17,9 +17,6 @@ dependencies:
   json5:
     specifier: ^2.2.3
     version: 2.2.3
-  mcproxy#1-19:
-    specifier: link:@icetank/mcproxy#1-19
-    version: link:@icetank/mcproxy#1-19
   minecraft-data:
     specifier: ^3.46.1
     version: 3.46.1
@@ -161,6 +158,17 @@ packages:
   /@humanwhocodes/object-schema@1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
+
+  /@icetank/mcproxy@1.0.6:
+    resolution: {integrity: sha512-me3r03xdJfYMrFMBKPzqlGmP6c3vrl3M5FsPglF83UBY5mYFdPEBfoBWh0Bn/f7i9WmFdu6RW0Prtk6Vw4T6Iw==}
+    dependencies:
+      deepcopy: 2.1.0
+      mineflayer: 4.14.0
+      smart-buffer: 4.2.0
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+    dev: false
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -2012,18 +2020,4 @@ packages:
     dependencies:
       mineflayer-auto-eat: 3.3.6
       vec3: 0.1.8
-    dev: false
-
-  github.com/IceTank/mcproxy/6841d91dd7ac5c96552d89a960a5ba1258d017ff:
-    resolution: {tarball: https://codeload.github.com/IceTank/mcproxy/tar.gz/6841d91dd7ac5c96552d89a960a5ba1258d017ff}
-    name: '@icetank/mcproxy'
-    version: 1.0.3
-    requiresBuild: true
-    dependencies:
-      deepcopy: 2.1.0
-      mineflayer: 4.14.0
-      smart-buffer: 4.2.0
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
     dev: false

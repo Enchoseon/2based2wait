@@ -18,11 +18,10 @@
   "author": "Enchoseon",
   "license": "GPL-2.0",
   "dependencies": {
-    "@icetank/mcproxy": "github:IceTank/mcproxy#1-19",
+    "@icetank/mcproxy": "^1.0.6",
     "deepmerge": "^4.3.1",
     "joi": "^17.10.2",
     "json5": "^2.2.3",
-    "mcproxy#1-19": "link:@icetank/mcproxy#1-19",
     "minecraft-data": "^3.46.1",
     "minecraft-protocol": "^1.44.0",
     "mineflayer": "^4.14.0",
