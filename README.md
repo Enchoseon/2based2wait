@@ -75,6 +75,7 @@ We'll never phone home or enable something you didn't. In other words, you are r
 		- Auto eat
 		- Anti afk
 		- Anti drowning
+		- Auto totem
 - Extensive logging
 - Share proxies with plug-and-play Ngrok tunnels
 	- Your machine's IP is never shared with players connecting to your proxy
