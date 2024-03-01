@@ -18,11 +18,14 @@ let sentNotification = false;
 /**
  * Difficulty packet handler, checks whether or not we're in queue
  * (explanation: when rerouted by Velocity, the difficulty packet is always sent *after* the MC|Brand packet.)
+ * @param {string} packetName Packet type
  * @param {object} packetData `difficulty` packet data object
  * @param {object} conn McProxy conn object
  */
-function difficultyPacketHandler(packetData, conn) {
-	const inQueue = (conn.bot.game.serverBrand === "2b2t (Velocity)") && (conn.bot.game.dimension === "minecraft:end") && (packetData.difficulty === 1);
+function difficultyPacketHandler(packetName, packetData, conn) {
+	if (packetName != "difficulty")
+		return;
+	const inQueue = (conn.bot.game.serverBrand === "2b2t (Velocity)") && (conn.bot.game.dimension === "the_end") && (packetData.difficulty === 1);
 	if (updateStatus("inQueue", inQueue) && inQueue === false && config.notify.whenJoining) { // Send notification when joining server
 		notifier.sendToast("In Server!");
 		notifier.sendWebhook({
@@ -37,10 +40,13 @@ function difficultyPacketHandler(packetData, conn) {
 
 /**
  * Playerlist packet handler, checks position in queue
+ * @param {string} packetName Packet type
  * @param {object} packetData `playerlist_header` packet data object
  * @param {object} server Mineflayer server object
  */
-function playerlistHeaderPacketHandler(packetData, server) {
+function playerlistHeaderPacketHandler(packetName, packetData, server) {
+	if (packetName != "playerlist_header")
+		return;
 	// If no longer in queue, stop here
 	if (status.inQueue === "false") {
 		updateStatus("position", "In Server!");

@@ -4,7 +4,7 @@
 // Imports
 // =======
 
-const mcproxy = require("@rob9315/mcproxy");
+const mcproxy = require("@icetank/mcproxy");
 const mc = require("minecraft-protocol");
 
 const { config, status, updateStatus, updateCoordinatorStatus } = require("./util/config.js");
@@ -50,23 +50,11 @@ function packetHandler(packetData, packetMeta) {
 	logger.packetHandler(packetData, packetMeta, "server");
 
 	// Assorted packet handlers
-	switch (packetMeta.name) {
-		case "chat": // Forward chat packets to chatty.js for livechat relay and reading server restart messages
-			chatty.chatPacketHandler(packetData);
-			break;
-		case "difficulty": // Difficulty packet handler, checks whether or not we're in queue (explanation: when rerouted by Velocity, the difficulty packet is always sent after the MC|Brand packet.)
-			queue.difficultyPacketHandler(packetData, conn);
-			break;
-		case "playerlist_header": // Playerlist packet handler, checks position in queue
-			queue.playerlistHeaderPacketHandler(packetData, server);
-			break;
-		case "map_chunk":
-			if (!config.experimental.worldDownloader.active) break;
-			downloader.mapChunkPacketHandler(packetData); // Don't proceed if world downloader isn't enabled
-			break;
-		default:
-			break;
-	}
+	chatty.chatPacketHandler(packetMeta.name, packetData);
+	queue.difficultyPacketHandler(packetMeta.name, packetData, conn);
+	queue.playerlistHeaderPacketHandler(packetMeta.name, packetData, server);
+	if (!config.experimental.worldDownloader.active)
+		downloader.mapChunkPacketHandler(packetMeta.name, packetData); 
 
 	// Reset uncleanDisconnectMonitor timer
 	refreshMonitor();
@@ -85,14 +73,19 @@ function start() {
 		updateCoordinatorStatus();
 	}
 
-	// Create local server
-	createLocalServer();
+	// Create local server for proxy connections
+	if (config.proxy.active) {
+		createLocalServer();
+	}
 
 	// Create client (connects to server)
 	if (!config.waitForControllerBeforeConnect) { // ... but if waitForControllerBeforeConnect is true, delay the creation of the client until someone connects to the local server
 		createClient();
 	} else {
 		console.log("Waiting for a controller...");
+		if (!config.proxy.active) {
+			console.log("WARNING: config.waitForControllerBeforeConnect is true but config.proxy.active is false, meaning there will never be a controller!");
+		}
 		if (config.ngrok.active) { // Create ngrok tunnel
 			ngrok.createTunnel(); // Note: May overwrite MSA instructions in console(?)
 		}
@@ -275,9 +268,10 @@ function createLocalServer() {
 			// Stop Mineflayer
 			stopMineflayer();
 
-			// Spoof player_info (skin fix)
-			if (config.experimental.spoofPlayerInfo.active) {
-				conn.bot.waitForTicks(1).then(() => {
+			// Send fake packets
+			setTimeout(function(){
+				// Spoof player_info (skin fix)
+				if (config.experimental.spoofPlayerInfo.active) {
 					bridgeClient.write("player_info", { // Add spoofed player to tablist
 						action: 0,
 						data: [{
@@ -298,8 +292,41 @@ function createLocalServer() {
 							properties: []
 						}]
 					});
-				});
-			}
+				}
+				// Attempt to fix game state desyncs by sending fake packets to the client
+				if (config.experimental.syncGamestate.active) {
+					if (typeof conn.bot.experience !== "undefined") {
+						bridgeClient.write("experience", {
+							"experienceBar": conn.bot.experience.progress,
+							"totalExperience": conn.bot.experience.points,
+							"level": conn.bot.experience.level
+						});
+					}
+					if (typeof conn.bot.vehicle !== "undefined") {
+						conn.bot.dismount();
+					}
+					for (const entityIndex in conn.bot.entities) {
+						const ENTITY = conn.bot.entities[entityIndex];
+						if (ENTITY.kind !== "Vehicles")
+							continue;
+						bridgeClient.write("spawn_entity", {
+							"entityId": ENTITY.id,
+							"objectUUID": ENTITY.uuid,
+							"type": ENTITY.entityType,
+							"x": ENTITY.position.x,
+							"y": ENTITY.position.y,
+							"z": ENTITY.position.z,
+							"pitch": 0,
+							"yaw": ENTITY.yaw,
+							"headPitch": ENTITY.pitch,
+							"objectData": ENTITY.metadata,
+							"velocityX": ENTITY.velocity.x,
+							"velocityY": ENTITY.velocity.y,
+							"velocityZ": ENTITY.velocity.z,
+						});
+					}
+				}
+			}, 1000);
 
 			// Log packets
 			bridgeClient.on("packet", (packetData, packetMeta) => {

@@ -14,9 +14,12 @@ const logger = require("./logger.js");
 
 /**
  * Extremely unstable world downloader
+ * @param {string} packetName Packet type
  * @param {object} packetData Packetdata from map_chunk
  */
-function mapChunkPacketHandler(packetData) {
+function mapChunkPacketHandler(packetName, packetData) {
+	if (packetName != "map_chunk")
+		return;
 	const serialized = JSON.stringify([ // Serialize the data we want to save
 		Math.floor(Date.now() / 1000),
 		packetData.x,

@@ -44,6 +44,7 @@
   - <span id='server-port'></span>**[port](#user-content-server-port)** <samp>`{type: number}`</samp> <samp>`{default: 25565}`</samp> : Port of the server to connect to
 
 <span id='proxy'></span>**[proxy](#user-content-proxy)** <samp>`{type: object}`</samp> : Settings for how you connect to the proxy
+  - <span id='proxy-active'></span>**[active](#user-content-proxy-active)** <samp>`{type: boolean}`</samp> <samp>`{default: true}`</samp> : Whether to allow players to control the account by connecting through a tunnel
   - <span id='proxy-whitelist'></span>**[whitelist](#user-content-proxy-whitelist)** <samp>`{type: array}`</samp> : Playernames of accounts that are allowed to connect to the proxy
   - <span id='proxy-onlinemode'></span>**[onlineMode](#user-content-proxy-onlinemode)** <samp>`{type: boolean}`</samp> <samp>`{default: true}`</samp> : Whether to enable online-mode on the proxy. This probably should never be touched
   - <span id='proxy-loopbackaddress'></span>**[loopbackAddress](#user-content-proxy-loopbackaddress)** <samp>`{type: string}`</samp> <samp>`{default: "127.0.0.1"}`</samp> : Loopback address to connect to the proxy. (options: '127.0.0.1', 'localhost', '0.0.0.0', '::1')
@@ -75,6 +76,8 @@
     - <span id='mineflayer-antiafk-chatting'></span>**[chatting](#user-content-mineflayer-antiafk-chatting)** <samp>`{type: boolean}`</samp> <samp>`{default: false}`</samp> : Whether the proxy will chat
     - <span id='mineflayer-antiafk-chatmessages'></span>**[chatMessages](#user-content-mineflayer-antiafk-chatmessages)** <samp>`{type: array}`</samp> <samp>`{default: ["!pt","!queue"]}`</samp> : Chat messages that the proxy will send if chatting is enabled
     - <span id='mineflayer-antiafk-chatinterval'></span>**[chatInterval](#user-content-mineflayer-antiafk-chatinterval)** <samp>`{type: number}`</samp> <samp>`{default: 690420}`</samp> : Time (in milliseconds) between each chat message
+  - <span id='mineflayer-autototem'></span>**[autoTotem](#user-content-mineflayer-autototem)** <samp>`{type: object}`</samp> : Settings for autototem
+    - <span id='mineflayer-autototem-interval'></span>**[interval](#user-content-mineflayer-autototem-interval)** <samp>`{type: number}`</samp> <samp>`{default: 50}`</samp> : Time (in milliseconds) between each totem equip attempt
 
 <span id='experimental'></span>**[experimental](#user-content-experimental)** <samp>`{type: object}`</samp> : Settings for experimental features that may be more unstable in resource usage and/or server and version parity
   - <span id='experimental-spoofplayerinfo'></span>**[spoofPlayerInfo](#user-content-experimental-spoofplayerinfo)** <samp>`{type: object}`</samp>
@@ -109,6 +112,8 @@
       - <span id='experimental-worlddownloader-compression-windowbits'></span>**[windowBits](#user-content-experimental-worlddownloader-compression-windowbits)** <samp>`{type: number}`</samp> <samp>`{default: 15}`</samp> : How much memory to allocate to the history buffer between 8 and 15. Higher values result in better compression ratio at the expense of memory usage
   - <span id='experimental-maxthreadpool'></span>**[maxThreadpool](#user-content-experimental-maxthreadpool)** <samp>`{type: object}`</samp>
     - <span id='experimental-maxthreadpool-active'></span>**[active](#user-content-experimental-maxthreadpool-active)** <samp>`{type: boolean}`</samp> <samp>`{default: true}`</samp> : Whether to set UV_THREADPOOL_SIZE to use all possible CPU logic cores
+  - <span id='experimental-syncgamestate'></span>**[syncGamestate](#user-content-experimental-syncgamestate)** <samp>`{type: object}`</samp>
+    - <span id='experimental-syncgamestate-active'></span>**[active](#user-content-experimental-syncgamestate-active)** <samp>`{type: boolean}`</samp> <samp>`{default: true}`</samp> : Send fake packets to attempt to sync gamestate
 
 <span id='waitforcontrollerbeforeconnect'></span>**[waitForControllerBeforeConnect](#user-content-waitforcontrollerbeforeconnect)** <samp>`{type: boolean}`</samp> <samp>`{default: false}`</samp> : Whether the proxy will wait for someone to take control before it connects to the server
 

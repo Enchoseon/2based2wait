@@ -111,6 +111,8 @@ const configSchema = joi.object({
 	}).default()
 		.description("Settings for how the proxy connects to the server"),
 	"proxy": joi.object({
+		"active": joi.boolean().default(true)
+			.description("Whether to allow players to control the account by connecting through a tunnel"),
 		"whitelist": joi.array().items(usernameSchema)
 			.description("Playernames of accounts that are allowed to connect to the proxy"),
 		"onlineMode": joi.boolean().default(true)
@@ -173,7 +175,12 @@ const configSchema = joi.object({
 			"chatInterval": joi.number().integer().positive().default(690420) // Not setting a minimum for this seems dangerous...
 				.description("Time (in milliseconds) between each chat message")
 		}).default()
-			.description("Settings for antiafk")
+			.description("Settings for antiafk"),
+		"autoTotem": joi.object({
+			"interval": joi.number().integer().positive().min(1).default(50)
+				.description("Time (in milliseconds) between each totem equip attempt")
+		}).default()
+			.description("Settings for autototem"),
 	}).default()
 		.description("Settings for the mineflayer bot"),
 	"experimental": joi.object({
@@ -234,6 +241,10 @@ const configSchema = joi.object({
 		"maxThreadpool": joi.object({
 			"active": joi.boolean().default(true)
 				.description("Whether to set UV_THREADPOOL_SIZE to use all possible CPU logic cores")
+		}).default(),
+		"syncGamestate": joi.object({
+			"active": joi.boolean().default(true)
+				.description("Send fake packets to attempt to sync gamestate")
 		}).default(),
 	}).default()
 		.description("Settings for experimental features that may be more unstable in resource usage and/or server and version parity"),
